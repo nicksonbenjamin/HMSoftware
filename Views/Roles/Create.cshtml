@@ -1,0 +1,16 @@
+@page
+@model Roles.CreateModel
+@{
+    ViewData["Title"] = "Add Role";
+}
+
+<h2>Add Role</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Role Name</label>
+        <input asp-for="Role.RoleName" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,37 @@
+@page
+@model ClinicApp.AttendingStaff.IndexModel
+@{
+    ViewData["Title"] = "Attending Staff";
+}
+
+<h2>Attending Staff</h2>
+<a class="btn btn-primary" asp-page="Create">Add Staff Member</a>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model.StaffList)
+        {
+            <tr>
+                <td>@staff.FirstName @staff.LastName</td>
+                <td>@staff.Role</td>
+                <td>@staff.Email</td>
+                <td>@staff.PhoneNumber</td>
+                <td>@staff.CreatedAt.ToShortDateString()</td>
+                <td>
+                    <a asp-page="Details" asp-route-id="@staff.StaffID">Details</a> |
+                    <a asp-page="Edit" asp-route-id="@staff.StaffID">Edit</a> |
+                    <a asp-page="Delete" asp-route-id="@staff.StaffID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

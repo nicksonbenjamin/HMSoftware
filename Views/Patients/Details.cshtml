@@ -1,0 +1,207 @@
+@model PatientViewModel
+
+@{
+    ViewData["Title"] = "Patient Registration Details";
+}
+
+<h2>Patient Registration Details</h2>
+
+<form asp-action="Create" aria-disabled method="post" enctype="multipart/form-data">
+    <div disabled="disabled">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">UHID Type<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                Patient Registration
+            </div>
+
+            <label class="col-sm-2 col-form-label">UHID No</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.UHIDNo
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Date<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.RegistrationDate.ToShortDateString()
+            </div>
+
+            <label class="col-sm-2 col-form-label">Time<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.RegistrationTime.ToString(@"hh\:mm")
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Sex<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Sex
+            </div>
+
+            <label class="col-sm-2 col-form-label">Patient Name<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.PatientTitle @Model.PatientName
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">DOB</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.DOB?.ToShortDateString()
+            </div>
+
+            <label class="col-sm-2 col-form-label">Age<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Age
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Guardian Name<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.GuardianTitle @Model.Guardian
+            </div>
+
+            <label class="col-sm-2 col-form-label">Address<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Address
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">District</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.District
+            </div>
+
+            <label class="col-sm-2 col-form-label">GST State<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.GSTState
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Country<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Country
+            </div>
+
+            <label class="col-sm-2 col-form-label">Pin Code</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.PinCode
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Place</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Place
+            </div>
+
+            <label class="col-sm-2 col-form-label">Patient Aadhar</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.PatientAadhar
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Guardian Aadhar</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.GuardianAadhar
+            </div>
+
+            <label class="col-sm-2 col-form-label">Mobile No<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.MobileNo
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Email
+            </div>
+
+            <label class="col-sm-2 col-form-label">Occupation</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Occupation
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Marital Status</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.MaritalStatus
+            </div>
+
+            <label class="col-sm-2 col-form-label">Blood Group</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.BloodGroup
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Allergic To</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.AllergicTo
+            </div>
+
+            <label class="col-sm-2 col-form-label">Consultant Doctor<span class="text-danger">*</span></label>
+            <div class="col-sm-4 col-form-label">
+                @Model.ConsultantDoctor
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Ref. Doctor</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.RefDoctor
+            </div>
+
+            <label class="col-sm-2 col-form-label">Payment Terms</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.PaymentTerms
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Registration Type</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.RegistrationType
+            </div>
+
+            <label class="col-sm-2 col-form-label">Comp/Ins/Camp</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.CompOrInsOrCamp
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Patient Condition</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.PatientCondition
+            </div>
+
+            <label class="col-sm-2 col-form-label">Reference/Phone No</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.ReferenceOrPicmeNo
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Photo</label>
+            <div class="col-sm-4 col-form-label">
+                @Model.Photo
+            </div>
+
+            <label class="col-sm-2 col-form-label">Status</label>
+            <div class="col-sm-4 form-check col-form-label">
+                <strong>@(Model.IsActive ? "Active" : "Inactive")</strong>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row mt-3">
+        <div class="col-sm-12 text-right">
+            <button type="submit" class="btn btn-primary">Edit</button>
+            <a href="@Url.Action("Index", "Patients")" class="btn btn-secondary">Exit</a>
+        </div>
+    </div>
+</form>

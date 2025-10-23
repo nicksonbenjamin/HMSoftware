@@ -1,0 +1,17 @@
+
+@model ClinicApp.Visits.DetailsModel
+@{
+    ViewData["Title"] = "Visit Details";
+}
+
+<h2>Visit Details</h2>
+
+<div>
+    <strong>Patient:</strong> @Model.Visit.PatientName<br />
+    <strong>Staff:</strong> @Model.Visit.StaffName<br />
+    <strong>Date:</strong> @Model.Visit.VisitDate.ToString("f")<br />
+    <strong>Notes:</strong> @Model.Visit.Notes
+</div>
+
+<a asp-page="Edit" asp-route-id="@Model.Visit.VisitID" class="btn btn-primary">Edit</a>
+<a asp-page="Index" class="btn btn-secondary">Back to List</a>

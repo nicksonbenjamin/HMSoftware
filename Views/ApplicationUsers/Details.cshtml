@@ -1,0 +1,16 @@
+@model ClinicApp.ViewModels.ApplicationUserViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2>User Details</h2>
+
+<div>
+    <strong>Login:</strong> @Model.LoginNamee<br />
+    <strong>Name:</strong> @Model.FirstName @Model.MiddleName @Model.LastName<br />
+    <strong>Role:</strong> @Model.RoleName
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
