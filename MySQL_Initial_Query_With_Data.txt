@@ -1,0 +1,85 @@
+-- Drop tables if they exist
+DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS AttendingStaff;
+DROP TABLE IF EXISTS Patients;
+DROP TABLE IF EXISTS Visits;
+DROP TABLE IF EXISTS ApplicationUser;
+DROP TABLE IF EXISTS Roles;
+
+-- Roles table
+CREATE TABLE IF NOT EXISTS Roles (
+    RoleId CHAR(36) PRIMARY KEY,
+    RoleName VARCHAR(30)
+);
+
+-- ApplicationUser table
+CREATE TABLE IF NOT EXISTS ApplicationUser (
+    UserId CHAR(36) PRIMARY KEY,
+    LoginNamee VARCHAR(25),
+    RoleID CHAR(36),
+    LoginPassword VARCHAR(18),
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    MiddleName VARCHAR(50),
+    FOREIGN KEY (RoleID) REFERENCES Roles(RoleId)
+);
+
+-- Patients table
+CREATE TABLE IF NOT EXISTS Patients (
+    PatientID CHAR(36) PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Gender VARCHAR(10),
+    DateOfBirth DATE,
+    PhoneNumber VARCHAR(20),
+    Email VARCHAR(100),
+    Address VARCHAR(255),
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Photo LONGBLOB
+);
+
+-- Appointments table
+CREATE TABLE IF NOT EXISTS Appointments (
+    AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
+    PatientID CHAR(36) NOT NULL,
+    AppointmentDate DATETIME NOT NULL,
+    Reason VARCHAR(255),
+    Status VARCHAR(50) DEFAULT 'Scheduled',
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
+);
+
+-- AttendingStaff table
+CREATE TABLE IF NOT EXISTS AttendingStaff (
+    StaffID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    RoleID CHAR(36),
+    Email VARCHAR(100),
+    PhoneNumber VARCHAR(20),
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Visits table
+CREATE TABLE IF NOT EXISTS Visits (
+    VisitID CHAR(36) PRIMARY KEY,
+    PatientID CHAR(36) NOT NULL,
+    VisitDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Notes TEXT,
+    AttendingStaffID INT,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (AttendingStaffID) REFERENCES AttendingStaff(StaffID)
+);
+
+-- Insert roles
+INSERT INTO Roles (RoleId, RoleName) VALUES (UUID(), 'Admin');
+INSERT INTO Roles (RoleId, RoleName) VALUES (UUID(), 'Doctor');
+INSERT INTO Roles (RoleId, RoleName) VALUES (UUID(), 'AttendeingStaff');
+INSERT INTO Roles (RoleId, RoleName) VALUES (UUID(), 'Reception');
+
+-- Insert admin user
+INSERT INTO ApplicationUser (UserId, LoginNamee, RoleID, LoginPassword, FirstName, LastName, MiddleName)
+VALUES (UUID(), 'admin', (SELECT RoleId FROM Roles WHERE RoleName='Admin'), 'admin@123', 'Admin', 'Admin', 'Admin');
+
+SELECT * FROM Roles;
+SELECT * FROM ApplicationUser;
