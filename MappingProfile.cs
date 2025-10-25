@@ -10,6 +10,7 @@ public class MappingProfile : Profile
         CreateMap<ApplicationUserViewModel, ApplicationUser>();
         CreateMap<Patient, PatientViewModel>();
         CreateMap<PatientViewModel, Patient>();
-
+        CreateMap<ProductMaster, ProductMasterViewModel>();
+        CreateMap<ProductMasterViewModel, ProductMaster>();
     }
 }
