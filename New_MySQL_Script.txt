@@ -42,3 +42,41 @@ CREATE TABLE Patients_New (
     CreatedDate DATETIME,
     UpdatedDate DATETIME
 );
+
+-- Drop tables if they exist
+DROP TABLE IF EXISTS ProductMaster;
+
+CREATE TABLE ProductMaster (
+    ProductCode INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    GenericName TEXT,
+    ProductGroup_List VARCHAR(50),
+    ProductGroup_Txt VARCHAR(50),
+    PurchaseUnit_List VARCHAR(20),
+    PurchaseUnit_Txt VARCHAR(20),
+    Packing INT,
+    StockUnit_List VARCHAR(20),
+    StockUnit_Txt VARCHAR(20),
+    Rack_List VARCHAR(50),
+    Rack_Txt VARCHAR(50),
+    Bin_List VARCHAR(50),
+    Bin_Txt VARCHAR(50),
+    ProductType_List VARCHAR(50),
+    ProductType_Txt VARCHAR(50),
+    Manufacturer_List VARCHAR(100),
+    Manufacturer_Txt VARCHAR(100),
+    Remarks TEXT,
+    PurchaseRate DECIMAL(10,2),
+    PurchaseDiscount DECIMAL(5,2),
+    MRP DECIMAL(10,2),
+    SaleRate DECIMAL(10,2),
+    SaleDiscount DECIMAL(5,2),
+    TaxPercent DECIMAL(5,2),
+    HSN VARCHAR(20),
+    MinStock DECIMAL(10,2),
+    MaxStock DECIMAL(10,2),
+    MinOrder DECIMAL(10,2),
+    IsActive BOOLEAN DEFAULT TRUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
