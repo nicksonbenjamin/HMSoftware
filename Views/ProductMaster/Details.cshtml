@@ -1,0 +1,179 @@
+@model ProductMasterViewModel
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h2>Product Details</h2>
+<br />
+<form asp-action="Edit" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Product Code</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.ProductCode
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="PurchaseRate">Purchase Rate</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.PurchaseRate
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="ProductName"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.ProductName
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="PurchaseDiscount">Purchase Discount %</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.PurchaseDiscount
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="GenericName"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.GenericName
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="ProductGroup_List">Product Group</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.ProductGroup_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.ProductGroup_Txt
+        </div>
+
+        <label class="col-sm-2 col-form-label" asp-for="MRP"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.MRP
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="PurchaseUnit_List">Purchase Unit</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.PurchaseUnit_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.PurchaseUnit_Txt
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="SaleRate"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.SaleRate
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Packing"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.Packing
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="SaleDiscount">Sale Discount %</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.SaleDiscount
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="StockUnit_List">Stock Unit</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.StockUnit_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.StockUnit_Txt
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="TaxPercent">Tax %</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.TaxPercent
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Rack_List">Rack</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.Rack_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.Rack_Txt
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="HSN"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.HSN
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Bin_List">Bin</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.Bin_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.Bin_Txt
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="MinStock">Min Stock</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.MinStock
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="ProductType_List">Product Type</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.ProductType_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.ProductType_Txt
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="MaxStock">Max Stock</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.MaxStock
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Manufacturer_List">Manufacturer</label>
+        <div class="col-sm-2 col-form-label">
+            @Model.Manufacturer_List
+        </div>
+        <div class="col-sm-2 col-form-label">
+            @Model.Manufacturer_Txt
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="MinOrder">Min Order</label>
+        <div class="col-sm-4 col-form-label">
+            @Model.MinOrder
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Remarks"></label>
+        <div class="col-sm-4 col-form-label">
+            @Model.Remarks
+        </div>
+        <label class="col-sm-2 col-form-label">Status</label>
+        <div class="col-sm-4 form-check col-form-label">
+            <strong>@(Model.IsActive ? "Active" : "Inactive")</strong>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row mt-3">
+        <div class="col-sm-12 text-right">
+            <a asp-action="Edit" asp-route-id="@Model.ProductCode" class="btn btn-primary">Edit</a>
+            <a href="@Url.Action("Index", "ProductMaster")" class="btn btn-secondary">Exit</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".productmaster").addClass("active");
+    });
+</script>
