@@ -1,0 +1,71 @@
+@model List<ClinicApp.ViewModels.LedgerMasterViewModel>
+
+@{
+    ViewData["Title"] = "Ledger List";
+}
+
+
+<h2>Ledger Master</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+<a asp-action="Create" class="btn btn-success">Add New Ledger</a>
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Ledger Type</th>
+            <th>Ledger Name</th>
+            <th>Place</th>
+            <th>GSTIN</th>
+            <th>GST State</th>
+            <th>Credit Days</th>
+            <th>Contact Person</th>
+            <th>Phone No</th>
+            <th>Mobile No</th>
+            <th>Email</th>
+            <th>Drug License No</th>
+            <th>Active</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.LedgerType</td>
+                <td>@item.LedgerName</td>
+                <td>@item.Place</td>
+                <td>@item.GSTIN</td>
+                <td>@item.GSTState</td>
+                <td>@item.CreditDays</td>
+                <td>@item.ContactPerson</td>
+                <td>@item.PhoneNo</td>
+                <td>@item.MobileNo</td>
+                <td>@item.Email</td>
+                <td>@item.DrugLicenseNo</td>
+                <td>@(item.IsActive ? "Yes" : "No")</td>
+                <td>@item.CreatedAt.ToString("dd-MM-yyyy")</td>
+                <td>@item.UpdatedAt.ToString("dd-MM-yyyy")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".ledgerMaster").addClass("active");
+    });
+</script>
