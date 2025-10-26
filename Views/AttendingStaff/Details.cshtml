@@ -1,0 +1,11 @@
+@page "{id:int}"
+@model ClinicApp.AttendingStaff.DetailsModel
+@{
+    ViewData["Title"] = "Staff Details";
+}
+
+<h2>Staff Details</h2>
+
+<div>
+    <strong>Name:</strong> @Model.Staff.FirstName @Model.Staff.LastName<br />
+    <strong>Role:</strong> @Model
