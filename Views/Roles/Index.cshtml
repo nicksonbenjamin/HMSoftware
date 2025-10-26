@@ -1,0 +1,29 @@
+@page
+@model Roles.IndexModel
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h2>Roles</h2>
+<a class="btn btn-primary" asp-page="Create">Add Role</a>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Role Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model.Roles)
+        {
+            <tr>
+                <td>@role.RoleName</td>
+                <td>
+                    <a asp-page="Details" asp-route-id="@role.RoleId">Details</a> |
+                    <a asp-page="Edit" asp-route-id="@role.RoleId">Edit</a> |
+                    <a asp-page="Delete" asp-route-id="@role.RoleId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
