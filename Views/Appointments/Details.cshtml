@@ -1,0 +1,19 @@
+@page "{id:int}"
+@model ClinicApp.Appointments.DetailsModel
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<h2>Appointment Details</h2>
+
+<div>
+    <strong>Patient:</strong> @Model.Appointment.PatientName<br />
+    <strong>Date:</strong> @Model.Appointment.AppointmentDate.ToString("f")<br />
+    <strong>Reason:</strong> @Model.Appointment.Reason<br />
+    <strong>Status:</strong> @Model.Appointment.Status<br />
+    <strong>Created:</strong> @Model.Appointment.CreatedAt.ToShortDateString()
+</div>
+
+<a asp-page="Edit" asp-route-id="@Model.Appointment.AppointmentID" class="btn btn-primary">Edit</a>
+<a asp-page="Index" class="btn btn-secondary">Back to List</a>
+<a asp-page="Delete" asp-route-id="@Model.Appointment.AppointmentID" class="btn btn-danger">Delete</a>
