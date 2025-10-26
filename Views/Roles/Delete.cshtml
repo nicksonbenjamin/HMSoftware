@@ -1,0 +1,17 @@
+@page "{id}"
+@model Roles.DeleteModel
+@{
+    ViewData["Title"] = "Delete Role";
+}
+
+<h2>Delete Role</h2>
+
+<h4>Are you sure you want to delete this role?</h4>
+<div>
+    <strong>Role Name:</strong> @Model.Role.RoleName
+</div>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
