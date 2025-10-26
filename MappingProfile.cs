@@ -12,5 +12,7 @@ public class MappingProfile : Profile
         CreateMap<PatientViewModel, Patient>();
         CreateMap<ProductMaster, ProductMasterViewModel>();
         CreateMap<ProductMasterViewModel, ProductMaster>();
+	CreateMap<LedgerMaster, LedgerMasterViewModel>();
+        CreateMap<LedgerMasterViewModel, LedgerMaster>();
     }
 }

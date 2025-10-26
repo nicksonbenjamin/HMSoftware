@@ -34,6 +34,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddScoped<ApplicationUserViewModel>();
 builder.Services.AddScoped<PatientViewModel>();
 builder.Services.AddScoped<ProductMasterViewModel>();
+builder.Services.AddScoped<LedgerMasterViewModel>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
