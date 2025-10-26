@@ -1,0 +1,25 @@
+@model ClinicApp.ViewModels.ApplicationUserViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2>User Details</h2>
+
+<div>
+    <strong>Login:</strong> @Model.LoginNamee<br />
+    <strong>Name:</strong> @Model.FirstName @Model.MiddleName @Model.LastName<br />
+    <strong>Role:</strong> @Model.RoleName
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".users").addClass("active");
+    });
+</script>

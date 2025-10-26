@@ -1,0 +1,42 @@
+@model List<ClinicApp.ViewModels.ApplicationUserViewModel>
+
+@{
+    ViewData["Title"] = "Application Users";
+}
+
+<h2>Application Users</h2>
+<a class="btn btn-primary" asp-action="Create">Add User</a>
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Login</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.LoginNamee</td>
+                <td>@user.FirstName @user.MiddleName @user.LastName</td>
+                <td>@user.RoleName</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@user.UserId">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".users").addClass("active");
+    });
+</script>
