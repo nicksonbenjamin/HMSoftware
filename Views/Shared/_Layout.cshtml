@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ClinicApp</title>    
+</head>
+
+<body>
+    <header>
+    <div class="card card-yellow">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid card-header">
+
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ClinicApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex navright">
+                    <!-- 🔐 Login/Logout UI -->
+                    <div class="d-flex align-items-right">
+                        @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
+                        {
+                            <text>
+                                <span class="me-2">Hello, @Context.Session.GetString("UserName")</span>
+                                <a class="btn btn-outline-secondary btn-sm" href="/Auth/Logout">Logout</a>
+                            </text>
+                        }
+                        @* else
+                        {
+                            <text>
+                                <a class="btn btn-outline-primary btn-sm" href="/Auth/Login">Login</a>
+                            </text>
+                        } *@
+                    </div>
+                </div>
+            </div>
+        </nav>
+        </div>
+    </header>
+    <div class="">
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
+    {        
+            <!-- Left Menu -->
+            <div class="">
+                <ul class="nav menu flex-row">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark pointer users active" asp-controller="ApplicationUsers" asp-action="Index">Add
+                            User</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark pointer patients" asp-controller="Patients" asp-action="Index">Patient
+                            Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark pointer productmaster" asp-controller="ProductMaster" asp-action="Index">Product Master</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark pointer ledgerMaster" asp-controller="LedgerMaster" asp-action="Index">Ledger Master</a>
+                    </li>
+                </ul>
+            </div>
+    }
+    <div class="col-10" style="padding-left: 10px;margin-top:10px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - ClinicApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
