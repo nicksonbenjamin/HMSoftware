@@ -1,0 +1,29 @@
+@page "{id}"
+@model ClinicApp.Visits.EditModel
+@{
+    ViewData["Title"] = "Edit Visit";
+}
+
+<h2>Edit Visit</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Visit.VisitID" />
+    <div class="form-group">
+        <label>Patient</label>
+        <select asp-for="Visit.PatientID" asp-items="Model.Patients" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Visit Date</label>
+        <input asp-for="Visit.VisitDate" type="datetime-local" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Attending Staff</label>
+        <select asp-for="Visit.AttendingStaffID" asp-items="Model.Staff" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Notes</label>
+        <textarea asp-for="Visit.Notes" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
