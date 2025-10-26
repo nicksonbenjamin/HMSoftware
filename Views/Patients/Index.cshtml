@@ -1,0 +1,56 @@
+@model List<PatientViewModel>
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<h1>Patients</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Age</th>
+            <th>Sex</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatientName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sex)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PatientId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PatientId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PatientId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".patients").addClass("active");
+    });
+</script>
