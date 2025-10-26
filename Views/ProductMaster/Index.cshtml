@@ -1,0 +1,47 @@
+@model List<ProductMasterViewModel>
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<h2>Product List</h2>
+<a asp-action="Create" class="btn btn-primary">Add New Product</a>
+<br />
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Generic</th>
+            <th>MRP</th>
+            <th>Sale Rate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.GenericName</td>
+            <td>@item.MRP</td>
+            <td>@item.SaleRate</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProductCode">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductCode">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductCode">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".productmaster").addClass("active");
+    });
+</script>

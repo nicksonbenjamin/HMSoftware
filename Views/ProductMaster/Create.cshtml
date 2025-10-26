@@ -1,0 +1,196 @@
+@model ProductMasterViewModel
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h2>Create Product</h2>
+<br />
+<form asp-action="Create" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Product Code</label>
+        <div class="col-sm-4 col-form-label">
+            To be generated automatically
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="PurchaseRate">Purchase Rate</label>
+        <div class="col-sm-4">
+            <input asp-for="PurchaseRate" class="form-control" />
+            <span asp-validation-for="PurchaseRate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="ProductName"></label>
+        <div class="col-sm-4">
+            <input asp-for="ProductName" class="form-control" />
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+
+        <label class="col-sm-2 col-form-label" asp-for="PurchaseDiscount">Purchase Discount %</label>
+        <div class="col-sm-4">
+            <input asp-for="PurchaseDiscount" class="form-control" />
+            <span asp-validation-for="PurchaseDiscount" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="GenericName"></label>
+        <div class="col-sm-4">
+            <textarea asp-for="GenericName" class="form-control"></textarea>
+            <span asp-validation-for="GenericName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="ProductGroup_List">Product Group</label>
+        <div class="col-sm-2">
+            <select asp-for="ProductGroup_List" class="form-control">
+                <option>General</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="ProductGroup_Txt" class="form-control" />
+        </div>
+
+        <label class="col-sm-2 col-form-label" asp-for="MRP"></label>
+        <div class="col-sm-4">
+            <input asp-for="MRP" class="form-control" />
+            <span asp-validation-for="MRP" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="PurchaseUnit_List">Purchase Unit</label>
+        <div class="col-sm-2">
+            <select asp-for="PurchaseUnit_List" class="form-control">
+                <option>strip</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="PurchaseUnit_Txt" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="SaleRate"></label>
+        <div class="col-sm-4">
+            <input asp-for="SaleRate" class="form-control" />
+            <span asp-validation-for="SaleRate" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Packing"></label>
+        <div class="col-sm-4">
+            <input asp-for="Packing" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="SaleDiscount">Sale Discount %</label>
+        <div class="col-sm-4">
+            <input asp-for="SaleDiscount" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="StockUnit_List">Stock Unit</label>
+        <div class="col-sm-2">
+            <select asp-for="StockUnit_List" class="form-control">
+                <option>tab</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="StockUnit_Txt" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="TaxPercent">Tax %</label>
+        <div class="col-sm-4">
+            <input asp-for="TaxPercent" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Rack_List">Rack</label>
+        <div class="col-sm-2">
+            <select asp-for="Rack_List" class="form-control">
+                <option>no rack</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="Rack_Txt" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="HSN"></label>
+        <div class="col-sm-4">
+            <input asp-for="HSN" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Bin_List">Bin</label>
+        <div class="col-sm-2">
+            <select asp-for="Bin_List" class="form-control">
+                <option>no rack</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="Bin_Txt" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="MinStock">Min Stock</label>
+        <div class="col-sm-4">
+            <input asp-for="MinStock" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="ProductType_List">Product Type</label>
+        <div class="col-sm-2">
+            <select asp-for="ProductType_List" class="form-control">
+                <option>Schedule H1</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="ProductType_Txt" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="MaxStock">Max Stock</label>
+        <div class="col-sm-4">
+            <input asp-for="MaxStock" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Manufacturer_List">Manufacturer</label>
+        <div class="col-sm-2">
+            <select asp-for="Manufacturer_List" class="form-control">
+                <option>Select an Option</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input asp-for="Manufacturer_Txt" class="form-control" />
+        </div>
+        <label class="col-sm-2 col-form-label" asp-for="MinOrder">Min Order</label>
+        <div class="col-sm-4">
+            <input asp-for="MinOrder" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label" asp-for="Remarks"></label>
+        <div class="col-sm-4">
+            <textarea asp-for="Remarks" class="form-control"></textarea>
+        </div>
+        <div class="col-sm-6" style="text-align: center;">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label"></label>
+        </div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-success mt-3">Save</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the clicked item's parent <li>
+        $(".productmaster").addClass("active");
+    });
+</script>
