@@ -1,1 +1,231 @@
+/*
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+*/
+/* Yellow-themed custom styles for Bootstrap-enabled ASP.NET Core MVC site */
+
+html {
+  position: relative;
+}
+
+/* Body and typography */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fffbea;
+    color: #333;
+    margin-bottom: 60px;
+    min-height: 500px;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #fdd835; /* Bright yellow */
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+    color: #212121 !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffeb3b !important;
+}
+
+/* Footer */
+footer {
+    background-color: #fbc02d;
+    color: #212121;
+    bottom: 0;
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  /* color: var(--bs-secondary-color); */
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #fdd835 !important;
+    color: #212121 !important;
+}
+
+.btn-primary:hover {
+    background-color: #fbc02d !important;
+    color: #000000 !important;
+}
+
+/* Cards */
+.card-yellow {
+    border: 1px solid #fdd835;
+    background-color: #fffde7;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-yellow .card-header {
+    background-color: #fdd835;
+    color: #212121;
+    font-weight: bold;
+}
+
+/* Form controls */
+.form-control:focus {
+    border-color: #fdd835;
+    box-shadow: 0 0 0 0.2rem rgba(253, 216, 53, 0.25);
+}
+
+/* Alerts */
+.alert-yellow {
+    background-color: #fffde7;
+    border-color: #fdd835;
+    color: #212121;
+}
+
+/* Yellow-themed table styles for Bootstrap-enabled ASP.NET Core MVC */
+
+/* Base table styling */
+table {
+    background-color: #fffde7; /* Light yellow background */
+    color: #212121;
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #fdd835;
+}
+
+/* Table header */
+table th {
+    background-color: #fdd835 !important; /* Bright yellow */
+    color: #212121;
+    font-weight: bold;
+}
+
+table th {
+    padding: 12px;
+    border: 1px solid #fbc02d !important;
+    text-align: left;
+}
+
+/* Table body */
+table td {
+    padding: 10px;
+    border: 1px solid #fbc02d !important;
+}
+
+/* Zebra striping */
+table tbody tr:nth-child(odd) {
+    background-color: #fff9c4 !important;
+}
+
+table tbody tr:hover {
+    background-color: #fff59d !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    table th,
+    table td {
+        padding: 8px;
+    }
+}
+
+/* Yellow-themed horizontal menu using ul/li */
+
+.menu {
+    background-color: #fdd835; /* Bright yellow */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: left;
+    border-bottom: 2px solid #fbc02d;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.menu li {
+    margin: 0;
+}
+
+.menu li a {
+    display: block;
+    padding: 14px 20px;
+    color: #212121;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu li a:hover,
+.menu li a.active {
+    background-color: #fff9c4; /* Soft yellow highlight */
+    color: #000;
+    text-decoration: underline;
+}
+
+.outercontainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.newcontainer {
+    text-align: left;
+    width: 40%;
+}
+
+/* Responsive stacking on small screens */
+@media (max-width: 768px) {
+    .menu {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .menu li a {
+        text-align: center;
+        border-top: 1px solid #fbc02d;
+    }
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+}
 
