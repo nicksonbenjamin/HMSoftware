@@ -27,9 +27,12 @@
             <td>@item.MRP</td>
             <td>@item.SaleRate</td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductCode">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductCode">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductCode">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ProductCode">
+                <img src="~/images/edit.jpg" alt="Edit" style="width:20px; height:20px;" /></a> |
+                <a asp-action="Details" asp-route-id="@item.ProductCode">
+                <img src="~/images/details.jpg" alt="Edit" style="width:20px; height:20px;" /></a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductCode">
+                <img src="~/images/delete.jpg" alt="Delete" style="width:20px; height:20px;" /></a>
             </td>
         </tr>
     }
