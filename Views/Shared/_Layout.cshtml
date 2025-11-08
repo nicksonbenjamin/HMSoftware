@@ -1,4 +1,19 @@
-﻿@* _Layout.cshtml *@
+﻿@using System.Linq
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    // Highlight active menu with lighter green
+    Func<string, string, string> isActive = (string controller, string action) =>
+    {
+        return (controller == currentController && (string.IsNullOrEmpty(action) || action == currentAction)) ? "active" : "";
+    };
+
+    Func<string[], string> isMasterOpen = (string[] controllers) =>
+    {
+        return controllers.Contains(currentController) ? "show" : "";
+    };
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,15 +21,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ClinicApp</title>
 
-    <!-- ✅ Bootstrap 5 -->
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- ✅ Optional: Font Awesome for icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
@@ -30,7 +40,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            background: #2e7d32; /* hospital green */
+            background: #2e7d32; /* dark green */
             color: #fff;
             border-right: 1px solid #1b5e20;
             padding-top: 70px;
@@ -45,17 +55,22 @@
         }
 
         .sidebar .nav-link:hover {
-            background-color: #1b5e20;
+            background-color: #1b5e20; /* darker green */
             color: #fff;
         }
 
-        .sidebar .nav-link i {
-            margin-right: 10px;
+        /* Active menu styling */
+        .sidebar .nav-link.active {
+            background-color: #43a047; /* lighter green */
+            color: #fff;
+            font-weight: 500;
+            border-left: 4px solid #fdd835; /* subtle yellow accent */
         }
 
+        /* Collapse submenu links */
         .sidebar .collapse .nav-link {
             padding-left: 35px;
-            background: #388e3c; /* lighter green */
+            background: #388e3c;
         }
 
         .sidebar .collapse .nav-link:hover {
@@ -95,11 +110,18 @@
         .collapse.show + a .caret {
             transform: rotate(90deg);
         }
+
+        /* Optional alert badge */
+        .badge-notification {
+            background-color: #fdd835; /* yellow */
+            color: #2e7d32;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
-    <!-- ✅ Header/Navbar -->
+    <!-- Navbar -->
     <header>
         <nav class="navbar navbar-expand-sm navbar-light border-bottom">
             <div class="container-fluid">
@@ -109,10 +131,8 @@
                 <div class="d-flex ms-auto">
                     @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
                     {
-                        <text>
-                            <span class="me-2">Hello, @Context.Session.GetString("UserName")</span>
-                            <a class="btn btn-outline-success btn-sm" href="/Auth/Logout">Logout</a>
-                        </text>
+                        <span class="me-2">Hello, @Context.Session.GetString("UserName")</span>
+                        <a class="btn btn-outline-success btn-sm" href="/Auth/Logout">Logout</a>
                     }
                 </div>
             </div>
@@ -121,46 +141,48 @@
 
     @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
     {
-        <!-- ✅ Left Sidebar -->
+        <!-- Sidebar -->
         <div class="sidebar">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="ApplicationUsers" asp-action="Index">
+                    <a class="nav-link @isActive("ApplicationUsers","Index")" asp-controller="ApplicationUsers" asp-action="Index">
                         <i class="fa-solid fa-user-plus"></i> Add User
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Patients" asp-action="Index">
+                    <a class="nav-link @isActive("Patients","Index")" asp-controller="Patients" asp-action="Index">
                         <i class="fa-solid fa-hospital-user"></i> Patient Registration
                     </a>
                 </li>
-        <li class="nav-item">
-                    <a class="nav-link" asp-controller="Prescriptions" asp-action="Index">
+                <li class="nav-item">
+                    <a class="nav-link @isActive("Prescriptions","Index")" asp-controller="Prescriptions" asp-action="Index">
                         <i class="fa-solid fa-hospital-user"></i> Prescriptions
                     </a>
                 </li>
-                <!-- 🔽 Master dropdown -->
+
+                <!-- Master dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center"
+                    <a class="nav-link d-flex justify-content-between align-items-center @( (new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster" }).Contains(currentController) ? "active" : "")"
                        data-bs-toggle="collapse" href="#masterSubmenu" role="button"
-                       aria-expanded="false" aria-controls="masterSubmenu">
+                       aria-expanded="@( (new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster" }).Contains(currentController) ? "true" : "false")"
+                       aria-controls="masterSubmenu">
                         <span><i class="fa-solid fa-gear"></i> Master</span>
                         <i class="fa-solid fa-caret-right caret"></i>
                     </a>
-                    <div class="collapse" id="masterSubmenu">
+                    <div class="collapse @isMasterOpen(new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster" })" id="masterSubmenu">
                         <ul class="nav flex-column">
-                        <li class="nav-item">
-               <a class="nav-link" asp-controller="DescriptionMaster" asp-action="Index">
-    <i class="fa-solid fa-file-lines"></i> Descriptions Master
-</a>
-            </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="ProductMaster" asp-action="Index">
+                                <a class="nav-link @isActive("DescriptionMaster","Index")" asp-controller="DescriptionMaster" asp-action="Index">
+                                    <i class="fa-solid fa-file-lines"></i> Descriptions Master
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @isActive("ProductMaster","Index")" asp-controller="ProductMaster" asp-action="Index">
                                     <i class="fa-solid fa-box"></i> Product Master
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="LedgerMaster" asp-action="Index">
+                                <a class="nav-link @isActive("LedgerMaster","Index")" asp-controller="LedgerMaster" asp-action="Index">
                                     <i class="fa-solid fa-book"></i> Ledger Master
                                 </a>
                             </li>
@@ -171,19 +193,19 @@
         </div>
     }
 
-    <!-- ✅ Main Content -->
+    <!-- Main Content -->
     <div class="content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <!-- ✅ Footer -->
+    <!-- Footer -->
     <footer>
         &copy; 2025 - ClinicApp | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
 
-    <!-- ✅ Bootstrap JS Bundle -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
