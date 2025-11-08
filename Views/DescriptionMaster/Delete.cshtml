@@ -1,0 +1,63 @@
+@model ClinicApp.ViewModels.DescriptionMasterViewModel
+
+@{
+    ViewData["Title"] = "Delete Description Master";
+}
+
+<h2>Delete Description Master</h2>
+
+<div class="alert alert-danger">
+    <strong>Warning:</strong> Are you sure you want to delete this record? This action cannot be undone.
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="DescriptionId" />
+
+    <div class="mb-3">
+        <label asp-for="DescriptionCode" class="form-label"></label>
+        <input asp-for="DescriptionCode" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DescriptionName" class="form-label"></label>
+        <input asp-for="DescriptionName" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Group" class="form-label"></label>
+        <input asp-for="Group" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Section" class="form-label"></label>
+        <input asp-for="Section" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NormalCharges" class="form-label"></label>
+        <input asp-for="NormalCharges" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EmergencyCharges" class="form-label"></label>
+        <input asp-for="EmergencyCharges" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DrCharges" class="form-label"></label>
+        <input asp-for="DrCharges" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Remarks" class="form-label"></label>
+        <textarea asp-for="Remarks" class="form-control" rows="3" readonly></textarea>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" disabled />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

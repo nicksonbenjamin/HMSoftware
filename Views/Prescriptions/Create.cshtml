@@ -1,0 +1,156 @@
+@model ClinicApp.ViewModels.PrescriptionViewModel
+
+@{
+    ViewData["Title"] = "Create Prescription";
+}
+
+<h3 class="mb-3">Create Prescription</h3>
+
+<form asp-action="Create" method="post">
+    <div class="p-3 border rounded">
+
+        <!-- Basic Info Row -->
+        <div class="row g-2 mb-2">
+            <div class="col-md-4">
+                <label asp-for="EntryType" class="form-label">Entry Type</label>
+                <input asp-for="EntryType" class="form-control border" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="EntryNo" class="form-label">Entry No</label>
+                <input asp-for="EntryNo" class="form-control border" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="EntryDate" class="form-label">Entry Date</label>
+                <input asp-for="EntryDate" type="date" class="form-control border" />
+            </div>
+        </div>
+
+        <!-- Patient Info Row -->
+        <div class="row g-2 mb-2">
+            <div class="col-md-6">
+                <label asp-for="PatientName" class="form-label">Patient Name</label>
+                <input asp-for="PatientName" class="form-control border" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="UHID" class="form-label">UHID</label>
+                <input asp-for="UHID" class="form-control border" />
+            </div>
+        </div>
+
+        <div class="row g-2 mb-2">
+            <div class="col-md-6">
+                <label asp-for="Address" class="form-label">Address</label>
+                <input asp-for="Address" class="form-control border" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Place" class="form-label">Place</label>
+                <input asp-for="Place" class="form-control border" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="CellNo" class="form-label">Cell No</label>
+                <input asp-for="CellNo" class="form-control border" />
+            </div>
+        </div>
+
+        <!-- Additional Info Row -->
+        <div class="row g-2 mb-2">
+            <div class="col-md-2">
+                <label asp-for="Sex" class="form-label">Sex</label>
+                <select asp-for="Sex" class="form-select border">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="Age" class="form-label">Age</label>
+                <input asp-for="Age" type="number" class="form-control border" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="BloodGroup" class="form-label">Blood Group</label>
+                <input asp-for="BloodGroup" class="form-control border" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="HeightCm" class="form-label">Height (cm)</label>
+                <input asp-for="HeightCm" type="number" step="0.01" class="form-control border" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="WeightKg" class="form-label">Weight (kg)</label>
+                <input asp-for="WeightKg" type="number" step="0.01" class="form-control border" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="BMI" class="form-label">BMI</label>
+                <input asp-for="BMI" type="number" step="0.01" class="form-control border" />
+            </div>
+        </div>
+
+        <!-- Prescription Details Table -->
+        <h5 class="mt-3 mb-2">Prescription Details</h5>
+        <table class="table table-bordered table-sm" id="detailsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th style="width:80px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Details != null && Model.Details.Count > 0)
+                {
+                    for (int i = 0; i < Model.Details.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input asp-for="Details[@i].Description" class="form-control form-control-sm border" />
+                            </td>
+                            <td>
+                                <input asp-for="Details[@i].Amount" type="number" step="0.01" class="form-control form-control-sm border" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm removeDetail">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary btn-sm mb-3" id="addDetail">Add Detail</button>
+
+        <!-- Form Buttons -->
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success btn-sm">Save</button>
+            <a asp-action="Index" class="btn btn-secondary btn-sm ms-2">Cancel</a>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        var detailIndex = @Model.Details?.Count ?? 0;
+
+        document.getElementById('addDetail').addEventListener('click', function () {
+            var tableBody = document.querySelector('#detailsTable tbody');
+            var row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <input name="Details[${detailIndex}].Description" class="form-control form-control-sm border" />
+                </td>
+                <td>
+                    <input name="Details[${detailIndex}].Amount" type="number" step="0.01" class="form-control form-control-sm border" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm removeDetail">Remove</button>
+                </td>`;
+            tableBody.appendChild(row);
+            detailIndex++;
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('removeDetail')) {
+                e.target.closest('tr').remove();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,195 @@
+@model ClinicApp.ViewModels.DescriptionMasterViewModel
+
+@{
+    ViewData["Title"] = "Description Master - Create";
+}
+
+<style>
+    .form-section {
+        border: 1px solid #0b5a8a;
+        background-color: #e9f4fb;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .form-section h4 {
+        background-color: #0b5a8a;
+        color: white;
+        padding: 8px;
+        margin: -15px -15px 10px -15px;
+        font-size: 1.1rem;
+    }
+    .table input, .table select {
+        width: 100%;
+    }
+</style>
+
+<form asp-action="Create" method="post">
+    <!-- ================= Description Master Section ================= -->
+    <div class="form-section">
+        <h4>Description Master</h4>
+
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label asp-for="DescriptionCode"></label>
+                <input asp-for="DescriptionCode" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="DescriptionName"></label>
+                <input asp-for="DescriptionName" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="NormalCharges"></label>
+                <input asp-for="NormalCharges" class="form-control text-end" />
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="form-check">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label asp-for="Group"></label>
+                <input asp-for="Group" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Section"></label>
+                <input asp-for="Section" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="EmergencyCharges"></label>
+                <input asp-for="EmergencyCharges" class="form-control text-end" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="DrCharges"></label>
+                <input asp-for="DrCharges" class="form-control text-end" />
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <label asp-for="Remarks"></label>
+                <input asp-for="Remarks" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label>Applicable</label>
+                <div>
+                    <input asp-for="Applicable_All" type="checkbox" /> All
+                    <input asp-for="Applicable_LAB" type="checkbox" /> LAB
+                    <input asp-for="Applicable_OP" type="checkbox" /> OP
+                    <input asp-for="Consultation" type="checkbox" /> Consultation
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-12 text-end">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Go Back</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Master Test Value Section ================= -->
+    <div class="form-section">
+        <h4>Master Test Value</h4>
+
+        <table class="table table-bordered" id="testValuesTable">
+            <thead style="background-color: #d0e9ff;">
+                <tr>
+                    <th>Specimen</th>
+                    <th>Test Name</th>
+                    <th>Male</th>
+                    <th>Female</th>
+                    <th>Children</th>
+                    <th>General</th>
+                    <th>Unit</th>
+                    <th>Method</th>
+                    <th>Html Style</th>
+                    <th>Instrument</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody id="testValuesBody">
+                <!-- Dynamic rows will appear here -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><input id="Specimen" class="form-control" /></td>
+                    <td><input id="TestName" class="form-control" /></td>
+                    <td><input id="Male" class="form-control" /></td>
+                    <td><input id="Female" class="form-control" /></td>
+                    <td><input id="Children" class="form-control" /></td>
+                    <td><input id="General" class="form-control" /></td>
+                    <td><input id="Unit" class="form-control" /></td>
+                    <td><input id="Method" class="form-control" /></td>
+                    <td><input id="HtmlStyle" class="form-control" /></td>
+                    <td><input id="Instrument" class="form-control" /></td>
+                    <td>
+                        <button type="button" id="addTestValueBtn" class="btn btn-sm btn-primary">Add</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        let testIndex = 0;
+
+        document.getElementById('addTestValueBtn').addEventListener('click', function () {
+            const specimen = document.getElementById('Specimen').value;
+            const testName = document.getElementById('TestName').value;
+            const male = document.getElementById('Male').value;
+            const female = document.getElementById('Female').value;
+            const children = document.getElementById('Children').value;
+            const general = document.getElementById('General').value;
+            const unit = document.getElementById('Unit').value;
+            const method = document.getElementById('Method').value;
+            const htmlStyle = document.getElementById('HtmlStyle').value;
+            const instrument = document.getElementById('Instrument').value;
+
+            if (!testName.trim()) {
+                alert('Please enter Test Name');
+                return;
+            }
+
+            const row = `
+                <tr>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Specimen" value="${specimen}" />${specimen}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].TestName" value="${testName}" />${testName}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Male" value="${male}" />${male}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Female" value="${female}" />${female}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Children" value="${children}" />${children}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].General" value="${general}" />${general}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Unit" value="${unit}" />${unit}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Method" value="${method}" />${method}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].HtmlStyle" value="${htmlStyle}" />${htmlStyle}</td>
+                    <td><input type="hidden" name="TestValues[${testIndex}].Instrument" value="${instrument}" />${instrument}</td>
+                    <td><button type="button" class="btn btn-danger btn-sm remove-row">X</button></td>
+                </tr>
+            `;
+
+            document.getElementById('testValuesBody').insertAdjacentHTML('beforeend', row);
+            testIndex++;
+
+            document.querySelectorAll('#Specimen, #TestName, #Male, #Female, #Children, #General, #Unit, #Method, #HtmlStyle, #Instrument')
+                .forEach(i => i.value = '');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-row')) {
+                e.target.closest('tr').remove();
+            }
+        });
+    </script>
+}
