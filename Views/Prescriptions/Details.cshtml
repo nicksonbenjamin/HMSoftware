@@ -1,0 +1,144 @@
+@model ClinicApp.ViewModels.PrescriptionViewModel
+@{
+    ViewData["Title"] = "Prescription Details";
+}
+
+<h3 class="mb-4 text-primary">
+    <i class="bi bi-file-medical"></i> @ViewData["Title"]
+</h3>
+
+<div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-primary text-white py-2">
+        <strong>Prescription Information</strong>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Entry No</label>
+                <div>@Model.EntryNo</div>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Entry Date</label>
+                <div>@($"{Model.EntryDate:dd/MM/yyyy HH:mm}")</div>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Patient Name</label>
+                <div>@Model.PatientName</div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">UHID</label>
+                <div>@Model.UHID</div>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Contact</label>
+                <div>@Model.CellNo</div>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Sex / Age</label>
+                <div>@Model.Sex / @Model.Age</div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Blood Group</label>
+                <div>@Model.BloodGroup</div>
+            </div>
+            <div class="col-md-8">
+                <label class="fw-semibold text-secondary">Address</label>
+                <div>@Model.Address, @Model.Place</div>
+            </div>
+
+            <div class="col-md-12">
+                <label class="fw-semibold text-secondary">Vitals</label>
+                <div class="bg-light p-2 rounded border small">
+                    Height: <strong>@Model.HeightCm cm</strong>,
+                    Weight: <strong>@Model.WeightKg kg</strong>,
+                    BMI: <strong>@Model.BMI</strong><br />
+                    Temperature: <strong>@Model.Temperature °C</strong>,
+                    BP: <strong>@Model.BP</strong>,
+                    SPO2: <strong>@Model.SPO2</strong>,
+                    Pulse: <strong>@Model.PulseRate</strong>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="fw-semibold text-secondary">Consulted By</label>
+                <div>@Model.ConsultBy</div>
+            </div>
+            <div class="col-md-6">
+                <label class="fw-semibold text-secondary">Referred By</label>
+                <div>@Model.ReferredBy</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="fw-semibold text-secondary">Disease / Diagnosis</label>
+                <div>@Model.Disease</div>
+            </div>
+            <div class="col-md-6">
+                <label class="fw-semibold text-secondary">Remarks</label>
+                <div>@Model.Remarks</div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Next Visit</label>
+                <div>@Model.NextVisitDate?.ToString("dd/MM/yyyy") (@Model.NextVisitAfter days)</div>
+            </div>
+            <div class="col-md-4">
+                <label class="fw-semibold text-secondary">Total Amount</label>
+                <div><strong class="text-success">@Model.TotalAmount?.ToString("C")</strong></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-secondary text-white py-2">
+        <strong>Prescription Items</strong>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width:5%">#</th>
+                    <th>Description</th>
+                    <th style="width:20%">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Details != null && Model.Details.Count > 0)
+                {
+                    int i = 1;
+                    foreach (var detail in Model.Details)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@detail.Description</td>
+                            <td class="text-end">@detail.Amount?.ToString("C")</td>
+                        </tr>
+                        i++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-3">
+                            <em>No prescription items available</em>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end gap-2 mt-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <a asp-action="Edit" asp-route-id="@Model.PrescriptionId" class="btn btn-warning btn-sm text-white">
+        <i class="bi bi-pencil-square"></i> Edit
+    </a>
+    <a asp-action="Delete" asp-route-id="@Model.PrescriptionId" class="btn btn-danger btn-sm">
+        <i class="bi bi-trash"></i> Delete
+    </a>
+</div>

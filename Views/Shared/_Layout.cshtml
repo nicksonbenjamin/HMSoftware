@@ -1,85 +1,191 @@
-﻿<!DOCTYPE html>
+﻿@* _Layout.cshtml *@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ClinicApp</title>    
+    <title>@ViewData["Title"] - ClinicApp</title>
+
+    <!-- ✅ Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- ✅ Optional: Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <style>
+        body {
+            overflow-x: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f9;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #2e7d32; /* hospital green */
+            color: #fff;
+            border-right: 1px solid #1b5e20;
+            padding-top: 70px;
+        }
+
+        .sidebar .nav-link {
+            color: #e8f5e9;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #1b5e20;
+            color: #fff;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+
+        .sidebar .collapse .nav-link {
+            padding-left: 35px;
+            background: #388e3c; /* lighter green */
+        }
+
+        .sidebar .collapse .nav-link:hover {
+            background: #2e7d32;
+        }
+
+        /* Content area */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        footer {
+            margin-left: 250px;
+            padding: 10px 20px;
+            background: #e8f5e9;
+            text-align: center;
+        }
+
+        /* Caret for collapse */
+        .caret {
+            transition: transform 0.3s;
+        }
+
+        .collapse.show + a .caret {
+            transform: rotate(90deg);
+        }
+    </style>
 </head>
 
 <body>
+    <!-- ✅ Header/Navbar -->
     <header>
-    <div class="card card-yellow">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid card-header">
-
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ClinicApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="navbar-collapse collapse d-sm-inline-flex navright">
-                    <!-- 🔐 Login/Logout UI -->
-                    <div class="d-flex align-items-right">
-                        @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
-                        {
-                            <text>
-                                <span class="me-2">Hello, @Context.Session.GetString("UserName")</span>
-                                <a class="btn btn-outline-secondary btn-sm" href="/Auth/Logout">Logout</a>
-                            </text>
-                        }
-                        @* else
-                        {
-                            <text>
-                                <a class="btn btn-outline-primary btn-sm" href="/Auth/Login">Login</a>
-                            </text>
-                        } *@
-                    </div>
+        <nav class="navbar navbar-expand-sm navbar-light border-bottom">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-success" asp-area="" asp-controller="Home" asp-action="Index">
+                    ClinicApp
+                </a>
+                <div class="d-flex ms-auto">
+                    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
+                    {
+                        <text>
+                            <span class="me-2">Hello, @Context.Session.GetString("UserName")</span>
+                            <a class="btn btn-outline-success btn-sm" href="/Auth/Logout">Logout</a>
+                        </text>
+                    }
                 </div>
             </div>
         </nav>
-        </div>
     </header>
-    <div class="">
+
     @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
-    {        
-            <!-- Left Menu -->
-            <div class="">
-                <ul class="nav menu flex-row">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark pointer users active" asp-controller="ApplicationUsers" asp-action="Index">Add
-                            User</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark pointer patients" asp-controller="Patients" asp-action="Index">Patient
-                            Registration</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark pointer productmaster" asp-controller="ProductMaster" asp-action="Index">Product Master</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark pointer ledgerMaster" asp-controller="LedgerMaster" asp-action="Index">Ledger Master</a>
-                    </li>
-                </ul>
-            </div>
+    {
+        <!-- ✅ Left Sidebar -->
+        <div class="sidebar">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="ApplicationUsers" asp-action="Index">
+                        <i class="fa-solid fa-user-plus"></i> Add User
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Patients" asp-action="Index">
+                        <i class="fa-solid fa-hospital-user"></i> Patient Registration
+                    </a>
+                </li>
+        <li class="nav-item">
+                    <a class="nav-link" asp-controller="Prescriptions" asp-action="Index">
+                        <i class="fa-solid fa-hospital-user"></i> Prescriptions
+                    </a>
+                </li>
+                <!-- 🔽 Master dropdown -->
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center"
+                       data-bs-toggle="collapse" href="#masterSubmenu" role="button"
+                       aria-expanded="false" aria-controls="masterSubmenu">
+                        <span><i class="fa-solid fa-gear"></i> Master</span>
+                        <i class="fa-solid fa-caret-right caret"></i>
+                    </a>
+                    <div class="collapse" id="masterSubmenu">
+                        <ul class="nav flex-column">
+                        <li class="nav-item">
+               <a class="nav-link" asp-controller="DescriptionMaster" asp-action="Index">
+    <i class="fa-solid fa-file-lines"></i> Descriptions Master
+</a>
+            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="ProductMaster" asp-action="Index">
+                                    <i class="fa-solid fa-box"></i> Product Master
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="LedgerMaster" asp-action="Index">
+                                    <i class="fa-solid fa-book"></i> Ledger Master
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
     }
-    <div class="col-10" style="padding-left: 10px;margin-top:10px;">
+
+    <!-- ✅ Main Content -->
+    <div class="content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - ClinicApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <!-- ✅ Footer -->
+    <footer>
+        &copy; 2025 - ClinicApp | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ✅ Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

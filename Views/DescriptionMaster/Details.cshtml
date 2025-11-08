@@ -1,0 +1,163 @@
+@model ClinicApp.ViewModels.DescriptionMasterViewModel
+
+@{
+    ViewData["Title"] = "Description Master Details";
+}
+
+<div class="container mt-3">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white py-2 px-3">
+            <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Description Master Details</h5>
+        </div>
+
+        <div class="card-body p-3">
+            <!-- Basic Info -->
+            <div class="row g-2 mb-2">
+                <div class="col-md-4">
+                    <label class="form-label small text-muted mb-1">Description Code</label>
+                    <div class="readonly-field">@Model.DescriptionCode</div>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label small text-muted mb-1">Description Name</label>
+                    <div class="readonly-field">@Model.DescriptionName</div>
+                </div>
+            </div>
+
+            <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                    <label class="form-label small text-muted mb-1">Group</label>
+                    <div class="readonly-field">@Model.Group</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small text-muted mb-1">Section</label>
+                    <div class="readonly-field">@Model.Section</div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label small text-muted mb-1">Applicable To</label>
+                <div class="readonly-field">
+                    @(Model.Applicable_All ? "All " : "")
+                    @(Model.Applicable_LAB ? "LAB " : "")
+                    @(Model.Applicable_OP ? "OP " : "")
+                    @(Model.Consultation ? "Consultation" : "")
+                </div>
+            </div>
+
+            <!-- Charges -->
+            <div class="row g-2 mb-2">
+                <div class="col-md-4">
+                    <label class="form-label small text-muted mb-1">Normal Charges</label>
+                    <div class="readonly-field">@Model.NormalCharges.ToString("C")</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small text-muted mb-1">Emergency Charges</label>
+                    <div class="readonly-field">@Model.EmergencyCharges.ToString("C")</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small text-muted mb-1">Dr. Charges</label>
+                    <div class="readonly-field">@Model.DrCharges.ToString("C")</div>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="row g-2 mb-2">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Active</label>
+                    <div class="readonly-field">
+                        @(Model.IsActive ? "✅ Active" : "❌ Inactive")
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Created At</label>
+                    <div class="readonly-field">@Model.CreatedAt.ToString("g")</div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Updated At</label>
+                    <div class="readonly-field">@Model.UpdatedAt.ToString("g")</div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted mb-1">Remarks</label>
+                    <div class="readonly-field">@Model.Remarks</div>
+                </div>
+            </div>
+
+            <!-- Test Values -->
+            <h6 class="text-primary mt-3 mb-2 border-bottom pb-1">Test Values</h6>
+            @if (Model.TestValues != null && Model.TestValues.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered align-middle mb-2">
+                        <thead class="table-light small text-center">
+                            <tr>
+                                <th>Specimen</th>
+                                <th>Test Name</th>
+                                <th>Male</th>
+                                <th>Female</th>
+                                <th>Children</th>
+                                <th>General</th>
+                                <th>Unit</th>
+                                <th>Method</th>
+                                <th>Html Style</th>
+                                <th>Instrument</th>
+                                <th>Sort</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            @foreach (var test in Model.TestValues)
+                            {
+                                <tr>
+                                    <td>@test.Specimen</td>
+                                    <td>@test.TestName</td>
+                                    <td>@test.Male</td>
+                                    <td>@test.Female</td>
+                                    <td>@test.Children</td>
+                                    <td>@test.General</td>
+                                    <td>@test.Unit</td>
+                                    <td>@test.Method</td>
+                                    <td>@test.HtmlStyle</td>
+                                    <td>@test.Instrument</td>
+                                    <td class="text-center">@test.SortOrder</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted small mb-1">No test values available.</p>
+            }
+
+            <!-- Buttons -->
+            <div class="text-end mt-2">
+                <a asp-action="Edit" asp-route-id="@Model.DescriptionId" class="btn btn-sm btn-warning me-2">
+                    <i class="bi bi-pencil-square me-1"></i>Edit
+                </a>
+                <a asp-action="Index" class="btn btn-sm btn-secondary">
+                    <i class="bi bi-arrow-left-circle me-1"></i>Back
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .readonly-field {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 0.9rem;
+        min-height: 30px;
+    }
+    .card {
+        border-radius: 8px;
+    }
+    .table-sm th, .table-sm td {
+        padding: 4px 6px !important;
+    }
+    .form-label {
+        font-weight: 600;
+    }
+</style>

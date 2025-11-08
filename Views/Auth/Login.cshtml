@@ -3,30 +3,65 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div class="outercontainer">
-    <div class="newcontainer">
-        <h2>Login</h2>
+
+<!-- Full-page container -->
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="width: 380px; border-radius: 15px;">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-success">ClinicApp Login</h2>
+            <i class="fa-solid fa-hospital fa-2x text-success"></i>
+        </div>
 
         <form asp-action="Login" method="post">
-            <div class="form-group">
-                <label asp-for="LoginNamee">Login Name</label>
-                <input asp-for="LoginNamee" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="LoginNamee" class="form-label">Login Name</label>
+                <input asp-for="LoginNamee" class="form-control" placeholder="Enter username" value="admin" />
                 <span asp-validation-for="LoginNamee" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="LoginPassword">Login Password</label>
-                <input asp-for="LoginPassword" type="password" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="LoginPassword" class="form-label">Password</label>
+                <input asp-for="LoginPassword" type="password" value="admin@123" class="form-control" placeholder="Enter password" />
                 <span asp-validation-for="LoginPassword" class="text-danger"></span>
             </div>
 
-            @if (!string.IsNullOrEmpty(Model == null ? "" : Model.ErrorMessage))
+            @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
             {
-                <div class="text-danger">@Model.ErrorMessage</div>
+                <div class="text-danger mb-3 text-center">@Model.ErrorMessage</div>
             }
-            <br />
-            <br />
-            <button type="submit" class="btn btn-primary">Login</button>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-block">Login</button>
+            </div>
         </form>
+
+        <div class="text-center mt-3">
+            <small class="text-muted">&copy; 2025 ClinicApp</small>
+        </div>
     </div>
 </div>
+
+<!-- ✅ Optional: Font Awesome for icon -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #e8f5e9; /* light hospital green */
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+    }
+
+    .btn-success {
+        background-color: #2e7d32;
+        border-color: #2e7d32;
+    }
+
+    .btn-success:hover {
+        background-color: #1b5e20;
+        border-color: #1b5e20;
+    }
+</style>

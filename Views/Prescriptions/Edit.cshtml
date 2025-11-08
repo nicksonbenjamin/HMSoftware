@@ -1,0 +1,120 @@
+@model ClinicApp.ViewModels.PrescriptionViewModel
+@{
+    ViewData["Title"] = "Edit Prescription";
+}
+
+<h3 class="mb-4 text-primary"><i class="bi bi-pencil-square"></i> @ViewData["Title"]</h3>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="PrescriptionId" />
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-primary text-white py-2"><strong>Prescription Info</strong></div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="EntryType" class="form-label fw-semibold"></label>
+                    <input asp-for="EntryType" class="form-control form-control-sm" />
+                    <span asp-validation-for="EntryType" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="EntryNo" class="form-label fw-semibold"></label>
+                    <input asp-for="EntryNo" class="form-control form-control-sm" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="EntryDate" class="form-label fw-semibold"></label>
+                    <input asp-for="EntryDate" type="datetime-local" class="form-control form-control-sm"
+                           value="@Model.EntryDate?.ToString("yyyy-MM-ddTHH:mm")" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PatientName" class="form-label fw-semibold"></label>
+                    <input asp-for="PatientName" class="form-control form-control-sm" />
+                    <span asp-validation-for="PatientName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Disease" class="form-label fw-semibold"></label>
+                    <select asp-for="Disease" class="form-select form-select-sm"
+                            asp-items="@(new SelectList(Model.DiseaseList))">
+                        <option value="">-- Select Disease --</option>
+                    </select>
+                    <span asp-validation-for="Disease" class="text-danger small"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-secondary text-white py-2 d-flex justify-content-between align-items-center">
+            <strong>Prescription Details</strong>
+            <button type="button" class="btn btn-light btn-sm" id="addDetail">
+                <i class="bi bi-plus-circle"></i> Add Detail
+            </button>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0 align-middle" id="detailsTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Description</th>
+                        <th style="width:20%">Amount</th>
+                        <th style="width:10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Details != null && Model.Details.Any())
+                    {
+                        for (int i = 0; i < Model.Details.Count; i++)
+                        {
+                            <tr>
+                                <td><input name="Details[@i].Description" value="@Model.Details[i].Description" class="form-control form-control-sm" /></td>
+                                <td><input name="Details[@i].Amount" value="@Model.Details[i].Amount" class="form-control form-control-sm text-end" /></td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm removeDetail"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-3 small">No details added yet</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label asp-for="TotalAmount" class="form-label fw-semibold"></label>
+            <input asp-for="TotalAmount" class="form-control form-control-sm text-end" />
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+        <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-save"></i> Save</button>
+        <a asp-action="Index" class="btn btn-secondary btn-sm"><i class="bi bi-arrow-left"></i> Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let detailIndex = @Model.Details?.Count ?? 0;
+        $("#addDetail").click(function () {
+            const row = `
+                <tr>
+                    <td><input name="Details[${detailIndex}].Description" class="form-control form-control-sm" /></td>
+                    <td><input name="Details[${detailIndex}].Amount" class="form-control form-control-sm text-end" /></td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger btn-sm removeDetail"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>`;
+            $("#detailsTable tbody").append(row);
+            detailIndex++;
+        });
+        $(document).on("click", ".removeDetail", function () {
+            $(this).closest("tr").remove();
+        });
+    </script>
+}

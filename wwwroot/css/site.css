@@ -40,8 +40,8 @@ html {
 /* Body and typography */
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #fffbea;
-    color: #333;
+    background-color: #eaf7ff;
+    color: #333333;
     margin-bottom: 60px;
     min-height: 500px;
 }
@@ -79,13 +79,16 @@ footer {
 
 /* Buttons */
 .btn-primary {
-    background-color: #fdd835 !important;
-    color: #212121 !important;
+    background-color: #fdd835;
+    color: #212121;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
 }
 
 .btn-primary:hover {
-    background-color: #fbc02d !important;
-    color: #000000 !important;
+    background-color: #fbc02d;
+    color: #000;
 }
 
 /* Cards */
@@ -118,7 +121,7 @@ footer {
 
 /* Base table styling */
 table {
-    background-color: #fffde7; /* Light yellow background */
+    background-color: #e7f3ff; /* Light yellow background */
     color: #212121;
     border-collapse: collapse;
     width: 100%;
@@ -227,5 +230,9 @@ table tbody tr:hover {
     .navbar-nav {
         text-align: center;
     }
-}
 
+    .btn-primary {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
