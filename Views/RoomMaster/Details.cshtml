@@ -1,0 +1,62 @@
+@model ClinicApp.ViewModels.RoomMasterViewModel
+
+@{
+    ViewData["Title"] = "Room Details";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4"><i class="fa-solid fa-bed"></i> Room Details</h2>
+    <hr />
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.RoomNo)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.RoomNo)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.FloorNo)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.FloorNo)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.TypeId)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.TypeId)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.NoOfBeds)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.NoOfBeds)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.RentPerDay)</dt>
+                <dd class="col-sm-9">@Model.RentPerDay?.ToString("C")</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.RentPerHour)</dt>
+                <dd class="col-sm-9">@Model.RentPerHour?.ToString("C")</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.NursingChargePerDay)</dt>
+                <dd class="col-sm-9">@Model.NursingChargePerDay?.ToString("C")</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ChargeDescription)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.ChargeDescription)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.AmountPerDay)</dt>
+                <dd class="col-sm-9">@Model.AmountPerDay?.ToString("C")</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Remarks)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.Remarks)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.IsActive)</dt>
+                <dd class="col-sm-9">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Back to List
+    </a>
+</div>

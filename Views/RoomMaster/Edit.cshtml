@@ -1,0 +1,96 @@
+@model ClinicApp.ViewModels.RoomMasterViewModel
+
+@{
+    ViewData["Title"] = "Edit Room";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4"><i class="fa-solid fa-pen-to-square"></i> Edit Room Details</h2>
+
+    <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+        @* Hidden RoomId field *@
+        <input type="hidden" asp-for="RoomId" />
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label asp-for="RoomNo" class="form-label"></label>
+                <input asp-for="RoomNo" class="form-control" />
+                <span asp-validation-for="RoomNo" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="FloorNo" class="form-label"></label>
+                <input asp-for="FloorNo" class="form-control" />
+                <span asp-validation-for="FloorNo" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="TypeId" class="form-label"></label>
+                <select asp-for="TypeId" asp-items="@(new SelectList(Model.RoomTypeList, "TypeId", "TypeName"))" class="form-select">
+                    <option value="">-- Select Room Type --</option>
+                </select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="NoOfBeds" class="form-label"></label>
+                <input asp-for="NoOfBeds" type="number" class="form-control" />
+                <span asp-validation-for="NoOfBeds" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="RentPerDay" class="form-label"></label>
+                <input asp-for="RentPerDay" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="RentPerDay" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="RentPerHour" class="form-label"></label>
+                <input asp-for="RentPerHour" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="RentPerHour" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="NursingChargePerDay" class="form-label"></label>
+                <input asp-for="NursingChargePerDay" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="NursingChargePerDay" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="ChargeDescription" class="form-label"></label>
+                <input asp-for="ChargeDescription" class="form-control" />
+                <span asp-validation-for="ChargeDescription" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="AmountPerDay" class="form-label"></label>
+                <input asp-for="AmountPerDay" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="AmountPerDay" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label asp-for="Remarks" class="form-label"></label>
+                <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3 form-check mt-3">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="fa-solid fa-save"></i> Update
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -4,8 +4,8 @@
     ViewData["Title"] = "Description Master Details";
 }
 
-<div class="container mt-3">
-    <div class="card shadow-sm border-0">
+<div class="container mt-2 mb-3" style="max-width: 1000px;">
+    <div class="card shadow-sm border-0 bg-light">
         <div class="card-header bg-primary text-white py-2 px-3">
             <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Description Master Details</h5>
         </div>
@@ -87,7 +87,7 @@
             @if (Model.TestValues != null && Model.TestValues.Count > 0)
             {
                 <div class="table-responsive">
-                    <table class="table table-sm table-bordered align-middle mb-2">
+                    <table class="table table-sm align-middle mb-2 test-values-table">
                         <thead class="table-light small text-center">
                             <tr>
                                 <th>Specimen</th>
@@ -143,21 +143,45 @@
 </div>
 
 <style>
+    body {
+        background-color: #e9ecef; /* soft light gray background */
+    }
+
     .readonly-field {
         background-color: #f8f9fa;
         border: 1px solid #dee2e6;
         border-radius: 4px;
         padding: 4px 8px;
         font-size: 0.9rem;
-        min-height: 30px;
+        min-height: 28px;
     }
+
     .card {
         border-radius: 8px;
     }
+
     .table-sm th, .table-sm td {
         padding: 4px 6px !important;
     }
+
     .form-label {
         font-weight: 600;
+    }
+
+    /* Reduce unnecessary top space in container */
+    .container {
+        padding-top: 0 !important;
+    }
+
+    /* Child grid / Test Values table styling */
+    .test-values-table {
+        border: 1px solid #6c757d; /* dark gray border */
+        background-color: #f1f3f5; /* light gray background */
+        color: #000; /* black font */
+    }
+
+    .test-values-table th,
+    .test-values-table td {
+        border: 1px solid #6c757d !important;
     }
 </style>
