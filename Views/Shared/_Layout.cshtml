@@ -77,6 +77,12 @@
             background: #2e7d32;
         }
 
+        /* Sidebar icons */
+        .sidebar .nav-link i {
+            margin-right: 8px;
+            color: #c8e6c9;
+        }
+
         /* Content area */
         .content {
             margin-left: 250px;
@@ -156,20 +162,20 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @isActive("Prescriptions","Index")" asp-controller="Prescriptions" asp-action="Index">
-                        <i class="fa-solid fa-hospital-user"></i> Prescriptions
+                        <i class="fa-solid fa-file-prescription"></i> Prescriptions
                     </a>
                 </li>
 
                 <!-- Master dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center @( (new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster" }).Contains(currentController) ? "active" : "")"
+                    <a class="nav-link d-flex justify-content-between align-items-center @( (new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster","RoomMaster","RoomTypeMaster" }).Contains(currentController) ? "active" : "")"
                        data-bs-toggle="collapse" href="#masterSubmenu" role="button"
-                       aria-expanded="@( (new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster" }).Contains(currentController) ? "true" : "false")"
+                       aria-expanded="@( (new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster","RoomMaster","RoomTypeMaster" }).Contains(currentController) ? "true" : "false")"
                        aria-controls="masterSubmenu">
                         <span><i class="fa-solid fa-gear"></i> Master</span>
                         <i class="fa-solid fa-caret-right caret"></i>
                     </a>
-                    <div class="collapse @isMasterOpen(new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster" })" id="masterSubmenu">
+                    <div class="collapse @isMasterOpen(new string[]{ "DescriptionMaster","ProductMaster","LedgerMaster","RoomMaster","RoomTypeMaster" })" id="masterSubmenu">
                         <ul class="nav flex-column">
                             <li class="nav-item">
                                 <a class="nav-link @isActive("DescriptionMaster","Index")" asp-controller="DescriptionMaster" asp-action="Index">
@@ -181,6 +187,12 @@
                                     <i class="fa-solid fa-box"></i> Product Master
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link @isActive("RoomMaster","Index")" asp-controller="RoomMaster" asp-action="Index">
+                                    <i class="fa-solid fa-bed"></i> Room Master
+                                </a>
+                            </li>
+                      
                             <li class="nav-item">
                                 <a class="nav-link @isActive("LedgerMaster","Index")" asp-controller="LedgerMaster" asp-action="Index">
                                     <i class="fa-solid fa-book"></i> Ledger Master

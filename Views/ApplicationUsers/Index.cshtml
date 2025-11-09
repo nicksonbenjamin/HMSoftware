@@ -23,9 +23,12 @@
                 <td>@user.FirstName @user.MiddleName @user.LastName</td>
                 <td>@user.RoleName</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@user.UserId">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
+                    <a asp-action="Details" asp-route-id="@user.UserId">
+                     <img src="~/images/details.jpg" alt="Details" style="width:20px; height:20px;" /></a> |
+                    <a asp-action="Edit" asp-route-id="@user.UserId">
+                     <img src="~/images/edit.jpg" alt="Details" style="width:20px; height:20px;" /></a> |
+                    <a asp-action="Delete" asp-route-id="@user.UserId">
+                     <img src="~/images/delete.jpg" alt="Details" style="width:20px; height:20px;" /></a>
                 </td>
             </tr>
         }

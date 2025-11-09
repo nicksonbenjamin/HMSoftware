@@ -10,7 +10,7 @@ using ClinicApp.ViewModels;
 using ClinicApp.Data;
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Logging;
-using ClinicApp.Models; // Add this line if Patient is in Models namespace
+using ClinicApp.Models; 
 
 namespace ClinicApp.Controllers
 {

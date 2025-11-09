@@ -20,5 +20,13 @@ public class MappingProfile : Profile
                // ⚡ Child mapping
         CreateMap<DescriptionMasterTestValue, DescriptionMasterTestValueViewModel>();
         CreateMap<DescriptionMasterTestValueViewModel, DescriptionMasterTestValue>();
+
+          // 🏨 Room mappings
+        CreateMap<RoomMaster, RoomMasterViewModel>()
+            .ForMember(dest => dest.RoomTypeList, opt => opt.Ignore()) // this list is loaded separately
+            .ReverseMap();
+
+        CreateMap<RoomTypeMaster, RoomTypeMasterViewModel>()
+            .ReverseMap();
     }
 }
