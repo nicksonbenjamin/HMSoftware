@@ -28,5 +28,7 @@ public class MappingProfile : Profile
 
         CreateMap<RoomTypeMaster, RoomTypeMasterViewModel>()
             .ReverseMap();
+
+            //CreateMap<RoomMaster, RoomMasterViewModel>().ReverseMap();
     }
 }

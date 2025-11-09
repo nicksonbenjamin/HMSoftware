@@ -25,6 +25,8 @@ namespace ClinicApp.Models
         [Column("type_id")]
         public int? TypeId { get; set; }
 
+        public string RoomTypeName { get; set; }
+
         public RoomTypeMaster RoomType { get; set; }
 
         [Column("no_of_beds")]
