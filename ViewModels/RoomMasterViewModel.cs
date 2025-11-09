@@ -23,7 +23,6 @@ namespace ClinicApp.ViewModels
 
         public string RoomTypeName { get; set; }
 
-
         [Display(Name = "No. of Beds")]
         public int? NoOfBeds { get; set; }
 

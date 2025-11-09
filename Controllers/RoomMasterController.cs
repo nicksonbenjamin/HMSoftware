@@ -233,10 +233,11 @@ namespace ClinicApp.Controllers
                 RentPerDay = Convert.ToDecimal(reader["RentPerDay"]),
                 RentPerHour = Convert.ToDecimal(reader["RentPerHour"]),
                 NursingChargePerDay = Convert.ToDecimal(reader["NursingChargePerDay"]),
-                Remarks = reader["Remarks"].ToString(),
+                Remarks = reader.GetString("Remarks"), //.ToString(),
                 ChargeDescription = reader["ChargeDescription"].ToString(),
                 AmountPerDay = Convert.ToDecimal(reader["AmountPerDay"]),
-                IsActive = Convert.ToBoolean(reader["IsActive"])
+                IsActive = Convert.ToBoolean(reader["IsActive"]),
+                RoomTypeName = reader.GetString("RoomTypeName")
             };
         }
 
