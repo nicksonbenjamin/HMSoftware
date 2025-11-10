@@ -42,10 +42,10 @@ namespace ClinicApp.Controllers
                 var entity = new DescriptionMaster
                 {
                     DescriptionId = Convert.ToInt32(reader["DescriptionId"]),
-                    DescriptionCode = reader["DescriptionCode"].ToString(),
-                    DescriptionName = reader["DescriptionName"].ToString(),
-                    Group = reader["Group"].ToString(),
-                    Section = reader["Section"].ToString(),
+                    DescriptionCode = reader.GetString("DescriptionCode"), 
+                    DescriptionName = reader.GetString("DescriptionName"),
+                    Group = reader.GetString("Group"),
+                    Section = reader.GetString("Section"),
                     Applicable_All = Convert.ToBoolean(reader["Applicable_All"]),
                     Applicable_LAB = Convert.ToBoolean(reader["Applicable_LAB"]),
                     Applicable_OP = Convert.ToBoolean(reader["Applicable_OP"]),
