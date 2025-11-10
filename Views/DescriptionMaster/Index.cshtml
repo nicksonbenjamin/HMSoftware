@@ -5,80 +5,107 @@
 }
 
 <style>
-    /* Light gray background for the entire table container */
     .table-container {
-        background-color: #f8f9fa; /* light gray */
-        padding: 15px;
+        background-color: #f8f9fa;
+        padding: 8px;
         border-radius: 6px;
         margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        max-height: 450px;
+        overflow-y: auto;
     }
 
-    /* Make table more compact */
     table.table {
+        width: 100%;
         font-size: 0.85rem;
+        border-collapse: collapse;
+        white-space: nowrap;
+        margin-bottom: 0;
     }
 
     table.table th,
     table.table td {
-        padding: 0.4rem 0.6rem;
+        padding: 0.25rem 0.5rem;
         vertical-align: middle;
-    }
-
-    /* Softer borders */
-    table.table-bordered {
-        border: 1px solid #dee2e6;
-    }
-    table.table-bordered th,
-    table.table-bordered td {
+        line-height: 1.1;
         border: 1px solid #dee2e6;
     }
 
-    /* Hover effect */
+    thead th {
+        position: sticky;
+        top: 0;
+        background-color: #007bff;
+        color: #fff;
+        z-index: 2;
+    }
+
     table.table-hover tbody tr:hover {
         background-color: #e9ecef;
     }
 
-    /* Smaller buttons */
-    .btn-sm img {
-        width: 16px;
-        height: 16px;
+    .btn-icon {
+        padding: 2px 4px;
+        margin-right: 3px;
+        border: none;
+        background-color: transparent;
+        line-height: 1;
+        border-radius: 3px;
     }
 
-    /* Optional: reduce the button padding for tighter look */
-    .btn-sm {
-        padding: 0.25rem 0.4rem;
-        font-size: 0.75rem;
-        line-height: 1.2;
-        border-radius: 0.2rem;
+    .btn-icon img {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+
+    .btn-icon:hover {
+        transform: scale(1.1);
+        transition: transform 0.15s;
+    }
+
+    td.actions {
+        text-align: center;
+        white-space: nowrap;
     }
 </style>
 
-<h2>Description Master List</h2>
+<h4 class="mb-2">Description Master List</h4>
 
 <p>
-    <a asp-action="Create" class="btn btn-success btn-sm">Create New Description</a>
+    <a asp-action="Create" class="btn btn-success btn-sm">+ Create New Description</a>
 </p>
 
 <div class="table-container">
     <table class="table table-bordered table-striped table-hover">
-        <thead class="table-primary">
+        <thead>
             <tr>
-                <th>@Html.DisplayNameFor(model => model.DescriptionCode)</th>
-                <th>@Html.DisplayNameFor(model => model.DescriptionName)</th>
-                <th>@Html.DisplayNameFor(model => model.Group)</th>
-                <th>@Html.DisplayNameFor(model => model.Section)</th>
+                <th class="text-center">Actions</th>
+                <th>Description Code</th>
+                <th>Description Name</th>
+                <th>Group</th>
+                <th>Section</th>
                 <th>Applicable</th>
-                <th>@Html.DisplayNameFor(model => model.NormalCharges)</th>
-                <th>@Html.DisplayNameFor(model => model.EmergencyCharges)</th>
-                <th>@Html.DisplayNameFor(model => model.DrCharges)</th>
-                <th>@Html.DisplayNameFor(model => model.IsActive)</th>
-                <th>Actions</th>
+                <th>Normal Charges</th>
+                <th>Emergency Charges</th>
+                <th>Dr Charges</th>
+                <th>Active</th>
             </tr>
         </thead>
         <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <td class="actions">
+                    <a asp-action="Details" asp-route-id="@item.DescriptionId" class="btn-icon" title="Details">
+                        <img src="~/images/details.jpg" alt="Details" />
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.DescriptionId" class="btn-icon" title="Edit">
+                        <img src="~/images/edit.jpg" alt="Edit" />
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.DescriptionId" class="btn-icon" title="Delete">
+                        <img src="~/images/delete.jpg" alt="Delete" />
+                    </a>
+                </td>
                 <td>@item.DescriptionCode</td>
                 <td>@item.DescriptionName</td>
                 <td>@item.Group</td>
@@ -93,17 +120,6 @@
                 <td>@item.EmergencyCharges.ToString("C")</td>
                 <td>@item.DrCharges.ToString("C")</td>
                 <td>@(item.IsActive ? "Yes" : "No")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.DescriptionId" class="btn btn-info btn-sm" title="Details">
-                        <img src="~/images/details.jpg" alt="Details" />
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@item.DescriptionId" class="btn btn-primary btn-sm" title="Edit">
-                        <img src="~/images/edit.jpg" alt="Edit" />
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.DescriptionId" class="btn btn-danger btn-sm" title="Delete">
-                        <img src="~/images/delete.jpg" alt="Delete" />
-                    </a>
-                </td>
             </tr>
         }
         </tbody>
