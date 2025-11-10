@@ -1,0 +1,20 @@
+
+
+CREATE TABLE DescriptionMaster (
+  DescriptionId INT AUTO_INCREMENT PRIMARY KEY,
+    DescriptionCode VARCHAR(50) ,
+    DescriptionName VARCHAR(255) NOT NULL,
+    `Group` VARCHAR(100),
+    Section VARCHAR(100),
+    Applicable_All BOOLEAN DEFAULT FALSE,
+    Applicable_LAB BOOLEAN DEFAULT FALSE,
+    Applicable_OP BOOLEAN DEFAULT FALSE,
+    Consultation BOOLEAN DEFAULT FALSE,
+    NormalCharges DECIMAL(10,2) DEFAULT 0.00,
+    EmergencyCharges DECIMAL(10,2) DEFAULT 0.00,
+    DrCharges DECIMAL(10,2) DEFAULT 0.00,
+    Remarks TEXT,
+    IsActive BOOLEAN DEFAULT TRUE,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
