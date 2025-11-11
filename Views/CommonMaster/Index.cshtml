@@ -5,80 +5,30 @@
 }
 
 <style>
-    .table-container {
-        background-color: #f8f9fa;
-        padding: 8px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        max-height: 450px;
-        overflow-y: auto;
-    }
-
-    table.table {
-        width: 100%;
-        font-size: 0.85rem;
-        border-collapse: collapse;
-        white-space: nowrap;
-        margin-bottom: 0;
-    }
-
-    table.table th,
-    table.table td {
-        padding: 0.25rem 0.5rem;
-        vertical-align: middle;
-        line-height: 1.1;
-        border: 1px solid #dee2e6;
-    }
-
-    thead th {
-        position: sticky;
-        top: 0;
-        background-color: #007bff;
-        color: #fff;
-        z-index: 2;
-    }
-
-    table.table-hover tbody tr:hover {
-        background-color: #e9ecef;
-    }
-
-    .btn-icon {
-        padding: 2px 4px;
-        margin-right: 3px;
-        border: none;
-        background-color: transparent;
-        line-height: 1;
-        border-radius: 3px;
-    }
-
-    .btn-icon img {
-        width: 18px;
-        height: 18px;
-        vertical-align: middle;
-    }
-
-    .btn-icon:hover {
-        transform: scale(1.1);
-        transition: transform 0.15s;
-    }
-
+    /* Existing styles you already have, plus the new compact action button styles */
+    
+    /* Action buttons styles */
     td.actions {
         text-align: center;
         white-space: nowrap;
+        padding: 0.2rem 0.3rem;
     }
 
-    thead input.form-control-sm {
-        font-size: 0.8rem;
+    td.actions .btn {
         padding: 0.15rem 0.3rem;
-        height: auto;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        width: 100%;
+        font-size: 0.75rem;
+        min-width: 28px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 2px;
+        border-radius: 3px;
     }
 
-    tr.filter-row {
-        background-color: #f1f1f1;
+    td.actions .btn i {
+        font-size: 14px;
+        vertical-align: middle;
     }
 </style>
 
@@ -110,14 +60,14 @@
         {
             <tr>
                 <td class="actions">
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn-icon" title="Details">
-                        <img src="~/images/details.jpg" alt="Details" />
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="Details">
+                        <i class="fa fa-eye"></i>
                     </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-icon" title="Edit">
-                        <img src="~/images/edit.jpg" alt="Edit" />
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" title="Edit">
+                        <i class="fa fa-edit"></i>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-icon" title="Delete">
-                        <img src="~/images/delete.jpg" alt="Delete" />
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Delete">
+                        <i class="fa fa-trash"></i>
                     </a>
                 </td>
                 <td>@item.MasterType</td>
