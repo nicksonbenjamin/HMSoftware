@@ -1,0 +1,52 @@
+@model ClinicApp.ViewModels.CommonMasterViewModel
+
+@{
+    ViewData["Title"] = "Common Master - Create";
+}
+
+<style>
+    .form-section {
+        border: 1px solid #0b5a8a;
+        background-color: #e9f4fb;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .form-section h4 {
+        background-color: #0b5a8a;
+        color: white;
+        padding: 8px;
+        margin: -15px -15px 10px -15px;
+        font-size: 1.1rem;
+    }
+    .form-control {
+        width: 100%;
+    }
+</style>
+
+<form asp-action="Create" method="post">
+    <!-- ================= Common Master Section ================= -->
+    <div class="form-section">
+        <h4>Common Master</h4>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <label asp-for="MasterType"></label>
+                <input asp-for="MasterType" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="MasterName"></label>
+                <input asp-for="MasterName" class="form-control" />
+            </div>
+        </div>
+
+      
+
+        <div class="row mb-2">
+            <div class="col-md-12 text-end">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Go Back</a>
+            </div>
+        </div>
+    </div>
+</form>
