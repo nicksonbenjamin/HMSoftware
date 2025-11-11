@@ -37,6 +37,11 @@ builder.Services.AddScoped<ProductMasterViewModel>();
 builder.Services.AddScoped<LedgerMasterViewModel>();
 builder.Services.AddScoped<PrescriptionViewModel>();
 builder.Services.AddScoped<DescriptionMasterViewModel>();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<SessionCheckFilter>();
+});
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 

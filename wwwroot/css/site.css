@@ -236,3 +236,27 @@ table tbody tr:hover {
         margin-bottom: 10px;
     }
 }
+
+td.actions {
+    text-align: center;
+    white-space: nowrap;
+    padding: 0.2rem 0.3rem;
+}
+
+td.actions .btn {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.75rem;
+    min-width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    border-radius: 3px;
+}
+
+td.actions .btn i {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
