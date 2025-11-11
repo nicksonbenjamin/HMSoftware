@@ -12,16 +12,16 @@ public class MappingProfile : Profile
         CreateMap<PatientViewModel, Patient>();
         CreateMap<ProductMaster, ProductMasterViewModel>();
         CreateMap<ProductMasterViewModel, ProductMaster>();
-	    CreateMap<LedgerMaster, LedgerMasterViewModel>();
+        CreateMap<LedgerMaster, LedgerMasterViewModel>();
         CreateMap<LedgerMasterViewModel, LedgerMaster>();
         CreateMap<DescriptionMaster, DescriptionMasterViewModel>();
         CreateMap<DescriptionMasterViewModel, DescriptionMaster>();
 
-               // ⚡ Child mapping
+        // ⚡ Child mapping
         CreateMap<DescriptionMasterTestValue, DescriptionMasterTestValueViewModel>();
         CreateMap<DescriptionMasterTestValueViewModel, DescriptionMasterTestValue>();
 
-          // 🏨 Room mappings
+        // 🏨 Room mappings
         CreateMap<RoomMaster, RoomMasterViewModel>()
             .ForMember(dest => dest.RoomTypeList, opt => opt.Ignore()) // this list is loaded separately
             .ReverseMap();
@@ -29,6 +29,9 @@ public class MappingProfile : Profile
         CreateMap<RoomTypeMaster, RoomTypeMasterViewModel>()
             .ReverseMap();
 
-            //CreateMap<RoomMaster, RoomMasterViewModel>().ReverseMap();
+        // ✅ ICD Code mapping
+        CreateMap<ICDCodeMaster, Icd10CodeViewModel>().ReverseMap();
+        
+        //CreateMap<RoomMaster, RoomMasterViewModel>().ReverseMap();
     }
 }

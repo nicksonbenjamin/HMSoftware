@@ -1,0 +1,52 @@
+@model ClinicApp.ViewModels.Icd10CodeViewModel
+
+@{
+    ViewData["Title"] = "Delete ICD Code";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger mb-4"><i class="fa-solid fa-trash"></i> Delete ICD Code</h2>
+    <h5 class="text-muted">Are you sure you want to delete this ICD Code?</h5>
+    <hr />
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.ICDCode)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.ICDCode)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DiagnosisCondition)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.DiagnosisCondition)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DescriptionUsage)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(m => m.DescriptionUsage)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(m => m.IsActive)</dt>
+                <dd class="col-sm-9">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="ICDCodeMasterId" />
+        <button type="submit" class="btn btn-danger me-2">
+            <i class="fa-solid fa-trash"></i> Confirm Delete
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Cancel
+        </a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

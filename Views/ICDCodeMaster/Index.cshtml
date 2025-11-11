@@ -1,0 +1,172 @@
+@model IEnumerable<ClinicApp.ViewModels.Icd10CodeViewModel>
+
+@{
+    ViewData["Title"] = "ICD Code Master List";
+}
+
+<style>
+    .table-container {
+        background-color: #f8f9fa;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        max-height: 450px;
+        overflow-y: auto;
+    }
+
+    table.table {
+        width: 100%;
+        font-size: 0.85rem;
+        border-collapse: collapse;
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+
+    table.table th,
+    table.table td {
+        padding: 0.25rem 0.5rem;
+        vertical-align: middle;
+        line-height: 1.1;
+        border: 1px solid #dee2e6;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        background-color: #007bff;
+        color: #fff;
+        z-index: 2;
+    }
+
+    table.table-hover tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    .btn-icon {
+        padding: 2px 4px;
+        margin-right: 3px;
+        border: none;
+        background-color: transparent;
+        line-height: 1;
+        border-radius: 3px;
+    }
+
+    .btn-icon img {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+
+    .btn-icon:hover {
+        transform: scale(1.1);
+        transition: transform 0.15s;
+    }
+
+    td.actions {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    thead input.form-control-sm {
+        font-size: 0.8rem;
+        padding: 0.15rem 0.3rem;
+        height: auto;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    tr.filter-row {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<h4 class="mb-2">ICD Code Master List</h4>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-sm">+ Create New ICD Code</a>
+</p>
+
+<div class="table-container">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">Actions</th>
+                <th>ICD Code</th>
+                <th>Diagnosis Condition</th>
+                <th>Description Usage</th>
+                <th>Active</th>
+            </tr>
+
+            <!-- Filter Row -->
+            <tr class="filter-row">
+                <th></th>
+                <th><input type="text" id="filterCode" class="form-control form-control-sm" placeholder="Search ICD Code" /></th>
+                <th><input type="text" id="filterDiagnosis" class="form-control form-control-sm" placeholder="Search Diagnosis" /></th>
+                <th><input type="text" id="filterDescription" class="form-control form-control-sm" placeholder="Search Description" /></th>
+                <th colspan="3"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="actions">
+                    <a asp-action="Details" asp-route-id="@item.ICDCodeMasterId" class="btn-icon" title="Details">
+                        <img src="~/images/details.jpg" alt="Details" />
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@item.ICDCodeMasterId" class="btn-icon" title="Edit">
+                        <img src="~/images/edit.jpg" alt="Edit" />
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.ICDCodeMasterId" class="btn-icon" title="Delete">
+                        <img src="~/images/delete.jpg" alt="Delete" />
+                    </a>
+                </td>
+                <td>@item.ICDCode</td>
+                <td>@item.DiagnosisCondition</td>
+                <td>@item.DescriptionUsage</td>
+                <td>@(item.IsActive ? "Yes" : "No")</td>
+               
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const filterInputs = {
+        code: document.getElementById('filterCode'),
+        diagnosis: document.getElementById('filterDiagnosis'),
+        description: document.getElementById('filterDescription')
+    };
+
+    const rows = document.querySelectorAll('tbody tr');
+
+    function applyFilters() {
+        const codeVal = filterInputs.code.value.toLowerCase();
+        const diagnosisVal = filterInputs.diagnosis.value.toLowerCase();
+        const descriptionVal = filterInputs.description.value.toLowerCase();
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const codeText = cells[1]?.textContent.toLowerCase() || "";
+            const diagnosisText = cells[2]?.textContent.toLowerCase() || "";
+            const descriptionText = cells[3]?.textContent.toLowerCase() || "";
+
+            const matches =
+                codeText.includes(codeVal) &&
+                diagnosisText.includes(diagnosisVal) &&
+                descriptionText.includes(descriptionVal);
+
+            row.style.display = matches ? '' : 'none';
+        });
+    }
+
+    Object.values(filterInputs).forEach(input => {
+        input.addEventListener('input', applyFilters);
+    });
+});
+</script>
