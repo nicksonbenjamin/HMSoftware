@@ -1,0 +1,40 @@
+@model ClinicApp.ViewModels.Icd10CodeViewModel
+
+@{
+    ViewData["Title"] = "ICD Code Master - Details";
+}
+
+<div class="card p-3">
+    <h4>ICD Code Master Details</h4>
+    <dl class="row">
+        <dt class="col-sm-3">ICD Code</dt>
+        <dd class="col-sm-9">@Model.ICDCode</dd>
+
+        <dt class="col-sm-3">Diagnosis Condition</dt>
+        <dd class="col-sm-9">@Model.DiagnosisCondition</dd>
+
+        <dt class="col-sm-3">Description Usage</dt>
+        <dd class="col-sm-9">@Model.DescriptionUsage</dd>
+
+        <dt class="col-sm-3">Active</dt>
+        <dd class="col-sm-9">
+            @if (Model.IsActive)
+            {
+                <span class="badge bg-success">Yes</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">No</span>
+            }
+        </dd>
+    </dl>
+
+    <div class="text-end">
+        <a asp-action="Edit" asp-route-id="@Model.ICDCodeMasterId" class="btn btn-primary">
+            <i class="fa-solid fa-pen"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+@model ClinicApp.ViewModels.Icd10CodeViewModel
+
+@{
+    ViewData["Title"] = "ICD Code Master - Edit";
+}
+
+<style>
+    .form-section {
+        border: 1px solid #0b5a8a;
+        background-color: #e9f4fb;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .form-section h4 {
+        background-color: #0b5a8a;
+        color: white;
+        padding: 8px;
+        margin: -15px -15px 10px -15px;
+        font-size: 1.1rem;
+    }
+</style>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ICDCodeMasterId" />
+
+    <div class="form-section">
+        <h4>Edit ICD Code Master</h4>
+
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label asp-for="ICDCode"></label>
+                <input asp-for="ICDCode" class="form-control" />
+            </div>
+
+            <div class="col-md-5">
+                <label asp-for="DiagnosisCondition"></label>
+                <input asp-for="DiagnosisCondition" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="DescriptionUsage"></label>
+                <input asp-for="DescriptionUsage" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label asp-for="IsActive"></label>
+                <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-12 text-end">
+                <button type="submit" class="btn btn-success">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
