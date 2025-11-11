@@ -32,6 +32,8 @@ public class MappingProfile : Profile
         // ✅ ICD Code mapping
         CreateMap<ICDCodeMaster, Icd10CodeViewModel>().ReverseMap();
         
+          // ✅ CommonMaster mapping
+        CreateMap<CommonMaster, CommonMasterViewModel>().ReverseMap();
         //CreateMap<RoomMaster, RoomMasterViewModel>().ReverseMap();
     }
 }

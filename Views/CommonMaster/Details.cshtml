@@ -1,0 +1,27 @@
+@model ClinicApp.ViewModels.CommonMasterViewModel
+
+@{
+    ViewData["Title"] = "Common Master - Details";
+}
+
+<div class="card p-3">
+    <h4>Common Master Details</h4>
+    <dl class="row">
+        <dt class="col-sm-3">Master Type</dt>
+        <dd class="col-sm-9">@Model.MasterType</dd>
+
+        <dt class="col-sm-3">Master Name</dt>
+        <dd class="col-sm-9">@Model.MasterName</dd>
+
+        
+    </dl>
+
+    <div class="text-end">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="fa-solid fa-pen"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
