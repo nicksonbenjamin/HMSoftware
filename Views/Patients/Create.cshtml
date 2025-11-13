@@ -3,269 +3,237 @@
     ViewBag.Title = "Patient Registration";
 }
 
-<h2>Patient Registration</h2>
+<!-- Compact Styling -->
+<style>
+    .card { border: 1px solid #dee2e6; }
+    .card-header { padding: 8px 15px; }
+    .card-body { padding: 10px 15px; }
+    .form-label { margin-bottom: 2px; font-size: 0.85rem; font-weight: 500; }
+    .form-control, .form-select {
+        height: 28px;
+        font-size: 0.85rem;
+        padding: 2px 6px;
+    }
+    .row { margin-bottom: 4px; }
+    textarea.form-control { height: 50px; }
+    .btn { font-size: 0.85rem; padding: 3px 10px; }
+    h5 { font-size: 0.9rem; margin-top: 8px; margin-bottom: 4px; color: #0d6efd; }
+</style>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">UHID Type<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="UHIDType" class="form-control">
-                <option>Patient Registration</option>
-            </select>
+<div class="container-fluid mt-2">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white py-1">
+            <h6 class="mb-0"><i class="bi bi-person-fill"></i> Patient Registration</h6>
         </div>
 
-        <label class="col-sm-2 col-form-label">UHID No</label>
-        <div class="col-sm-4">
-            <input asp-for="UHIDNo" class="form-control" />
-        </div>
-    </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                
+                <!-- UHID & Date Section -->
+                <h5><i class="bi bi-info-circle"></i> Basic Info</h5>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="form-label">UHID Type<span class="text-danger">*</span></label>
+                        <select asp-for="UHIDType" class="form-select">
+                            <option>Patient Registration</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">UHID No</label>
+                        <input asp-for="UHIDNo" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Date<span class="text-danger">*</span></label>
+                        <input asp-for="RegistrationDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Time<span class="text-danger">*</span></label>
+                        <input asp-for="RegistrationTime" type="time" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Sex<span class="text-danger">*</span></label>
+                        <select asp-for="Sex" class="form-select">
+                            <option>M</option>
+                            <option>F</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Age<span class="text-danger">*</span></label>
+                        <input asp-for="Age" type="number" class="form-control" />
+                    </div>
+                </div>
 
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Date<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <input asp-for="RegistrationDate" type="date" class="form-control" />
-        </div>
+                <!-- Patient Name -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Patient Name<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <select asp-for="PatientTitle" class="form-select" style="max-width:70px;">
+                                <option>Mr.</option>
+                                <option>Miss.</option>
+                            </select>
+                            <input asp-for="PatientName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">DOB</label>
+                        <input asp-for="DOB" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Guardian<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <select asp-for="GuardianTitle" class="form-select" style="max-width:70px;">
+                                <option>F/O</option>
+                                <option>S/O</option>
+                                <option>D/O</option>
+                                <option>M/O</option>
+                            </select>
+                            <input asp-for="Guardian" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Mobile<span class="text-danger">*</span></label>
+                        <input asp-for="MobileNo" class="form-control" />
+                    </div>
+                </div>
 
-        <label class="col-sm-2 col-form-label">Time<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <input asp-for="RegistrationTime" type="time" class="form-control" />
-        </div>
-    </div>
+                <!-- Address & Location -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Address</label>
+                        <textarea asp-for="Address" class="form-control"></textarea>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">District</label>
+                        <input asp-for="District" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Place</label>
+                        <input asp-for="Place" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">State</label>
+                        <select asp-for="GSTState" class="form-select">
+                            <option>TamilNadu</option>
+                            <option>Karnataka</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Pin</label>
+                        <input asp-for="PinCode" class="form-control" />
+                    </div>
+                </div>
 
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Sex<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="Sex" class="form-control">
-                <option>M</option>
-                <option>F</option>
-            </select>
-        </div>
+                <!-- Aadhar & Email -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Guardian Aadhar</label>
+                        <input asp-for="GuardianAadhar" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Patient Aadhar</label>
+                        <input asp-for="PatientAadhar" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Occupation</label>
+                        <input asp-for="Occupation" class="form-control" />
+                    </div>
+                </div>
 
-        <label class="col-sm-2 col-form-label">Patient Name<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="PatientTitle" class="form-control">
-                <option>Mr.</option>
-                <option>Miss.</option>
-            </select>
-            <input asp-for="PatientName" class="form-control" />
-        </div>
-    </div>
+                <!-- Medical Info -->
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="form-label">Marital</label>
+                        <select asp-for="MaritalStatus" class="form-select">
+                            <option>Single</option>
+                            <option>Married</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Blood Group</label>
+                        <select asp-for="BloodGroup" class="form-select">
+                            <option>O+ve</option>
+                            <option>A+ve</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Allergic To</label>
+                        <input asp-for="AllergicTo" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Consultant Dr<span class="text-danger">*</span></label>
+                        <select asp-for="ConsultantDoctor" class="form-select">
+                            <option>Dr.Ramesh</option>
+                            <option>Dr.Suresh</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Ref. Dr</label>
+                        <select asp-for="RefDoctor" class="form-select">
+                            <option>Dr.Ramesh</option>
+                            <option>Dr.Suresh</option>
+                        </select>
+                    </div>
+                </div>
 
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">DOB</label>
-        <div class="col-sm-4">
-            <input asp-for="DOB" type="date" class="form-control" />
-        </div>
+                <!-- Payment -->
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="form-label">Payment</label>
+                        <select asp-for="PaymentTerms" class="form-select">
+                            <option>Cash</option>
+                            <option>UPI</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Reg Type</label>
+                        <select asp-for="RegistrationType" class="form-select">
+                            <option>General</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Comp/Ins</label>
+                        <select asp-for="CompOrInsOrCamp" class="form-select">
+                            <option>Comp</option>
+                            <option>Ins</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Condition</label>
+                        <input asp-for="PatientCondition" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Reference/Ph</label>
+                        <input asp-for="ReferenceOrPicmeNo" class="form-control" />
+                    </div>
+                </div>
 
-        <label class="col-sm-2 col-form-label">Age<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <input asp-for="Age" type="number" class="form-control" />
-        </div>
-    </div>
+                <!-- Photo -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Photo</label>
+                        <input type="file" name="Photo" class="form-control" />
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label class="form-check-label">Active</label>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Guardian Name<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="GuardianTitle" class="form-control">
-                <option>F/O</option>
-                <option>S/O</option>
-                <option>D/O</option>
-                <option>M/O</option>
-            </select>
-            <input asp-for="Guardian" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">Address<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <textarea asp-for="Address" class="form-control"></textarea>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">District</label>
-        <div class="col-sm-4">
-            <input asp-for="District" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">GST State<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="GSTState" class="form-control">
-                <option>TamilNadu</option>
-                <option>Karnataka</option>
-                <option>Kerala</option>
-                <option>Telangana</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Country<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="Country" class="form-control">
-                <option>India</option>
-                <option>USA</option>
-                <option>UK</option>
-                <option>UAE</option>
-            </select>
-        </div>
-
-        <label class="col-sm-2 col-form-label">Pin Code</label>
-        <div class="col-sm-4">
-            <input asp-for="PinCode" class="form-control" />
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Place</label>
-        <div class="col-sm-4">
-            <input asp-for="Place" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">Mobile No<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <input asp-for="MobileNo" class="form-control" />
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Guardian Aadhar</label>
-        <div class="col-sm-4">
-            <input asp-for="GuardianAadhar" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">Patient Aadhar</label>
-        <div class="col-sm-4">
-            <input asp-for="PatientAadhar" class="form-control" />
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Email</label>
-        <div class="col-sm-4">
-            <input asp-for="Email" type="email" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">Occupation</label>
-        <div class="col-sm-4">
-            <input asp-for="Occupation" class="form-control" />
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Marital Status</label>
-        <div class="col-sm-4">
-            <select asp-for="MaritalStatus" class="form-control">
-                <option>Single</option>
-                <option>Married</option>
-            </select>
-        </div>
-
-        <label class="col-sm-2 col-form-label">Blood Group</label>
-        <div class="col-sm-4">
-            <select asp-for="BloodGroup" class="form-control">
-                <option>O+ve</option>
-                <option>A+ve</option>
-                <option>A-ve</option>
-                <option>B+ve</option>
-                <option>B-ve</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Allergic To</label>
-        <div class="col-sm-4">
-            <input asp-for="AllergicTo" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">Consultant Doctor<span class="text-danger">*</span></label>
-        <div class="col-sm-4">
-            <select asp-for="ConsultantDoctor" class="form-control">
-                <option>Dr.Ramesh</option>
-                <option>Dr.Suresh</option>
-                <option>Dr.Srini</option>
-                <option>Dr.Ganesh</option>
-                <option>Dr.Anand</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Ref. Doctor</label>
-        <div class="col-sm-4">
-            <select asp-for="RefDoctor" class="form-control">
-                <option>Dr.Ramesh</option>
-                <option>Dr.Suresh</option>
-                <option>Dr.Srini</option>
-                <option>Dr.Ganesh</option>
-                <option>Dr.Anand</option>
-            </select>
-        </div>
-
-        <label class="col-sm-2 col-form-label">Payment Terms</label>
-        <div class="col-sm-4">
-            <select asp-for="PaymentTerms" class="form-control">
-                <option>Cash</option>
-                <option>UPI</option>
-                <option>Card</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Registration Type</label>
-        <div class="col-sm-4">
-            <select asp-for="RegistrationType" class="form-control">
-                <option>General</option>
-            </select>
-        </div>
-
-        <label class="col-sm-2 col-form-label">Comp/Ins/Camp</label>
-        <div class="col-sm-4">
-            <select asp-for="CompOrInsOrCamp" class="form-control">
-                <option>Comp</option>
-                <option>Ins</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Patient Condition</label>
-        <div class="col-sm-4">
-            <input asp-for="PatientCondition" class="form-control" />
-        </div>
-
-        <label class="col-sm-2 col-form-label">Reference/Phone No</label>
-        <div class="col-sm-4">
-            <input asp-for="ReferenceOrPicmeNo" class="form-control" />
+                <!-- Buttons -->
+                <div class="text-end mt-2">
+                    <button type="submit" class="btn btn-success btn-sm px-3"><i class="bi bi-save"></i> Save</button>
+                    <a href="@Url.Action("Index", "Patients")" class="btn btn-secondary btn-sm px-3"><i class="bi bi-x-circle"></i> Exit</a>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Photo</label>
-        <div class="col-sm-4">
-            <input type="file" name="Photo" class="form-control" />
-        </div>
-
-        <div class="col-sm-4 form-check">
-            <input asp-for="IsActive" class="form-check-input" />
-            <label class="form-check-label">Active</label>
-        </div>
-    </div>
-
-    <div class="form-group row mt-3">
-        <div class="col-sm-12 text-right">
-            <button type="submit" class="btn btn-success">Save</button>
-            <a href="@Url.Action("Index", "Patients")" class="btn btn-secondary">Exit</a>
-        </div>
-    </div>
-</form>
-<script type="text/javascript">
-    $(document).ready(function() {
-        // Remove 'active' class from all menu items
-        $(".menu li a").removeClass("active");
-
-        // Add 'active' class to the clicked item's parent <li>
-        $(".patients").addClass("active");
-    });
-</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
