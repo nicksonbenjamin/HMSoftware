@@ -1,0 +1,45 @@
+@model ClinicApp.ViewModels.PatientRegistrationViewModel
+
+<div class="container-fluid p-0 small">
+    <h4>Confirm Delete Patient</h4>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="PatientId" />
+
+        <div class="row g-1">
+            <div class="col-md-2">
+                <label asp-for="UHIDType"></label>
+                <input asp-for="UHIDType" class="form-control form-control-sm" disabled />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="UHIDNo"></label>
+                <input asp-for="UHIDNo" class="form-control form-control-sm" disabled />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="RegistrationDate"></label>
+                <input asp-for="RegistrationDate" class="form-control form-control-sm" type="date" disabled />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="RegistrationTime"></label>
+                <input asp-for="RegistrationTime" class="form-control form-control-sm" type="time" disabled />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="Sex"></label>
+                <input asp-for="Sex" class="form-control form-control-sm" disabled />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="PatientTitle"></label>
+                <input asp-for="PatientTitle" class="form-control form-control-sm" disabled />
+            </div>
+        </div>
+
+        <!-- Add more fields as needed -->
+
+        <div class="row g-1 mt-3">
+            <div class="col-md-12">
+                <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -35,8 +35,10 @@ builder.Services.AddScoped<ApplicationUserViewModel>();
 builder.Services.AddScoped<PatientViewModel>();
 builder.Services.AddScoped<ProductMasterViewModel>();
 builder.Services.AddScoped<LedgerMasterViewModel>();
-builder.Services.AddScoped<PrescriptionViewModel>();
 builder.Services.AddScoped<DescriptionMasterViewModel>();
+builder.Services.AddScoped<PatientRegistrationViewModel>(); // << Added PatientRegistration
+// Prescription-related ViewModels
+
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add<SessionCheckFilter>();
