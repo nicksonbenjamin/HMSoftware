@@ -1,0 +1,200 @@
+@model IEnumerable<ClinicApp.ViewModels.PatientRegistrationViewModel>
+
+@{
+    ViewData["Title"] = "Patient Registration List";
+}
+
+<style>
+    .table-container {
+        background-color: #f8f9fa;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        max-height: 450px;
+        overflow-y: auto;
+    }
+
+    table.table {
+        width: 100%;
+        font-size: 0.85rem;
+        border-collapse: collapse;
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+
+    table.table th,
+    table.table td {
+        padding: 0.25rem 0.5rem;
+        vertical-align: middle;
+        line-height: 1.1;
+        border: 1px solid #dee2e6;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        background-color: #007bff;
+        color: #fff;
+        z-index: 2;
+    }
+
+    table.table-hover tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    .btn-icon {
+        padding: 2px 4px;
+        margin-right: 3px;
+        border: none;
+        background-color: transparent;
+        line-height: 1;
+        border-radius: 3px;
+    }
+
+    .btn-icon img {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+
+    .btn-icon:hover {
+        transform: scale(1.1);
+        transition: transform 0.15s;
+    }
+
+    td.actions {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    thead input.form-control-sm {
+        font-size: 0.8rem;
+        padding: 0.15rem 0.3rem;
+        height: auto;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    tr.filter-row {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<h4 class="mb-2">Patient Registration List</h4>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-sm">+ Register New Patient</a>
+</p>
+
+<div class="table-container">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">Actions</th>
+                <th>UHID Type</th>
+                <th>UHID No</th>
+                <th>Registration Date</th>
+                <th>Patient Name</th>
+                <th>Mobile No</th>
+                <th>Age</th>
+                <th>Sex</th>
+                <th>Is Active</th>
+            </tr>
+
+            <!-- Filter Row -->
+            <tr class="filter-row">
+                <th></th>
+                <th><input type="text" id="filterUHIDType" class="form-control form-control-sm" placeholder="Search UHID Type" /></th>
+                <th><input type="text" id="filterUHIDNo" class="form-control form-control-sm" placeholder="Search UHID No" /></th>
+                <th><input type="text" id="filterRegDate" class="form-control form-control-sm" placeholder="Search Reg Date" /></th>
+                <th><input type="text" id="filterName" class="form-control form-control-sm" placeholder="Search Name" /></th>
+                <th><input type="text" id="filterMobile" class="form-control form-control-sm" placeholder="Search Mobile" /></th>
+                <th><input type="text" id="filterAge" class="form-control form-control-sm" placeholder="Search Age" /></th>
+                <th><input type="text" id="filterSex" class="form-control form-control-sm" placeholder="Search Sex" /></th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var patient in Model)
+            {
+                <tr>
+                    <td class="actions">
+                        <a asp-action="Details" asp-route-id="@patient.PatientId" class="btn-icon" title="Details">
+                            <img src="~/images/details.jpg" alt="Details" />
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@patient.PatientId" class="btn-icon" title="Edit">
+                            <img src="~/images/edit.jpg" alt="Edit" />
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@patient.PatientId" class="btn-icon" title="Delete">
+                            <img src="~/images/delete.jpg" alt="Delete" />
+                        </a>
+                    </td>
+                    <td>@patient.UHIDType</td>
+                    <td>@patient.UHIDNo</td>
+                    <td>@patient.RegistrationDate.ToString("dd/MM/yyyy")</td>
+                    <td>@patient.PatientName</td>
+                    <td>@patient.MobileNo</td>
+                    <td>@patient.Age</td>
+                    <td>@patient.Sex</td>
+                    <td>@(patient.IsActive ? "Yes" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Search Filter Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const filterInputs = {
+        uhidType: document.getElementById('filterUHIDType'),
+        uhidNo: document.getElementById('filterUHIDNo'),
+        regDate: document.getElementById('filterRegDate'),
+        name: document.getElementById('filterName'),
+        mobile: document.getElementById('filterMobile'),
+        age: document.getElementById('filterAge'),
+        sex: document.getElementById('filterSex')
+    };
+
+    const rows = document.querySelectorAll('tbody tr');
+
+    function applyFilters() {
+        const uhidTypeVal = filterInputs.uhidType.value.toLowerCase();
+        const uhidNoVal = filterInputs.uhidNo.value.toLowerCase();
+        const regDateVal = filterInputs.regDate.value.toLowerCase();
+        const nameVal = filterInputs.name.value.toLowerCase();
+        const mobileVal = filterInputs.mobile.value.toLowerCase();
+        const ageVal = filterInputs.age.value.toLowerCase();
+        const sexVal = filterInputs.sex.value.toLowerCase();
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const uhidTypeText = cells[1]?.textContent.toLowerCase() || "";
+            const uhidNoText = cells[2]?.textContent.toLowerCase() || "";
+            const regDateText = cells[3]?.textContent.toLowerCase() || "";
+            const nameText = cells[4]?.textContent.toLowerCase() || "";
+            const mobileText = cells[5]?.textContent.toLowerCase() || "";
+            const ageText = cells[6]?.textContent.toLowerCase() || "";
+            const sexText = cells[7]?.textContent.toLowerCase() || "";
+
+            const matches =
+                uhidTypeText.includes(uhidTypeVal) &&
+                uhidNoText.includes(uhidNoVal) &&
+                regDateText.includes(regDateVal) &&
+                nameText.includes(nameVal) &&
+                mobileText.includes(mobileVal) &&
+                ageText.includes(ageVal) &&
+                sexText.includes(sexVal);
+
+            row.style.display = matches ? '' : 'none';
+        });
+    }
+
+    Object.values(filterInputs).forEach(input => {
+        input.addEventListener('input', applyFilters);
+    });
+});
+</script>

@@ -1,26 +1,33 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicApp.Models
 {
-   public class PrescriptionDetail
+    [Table("prescription_details")]
+    public class PrescriptionDetail
     {
         [Key]
-        public int DetailId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int PrescriptionDetailId { get; set; }
 
-        [ForeignKey("Prescription")]
-        public int PrescriptionDetailId  { get; set; }
+        public int PrescriptionId { get; set; }
 
-        [Required]
-        public string Description { get; set; }
-
-        [DataType(DataType.Currency)]
-        public decimal? Amount { get; set; }
-
+        [ForeignKey("PrescriptionId")]
         public Prescription Prescription { get; set; }
+
+        [Required, StringLength(255)]
+        public string Medicine { get; set; }
+
+        [StringLength(50)]
+        public string Dose { get; set; }
+
+        [StringLength(100)]
+        public string Instructions { get; set; }
+
+        public int? Days { get; set; }
+        public int? Quantity { get; set; }
+
+        public string Note { get; set; }
     }
 }
