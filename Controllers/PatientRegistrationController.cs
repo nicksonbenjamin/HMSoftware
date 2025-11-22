@@ -468,5 +468,68 @@ public IActionResult DeleteConfirmed(int id)
                 new("Camp","Camp")
             };
         }
+
+        // ================== DETAILS ==================
+public IActionResult Details(int id)
+{
+    var model = new PatientRegistrationViewModel();
+
+    using var conn = _db.GetConnection();
+    conn.Open();
+
+    string sql =
+        "SELECT pm.*, pe.RegistrationDate, pe.RegistrationTime, pe.Age, pe.ConsultantDoctorId, " +
+        "pe.RefDoctorId, pe.PaymentTerms, pe.RegistrationType, pe.CompOrInsOrCamp, pe.PatientCondition, " +
+        "pe.ReferenceOrPicmeNo " +
+        "FROM patients_master pm " +
+        "LEFT JOIN patient_entry pe ON pm.PatientId = pe.PatientId " +
+        "WHERE pm.PatientId = @PatientId";
+
+    using var cmd = new MySqlCommand(sql, conn);
+    cmd.Parameters.AddWithValue("@PatientId", id);
+
+    using var reader = cmd.ExecuteReader();
+    if (!reader.Read())
+        return NotFound();
+
+    model.PatientId = reader.GetInt32("PatientId");
+    model.UHIDType = reader.GetString("UHIDType");
+    model.UHIDNo = reader["UHIDNo"]?.ToString();
+    model.PatientTitle = reader.GetString("PatientTitle");
+    model.PatientName = reader.GetString("PatientName");
+    model.DOB = reader["DOB"] as DateTime?;
+    model.Sex = reader.GetString("Sex");
+    model.GuardianTitle = reader["GuardianTitle"]?.ToString();
+    model.Guardian = reader["Guardian"]?.ToString();
+    model.Address = reader["Address"]?.ToString();
+    model.Place = reader["Place"]?.ToString();
+    model.District = reader["District"]?.ToString();
+    model.GSTState = reader["GSTState"]?.ToString();
+    model.Country = reader["Country"]?.ToString();
+    model.PinCode = reader["PinCode"]?.ToString();
+    model.PatientAadhar = reader["PatientAadhar"]?.ToString();
+    model.GuardianAadhar = reader["GuardianAadhar"]?.ToString();
+    model.MobileNo = reader["MobileNo"]?.ToString();
+    model.Email = reader["Email"]?.ToString();
+    model.Occupation = reader["Occupation"]?.ToString();
+    model.MaritalStatus = reader["MaritalStatus"]?.ToString();
+    model.BloodGroup = reader["BloodGroup"]?.ToString();
+    model.AllergicTo = reader["AllergicTo"]?.ToString();
+
+    model.IsActive = reader["IsActive"] != DBNull.Value && Convert.ToBoolean(reader["IsActive"]);
+    model.RegistrationDate = reader["RegistrationDate"] as DateTime? ?? DateTime.Now;
+    model.RegistrationTime = reader["RegistrationTime"] as TimeSpan? ?? TimeSpan.Zero;
+    model.Age = reader["Age"] as int? ?? 0;
+    model.ConsultantDoctorId = reader["ConsultantDoctorId"] as int? ?? 0;
+    model.RefDoctorId = reader["RefDoctorId"] as int?;
+    model.PaymentTerms = reader["PaymentTerms"]?.ToString();
+    model.RegistrationType = reader["RegistrationType"]?.ToString();
+    model.CompOrInsOrCamp = reader["CompOrInsOrCamp"]?.ToString();
+    model.PatientCondition = reader["PatientCondition"]?.ToString();
+    model.ReferenceOrPicmeNo = reader["ReferenceOrPicmeNo"]?.ToString();
+
+    return View(model);
+}
+
     }
 }
