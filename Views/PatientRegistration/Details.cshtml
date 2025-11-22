@@ -1,40 +1,58 @@
 @model ClinicApp.ViewModels.PatientRegistrationViewModel
 
-<div class="container-fluid p-0 small">
-    <h4>Patient Registration Details</h4>
+<h4 class="mb-3">Patient Details</h4>
 
-    <div class="row g-1">
-        <div class="col-md-2">
-            <label asp-for="UHIDType"></label>
-            <input asp-for="UHIDType" class="form-control form-control-sm" disabled />
+<div class="card shadow-sm border-0 p-3 small">
+    <div class="row">
+
+        <!-- LEFT COLUMN -->
+        <div class="col-md-6 border-end">
+
+            <p><strong>UHID Type:</strong> @Model.UHIDType</p>
+            <p><strong>UHID No:</strong> @Model.UHIDNo</p>
+            <p><strong>Registration Date:</strong> @Model.RegistrationDate.ToString("dd/MM/yyyy")</p>
+            <p><strong>Registration Time:</strong> @Model.RegistrationTime</p>
+            <p><strong>Patient Title:</strong> @Model.PatientTitle</p>
+            <p><strong>Patient Name:</strong> @Model.PatientName</p>
+            <p><strong>Date of Birth:</strong> @(Model.DOB?.ToString("dd/MM/yyyy") ?? "-")</p>
+            <p><strong>Age:</strong> @Model.Age</p>
+            <p><strong>Sex:</strong> @Model.Sex</p>
+            <p><strong>Guardian:</strong> @Model.GuardianTitle @Model.Guardian</p>
+            <p><strong>Address:</strong> @Model.Address</p>
+            <p><strong>Place:</strong> @Model.Place</p>
+            <p><strong>District:</strong> @Model.District</p>
+            <p><strong>GST State:</strong> @Model.GSTState</p>
+            <p><strong>Country:</strong> @Model.Country</p>
+
         </div>
-        <div class="col-md-2">
-            <label asp-for="UHIDNo"></label>
-            <input asp-for="UHIDNo" class="form-control form-control-sm" disabled />
-        </div>
-        <div class="col-md-2">
-            <label asp-for="RegistrationDate"></label>
-            <input asp-for="RegistrationDate" class="form-control form-control-sm" type="date" disabled />
-        </div>
-        <div class="col-md-2">
-            <label asp-for="RegistrationTime"></label>
-            <input asp-for="RegistrationTime" class="form-control form-control-sm" type="time" disabled />
-        </div>
-        <div class="col-md-2">
-            <label asp-for="Sex"></label>
-            <input asp-for="Sex" class="form-control form-control-sm" disabled />
-        </div>
-        <div class="col-md-2">
-            <label asp-for="PatientTitle"></label>
-            <input asp-for="PatientTitle" class="form-control form-control-sm" disabled />
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-md-6 ps-3">
+
+            <p><strong>Mobile No:</strong> @Model.MobileNo</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Occupation:</strong> @Model.Occupation</p>
+            <p><strong>Marital Status:</strong> @Model.MaritalStatus</p>
+            <p><strong>Blood Group:</strong> @Model.BloodGroup</p>
+            <p><strong>Allergic To:</strong> @Model.AllergicTo</p>
+
+            <p><strong>Consultant Doctor:</strong> @Model.ConsultantDoctorId</p>
+            <p><strong>Referred Doctor:</strong> @Model.RefDoctorId</p>
+
+            <p><strong>Payment Terms:</strong> @Model.PaymentTerms</p>
+            <p><strong>Registration Type:</strong> @Model.RegistrationType</p>
+            <p><strong>Comp/Insurance/Camp:</strong> @Model.CompOrInsOrCamp</p>
+
+            <p><strong>Patient Condition:</strong> @Model.PatientCondition</p>
+            <p><strong>Reference / PICME No:</strong> @Model.ReferenceOrPicmeNo</p>
+
+            <p><strong>Status:</strong> @(Model.IsActive ? "Active" : "Inactive")</p>
+
         </div>
     </div>
 
-    <!-- Continue with other fields here. For example: PatientName, DOB, Age, Guardian, etc. -->
-
-    <div class="row g-1 mt-1">
-        <div class="col-md-12">
-            <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
-        </div>
+    <div class="text-end mt-3">
+        <a asp-action="Edit" asp-route-id="@Model.PatientId" class="btn btn-primary btn-sm">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">Back</a>
     </div>
 </div>
