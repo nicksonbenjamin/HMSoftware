@@ -193,3 +193,155 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS spGetAllPatients;
+DELIMITER //
+
+CREATE PROCEDURE spGetAllPatients()
+BEGIN
+    SELECT 
+        pm.PatientId,
+        pm.PatientName,
+        pm.MobileNo,
+        pm.Sex,
+        pm.UHIDNo,
+        pm.PhotoBase64,
+        pm.PhotoFileName
+    FROM patients_master pm
+    ORDER BY pm.PatientName;
+END //
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS spGetPatientById;
+DELIMITER //
+
+CREATE PROCEDURE spGetPatientById(IN p_PatientId INT)
+BEGIN
+    SELECT 
+        pm.*,
+        pe.EntryId,
+        pe.RegistrationDate,
+        pe.RegistrationTime,
+        pe.Age,
+        pe.ConsultantDoctorId,
+        pe.RefDoctorId,
+        pe.PaymentTerms,
+        pe.RegistrationType,
+        pe.CompOrInsOrCamp,
+        pe.PatientCondition,
+        pe.ReferenceOrPicmeNo
+    FROM patients_master pm
+    LEFT JOIN patient_entry pe ON pm.PatientId = pe.PatientId
+    WHERE pm.PatientId = p_PatientId;
+END //
+
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS spGetPatientById;
+
+DELIMITER //
+
+CREATE PROCEDURE spGetPatientById(IN p_PatientId INT)
+BEGIN
+    SELECT 
+        pm.PatientId,
+        pm.UHIDType,
+        pm.UHIDNo,
+        pm.PatientTitle,
+        pm.PatientName,
+        pm.DOB,
+        pm.Sex,
+        pm.GuardianTitle,
+        pm.Guardian,
+        pm.Address,
+        pm.Place,
+        pm.District,
+        pm.GSTState,
+        pm.Country,
+        pm.PinCode,
+        pm.PatientAadhar,
+        pm.GuardianAadhar,
+        pm.MobileNo,
+        pm.Email,
+        pm.Photo, -- keep as LONGBLOB
+        pm.Occupation,
+        pm.MaritalStatus,
+        pm.BloodGroup,
+        pm.AllergicTo,
+        pm.IsActive,
+        pm.CreatedBy,
+        pm.UpdatedBy,
+        pm.CreatedDate,
+        pm.UpdatedDate,
+        pe.EntryId,
+        pe.RegistrationDate,
+        pe.RegistrationTime,
+        pe.Age,
+        pe.ConsultantDoctorId,
+        pe.RefDoctorId,
+        pe.PaymentTerms,
+        pe.RegistrationType,
+        pe.CompOrInsOrCamp,
+        pe.PatientCondition,
+        pe.ReferenceOrPicmeNo
+    FROM patients_master pm
+    LEFT JOIN patient_entry pe ON pm.PatientId = pe.PatientId
+    WHERE pm.PatientId = p_PatientId;
+END //
+
+DELIMITER ;
+DELIMITER //
+drop procedure spInsertPatient
+
+DELIMITER //
+
+CREATE PROCEDURE spInsertPatient(
+    IN p_UHIDType VARCHAR(50),
+    IN p_UHIDNo VARCHAR(50),
+    IN p_PatientTitle VARCHAR(10),
+    IN p_PatientName VARCHAR(100),
+    IN p_DOB DATE,
+    IN p_Sex VARCHAR(10),
+    IN p_GuardianTitle VARCHAR(10),
+    IN p_Guardian VARCHAR(100),
+    IN p_Address TEXT,
+    IN p_Place VARCHAR(100),
+    IN p_District VARCHAR(100),
+    IN p_GSTState VARCHAR(100),
+    IN p_Country VARCHAR(100),
+    IN p_PinCode VARCHAR(10),
+    IN p_PatientAadhar VARCHAR(12),
+    IN p_GuardianAadhar VARCHAR(12),
+    IN p_MobileNo VARCHAR(15),
+    IN p_Email VARCHAR(100),
+    IN p_Photo LONGBLOB,
+    IN p_PhotoFileName VARCHAR(255),
+    IN p_Occupation VARCHAR(100),
+    IN p_MaritalStatus VARCHAR(50),
+    IN p_BloodGroup VARCHAR(10),
+    IN p_AllergicTo TEXT,
+    IN p_IsActive TINYINT(1),
+    IN p_CreatedBy VARCHAR(50),
+    IN p_PhotoBase64 longtext,
+    OUT p_NewPatientId INT
+)
+BEGIN
+    INSERT INTO patients_master (
+        UHIDType, UHIDNo, PatientTitle, PatientName, DOB, Sex, GuardianTitle, Guardian,
+        Address, Place, District, GSTState, Country, PinCode, PatientAadhar, GuardianAadhar,
+        MobileNo, Email, Photo, PhotoFileName, PhotoBase64,Occupation, MaritalStatus, BloodGroup, AllergicTo, IsActive, CreatedBy
+    )
+    VALUES (
+        p_UHIDType, p_UHIDNo, p_PatientTitle, p_PatientName, p_DOB, p_Sex, p_GuardianTitle, p_Guardian,
+        p_Address, p_Place, p_District, p_GSTState, p_Country, p_PinCode, p_PatientAadhar, p_GuardianAadhar,
+        p_MobileNo, p_Email, p_Photo, p_PhotoFileName, p_PhotoBase64, p_Occupation, p_MaritalStatus, p_BloodGroup, p_AllergicTo, p_IsActive, p_CreatedBy
+    );
+
+    SET p_NewPatientId = LAST_INSERT_ID();
+END //
+
+DELIMITER ;

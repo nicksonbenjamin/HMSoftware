@@ -1,203 +1,300 @@
 @model ClinicApp.ViewModels.PatientRegistrationViewModel
 
-<h5 class="fw-bold mb-2">Patient Registration</h5>
+<style>
+  .reg-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #fafafa;
+    /* use your sample image colors and spacing as reference */
+  }
 
-<form asp-action="Create" method="post" enctype="multipart/form-data" class="small">
+  .reg-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    background: #e8eff6;
+    padding: 5px 8px;
+    border-bottom: 1px solid #c5d0da;
+  }
 
-<div class="card shadow-sm border-0">
-<div class="card-body p-2">
+  .reg-form label {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
 
-<div class="row">
+  .reg-form input,
+  .reg-form select,
+  .reg-form textarea {
+    height: 26px !important;
+    padding: 2px 4px !important;
+    font-size: 12px !important;
+    border-radius: 0 !important;
+  }
 
-    <!-- ================= LEFT COLUMN ================= -->
-    <div class="col-md-6 border-end">
+  textarea {
+    height: 40px !important;
+  }
 
-        <!-- Row -->
-        <div class="row g-1 mb-1">
-            <div class="col-4">
-                <label class="form-label form-label-sm">UHID Type</label>
-                <select asp-for="UHIDType" asp-items="Model.UHIDTypes" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">UHID No</label>
-                <input asp-for="UHIDNo" class="form-control form-control-sm" />
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Reg Date</label>
-                <input asp-for="RegistrationDate" type="date" class="form-control form-control-sm" />
-            </div>
+  .row {
+    margin-bottom: 4px;
+  }
+
+  .photo-box {
+    width: 90px;
+    height: 110px;
+    border: 1px dashed #888;
+    background-size: cover;
+    background-position: center;
+  }
+
+  #webcam {
+    width: 120px;
+    height: 100px;
+    border: 1px solid #444;
+    margin-top: 5px;
+  }
+
+  .btn-sm {
+    padding: 2px 8px !important;
+    font-size: 12px !important;
+    border-radius: 2px;
+  }
+
+  .save-section {
+    text-align: right;
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+  }
+</style>
+
+<div class="reg-container">
+  <div class="reg-title">Patient Registration</div>
+
+  <form asp-action="Create" method="post" class="reg-form">
+    <div class="row">
+      <div class="col-md-6" style="border-right: 1px solid #ccc;">
+        <div class="row">
+          <div class="col-4">
+            <label>UHID Type</label>
+            <select asp-for="UHIDType" asp-items="Model.UHIDTypes" class="form-select"></select>
+          </div>
+          <div class="col-4">
+            <label>UHID No</label>
+            <input asp-for="UHIDNo" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label>Date</label>
+            <input asp-for="RegistrationDate" type="date" class="form-control" />
+          </div>
         </div>
 
-        <div class="row g-1 mb-1">
-            <div class="col-3">
-                <label class="form-label form-label-sm">Time</label>
-                <input asp-for="RegistrationTime" type="time" class="form-control form-control-sm" />
-            </div>
-            <div class="col-3">
-                <label class="form-label form-label-sm">Sex</label>
-                <select asp-for="Sex" asp-items="Model.Sexes" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-3">
-                <label class="form-label form-label-sm">Title</label>
-                <select asp-for="PatientTitle" asp-items="Model.PatientTitles" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-3">
-                <label class="form-label form-label-sm">DOB</label>
-                <input asp-for="DOB" type="date" class="form-control form-control-sm" />
-            </div>
+        <div class="row">
+          <div class="col-3">
+            <label>Time</label>
+            <input asp-for="RegistrationTime" type="time" class="form-control" />
+          </div>
+          <div class="col-3">
+            <label>Sex</label>
+            <select asp-for="Sex" asp-items="Model.Sexes" class="form-select"></select>
+          </div>
+          <div class="col-3">
+            <label>Title</label>
+            <select asp-for="PatientTitle" asp-items="Model.PatientTitles" class="form-select"></select>
+          </div>
+          <div class="col-3">
+            <label>DOB</label>
+            <input asp-for="DOB" type="date" class="form-control" />
+          </div>
         </div>
 
-        <div class="row g-1 mb-1">
-            <div class="col-8">
-                <label class="form-label form-label-sm">Patient Name*</label>
-                <input asp-for="PatientName" class="form-control form-control-sm" />
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Age</label>
-                <input asp-for="Age" type="number" class="form-control form-control-sm" />
-            </div>
+        <div class="row">
+          <div class="col-8">
+            <label>Patient Name*</label>
+            <input asp-for="PatientName" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label>Age</label>
+            <input asp-for="Age" type="number" class="form-control" />
+          </div>
         </div>
 
-        <div class="row g-1 mb-1">
-            <div class="col-3">
-                <label class="form-label form-label-sm">Guardian</label>
-                <select asp-for="GuardianTitle" asp-items="Model.GuardianTitles" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-9">
-                <label class="form-label form-label-sm">Guardian Name</label>
-                <input asp-for="Guardian" class="form-control form-control-sm" />
-            </div>
+        <div class="row">
+          <div class="col-3">
+            <label>Guardian</label>
+            <select asp-for="GuardianTitle" asp-items="Model.GuardianTitles" class="form-select"></select>
+          </div>
+          <div class="col-9">
+            <label>Guardian Name</label>
+            <input asp-for="Guardian" class="form-control" />
+          </div>
         </div>
 
-        <div class="row g-1 mb-1">
-            <div class="col-12">
-                <label class="form-label form-label-sm">Address</label>
-                <textarea asp-for="Address" rows="1" class="form-control form-control-sm"></textarea>
-            </div>
+        <div class="row">
+          <div class="col-12">
+            <label>Address</label>
+            <textarea asp-for="Address" class="form-control"></textarea>
+          </div>
         </div>
 
-        <div class="row g-1 mb-1">
-            <div class="col-4">
-                <label class="form-label form-label-sm">Place</label>
-                <input asp-for="Place" class="form-control form-control-sm" />
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">District</label>
-                <input asp-for="District" class="form-control form-control-sm" />
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">GST State</label>
-                <select asp-for="GSTState" asp-items="Model.GSTStates" class="form-select form-select-sm"></select>
-            </div>
+        <div class="row">
+          <div class="col-4">
+            <label>Place</label>
+            <input asp-for="Place" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label>District</label>
+            <input asp-for="District" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label>GST State</label>
+            <select asp-for="GSTState" asp-items="Model.GSTStates" class="form-select"></select>
+          </div>
         </div>
 
-        <div class="row g-1 mb-1">
-            <div class="col-4">
-                <label class="form-label form-label-sm">Country</label>
-                <select asp-for="Country" asp-items="Model.Countries" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Pin Code</label>
-                <input asp-for="PinCode" class="form-control form-control-sm" />
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Mobile No*</label>
-                <input asp-for="MobileNo" class="form-control form-control-sm" />
-            </div>
+        <div class="row">
+          <div class="col-4">
+            <label>Country</label>
+            <select asp-for="Country" asp-items="Model.Countries" class="form-select"></select>
+          </div>
+          <div class="col-4">
+            <label>Pin Code</label>
+            <input asp-for="PinCode" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label>Mobile No*</label>
+            <input asp-for="MobileNo" class="form-control" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-6">
+            <label>Email</label>
+            <input asp-for="Email" class="form-control" />
+          </div>
+          <div class="col-6">
+            <label>Occupation</label>
+            <input asp-for="Occupation" class="form-control" />
+          </div>
         </div>
 
+        <div class="row">
+          <div class="col-4">
+            <label>Marital Status</label>
+            <select asp-for="MaritalStatus" asp-items="Model.MaritalStatuses" class="form-select"></select>
+          </div>
+          <div class="col-4">
+            <label>B.Group</label>
+            <select asp-for="BloodGroup" asp-items="Model.BloodGroups" class="form-select"></select>
+          </div>
+          <div class="col-4">
+            <label>Allergic To</label>
+            <input asp-for="AllergicTo" class="form-control" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <label>Consultant Doctor*</label>
+            <select asp-for="ConsultantDoctorId" asp-items="Model.ConsultantDoctors" class="form-select"></select>
+          </div>
+          <div class="col-6">
+            <label>Ref Doctor</label>
+            <select asp-for="RefDoctorId" asp-items="Model.RefDoctors" class="form-select"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+            <label>Payment Terms</label>
+            <select asp-for="PaymentTerms" asp-items="Model.PaymentTermsList" class="form-select"></select>
+          </div>
+          <div class="col-4">
+            <label>Reg Type</label>
+            <select asp-for="RegistrationType" asp-items="Model.RegistrationTypes" class="form-select"></select>
+          </div>
+          <div class="col-4">
+            <label>Comp/Ins/Camp</label>
+            <select asp-for="CompOrInsOrCamp" asp-items="Model.CompInsCampList" class="form-select"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <label>Patient Condition</label>
+            <input asp-for="PatientCondition" class="form-control" />
+          </div>
+          <div class="col-6">
+            <label>Reference/PICME No</label>
+            <input asp-for="ReferenceOrPicmeNo" class="form-control" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <label>Photo</label>
+            <button type="button" id="startWebcamBtn" class="btn btn-info btn-sm">Start Webcam</button>
+            <button type="button" id="captureBtn" class="btn btn-primary btn-sm ms-1">Take Photo</button>
+            <input type="hidden" asp-for="PhotoBase64" id="PhotoBase64" />
+            <input type="text" asp-for="PhotoFileName" readonly class="form-control form-control-sm mt-1" />
+            <video id="webcam" autoplay style="display: none;"></video>
+          </div>
+          <div class="col-6 d-flex align-items-center justify-content-center">
+            <div id="photoPreviewBox" class="photo-box"></div>
+          </div>
+        </div>
+
+        <div class="row mt-1">
+          <div class="col-12 d-flex align-items-center">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label class="ms-1">Active</label>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- ================= RIGHT COLUMN ================= -->
-    <div class="col-md-6 ps-3">
-
-        <div class="row g-1 mb-1">
-            <div class="col-6">
-                <label class="form-label form-label-sm">Email</label>
-                <input asp-for="Email" class="form-control form-control-sm" />
-            </div>
-            <div class="col-6">
-                <label class="form-label form-label-sm">Occupation</label>
-                <input asp-for="Occupation" class="form-control form-control-sm" />
-            </div>
-        </div>
-
-        <div class="row g-1 mb-1">
-            <div class="col-4">
-                <label class="form-label form-label-sm">Marital Status</label>
-                <select asp-for="MaritalStatus" asp-items="Model.MaritalStatuses" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Blood Group</label>
-                <select asp-for="BloodGroup" asp-items="Model.BloodGroups" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Allergic To</label>
-                <input asp-for="AllergicTo" class="form-control form-control-sm" />
-            </div>
-        </div>
-
-        <div class="row g-1 mb-1">
-            <div class="col-6">
-                <label class="form-label form-label-sm">Consultant Doctor*</label>
-                <select asp-for="ConsultantDoctorId" asp-items="Model.ConsultantDoctors" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-6">
-                <label class="form-label form-label-sm">Ref Doctor</label>
-                <select asp-for="RefDoctorId" asp-items="Model.RefDoctors" 
-                class="form-select form-select-sm @(ViewData.ModelState["ConsultantDoctorId"]?.Errors.Count > 0 ? "is-invalid" : "")"></select>
-            </div>
-        </div>
-
-        <div class="row g-1 mb-1">
-            <div class="col-4">
-                <label class="form-label form-label-sm">Payment Terms</label>
-                <select asp-for="PaymentTerms" asp-items="Model.PaymentTermsList" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Reg Type</label>
-                <select asp-for="RegistrationType" asp-items="Model.RegistrationTypes" class="form-select form-select-sm"></select>
-            </div>
-            <div class="col-4">
-                <label class="form-label form-label-sm">Comp/Ins/Camp</label>
-                <select asp-for="CompOrInsOrCamp" asp-items="Model.CompInsCampList" class="form-select form-select-sm"></select>
-            </div>
-        </div>
-
-        <div class="row g-1 mb-1">
-            <div class="col-6">
-                <label class="form-label form-label-sm">Patient Condition</label>
-                <input asp-for="PatientCondition" class="form-control form-control-sm" />
-            </div>
-            <div class="col-6">
-                <label class="form-label form-label-sm">Reference / Picme</label>
-                <input asp-for="ReferenceOrPicmeNo" class="form-control form-control-sm" />
-            </div>
-        </div>
-
-        <div class="row g-1 mb-1">
-            <div class="col-6">
-                <label class="form-label form-label-sm">Photo</label>
-                <input asp-for="Photo" type="file" class="form-control form-control-sm" />
-            </div>
-            <div class="col-6 d-flex align-items-center pt-3">
-                <div class="form-check">
-                    <input asp-for="IsActive" class="form-check-input" />
-                    <label asp-for="IsActive" class="form-check-label small"></label>
-                </div>
-            </div>
-        </div>
-
+    <div class="save-section">
+      <button class="btn btn-success btn-sm px-3">Save</button>
+      <a asp-action="Index" class="btn btn-secondary btn-sm px-3 ms-1">Cancel</a>
     </div>
+  </form>
 </div>
 
-<!-- Buttons -->
-<div class="text-end mt-2">
-    <button class="btn btn-success btn-sm px-3">Save</button>
-    <a asp-action="Index" class="btn btn-secondary btn-sm px-3 ms-1">Cancel</a>
-</div>
+<script>
+  let webcamStream;
 
-</div>
-</div>
+  document.getElementById("startWebcamBtn").addEventListener("click", async () => {
+    const video = document.getElementById("webcam");
+    video.style.display = "block";
+    webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    video.srcObject = webcamStream;
+  });
 
-</form>
+  document.getElementById("captureBtn").addEventListener("click", () => {
+    const video = document.getElementById("webcam");
+    const canvas = document.createElement("canvas");
+    canvas.width = 120;
+    canvas.height = 100;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = canvas.toDataURL("image/png");
+    // Set Base64 hidden field
+    document.getElementById("PhotoBase64").value = imageData;
+
+    // Generate pseudo-filename
+    const now = new Date();
+    const filename = `Captured_${now.getFullYear()}_${String(now.getMonth()+1).padStart(2,'0')}_${String(now.getDate()).padStart(2,'0')}_${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}${String(now.getSeconds()).padStart(2,'0')}.png`;
+    document.querySelector("input[name='PhotoFileName']").value = filename;
+
+    // Show preview
+    document.getElementById("photoPreviewBox").style.backgroundImage = `url(${imageData})`;
+
+    // Stop webcam
+    if (webcamStream) {
+      webcamStream.getTracks().forEach(track => track.stop());
+    }
+  });
+</script>
