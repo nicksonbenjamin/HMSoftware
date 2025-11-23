@@ -1,58 +1,115 @@
 @model ClinicApp.ViewModels.PatientRegistrationViewModel
 
-<h4 class="mb-3">Patient Details</h4>
+<style>
+  .details-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #fafafa;
+    font-size: 12px;
+  }
+  .details-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    background: #e8eff6;
+    padding: 5px 8px;
+    border-bottom: 1px solid #c5d0da;
+  }
+  .detail-label {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .detail-value {
+    margin-bottom: 4px;
+  }
+  .photo-box {
+    width: 90px;
+    height: 110px;
+    border: 1px dashed #888;
+    background-size: cover;
+    background-position: center;
+  }
+</style>
 
-<div class="card shadow-sm border-0 p-3 small">
-    <div class="row">
+<div class="details-container">
+  <div class="details-title">Patient Details</div>
+  <div class="row">
+    <div class="col-md-6" style="border-right: 1px solid #ccc;">
 
-        <!-- LEFT COLUMN -->
-        <div class="col-md-6 border-end">
+      <div class="row">
+        <div class="col-4"><div class="detail-label">UHID Type</div><div class="detail-value">@Model.UHIDType</div></div>
+        <div class="col-4"><div class="detail-label">UHID No</div><div class="detail-value">@Model.UHIDNo</div></div>
+        <div class="col-4"><div class="detail-label">Reg Date</div><div class="detail-value">@Model.RegistrationDate.ToShortDateString()</div></div>
+      </div>
 
-            <p><strong>UHID Type:</strong> @Model.UHIDType</p>
-            <p><strong>UHID No:</strong> @Model.UHIDNo</p>
-            <p><strong>Registration Date:</strong> @Model.RegistrationDate.ToString("dd/MM/yyyy")</p>
-            <p><strong>Registration Time:</strong> @Model.RegistrationTime</p>
-            <p><strong>Patient Title:</strong> @Model.PatientTitle</p>
-            <p><strong>Patient Name:</strong> @Model.PatientName</p>
-            <p><strong>Date of Birth:</strong> @(Model.DOB?.ToString("dd/MM/yyyy") ?? "-")</p>
-            <p><strong>Age:</strong> @Model.Age</p>
-            <p><strong>Sex:</strong> @Model.Sex</p>
-            <p><strong>Guardian:</strong> @Model.GuardianTitle @Model.Guardian</p>
-            <p><strong>Address:</strong> @Model.Address</p>
-            <p><strong>Place:</strong> @Model.Place</p>
-            <p><strong>District:</strong> @Model.District</p>
-            <p><strong>GST State:</strong> @Model.GSTState</p>
-            <p><strong>Country:</strong> @Model.Country</p>
+      <div class="row">
+        <div class="col-3"><div class="detail-label">Time</div><div class="detail-value">@Model.RegistrationTime</div></div>
+        <div class="col-3"><div class="detail-label">Sex</div><div class="detail-value">@Model.Sex</div></div>
+        <div class="col-3"><div class="detail-label">Title</div><div class="detail-value">@Model.PatientTitle</div></div>
+        <div class="col-3"><div class="detail-label">DOB</div><div class="detail-value">@Model.DOB?.ToShortDateString()</div></div>
+      </div>
 
-        </div>
+      <div class="row">
+        <div class="col-8"><div class="detail-label">Patient Name</div><div class="detail-value">@Model.PatientName</div></div>
+        <div class="col-4"><div class="detail-label">Age</div><div class="detail-value">@Model.Age</div></div>
+      </div>
 
-        <!-- RIGHT COLUMN -->
-        <div class="col-md-6 ps-3">
+      <div class="row">
+        <div class="col-3"><div class="detail-label">Guardian</div><div class="detail-value">@Model.GuardianTitle</div></div>
+        <div class="col-9"><div class="detail-label">Guardian Name</div><div class="detail-value">@Model.Guardian</div></div>
+      </div>
 
-            <p><strong>Mobile No:</strong> @Model.MobileNo</p>
-            <p><strong>Email:</strong> @Model.Email</p>
-            <p><strong>Occupation:</strong> @Model.Occupation</p>
-            <p><strong>Marital Status:</strong> @Model.MaritalStatus</p>
-            <p><strong>Blood Group:</strong> @Model.BloodGroup</p>
-            <p><strong>Allergic To:</strong> @Model.AllergicTo</p>
+      <div class="row">
+        <div class="col-12"><div class="detail-label">Address</div><div class="detail-value">@Model.Address</div></div>
+      </div>
 
-            <p><strong>Consultant Doctor:</strong> @Model.ConsultantDoctorId</p>
-            <p><strong>Referred Doctor:</strong> @Model.RefDoctorId</p>
+      <div class="row">
+        <div class="col-4"><div class="detail-label">Place</div><div class="detail-value">@Model.Place</div></div>
+        <div class="col-4"><div class="detail-label">District</div><div class="detail-value">@Model.District</div></div>
+        <div class="col-4"><div class="detail-label">GST State</div><div class="detail-value">@Model.GSTState</div></div>
+      </div>
 
-            <p><strong>Payment Terms:</strong> @Model.PaymentTerms</p>
-            <p><strong>Registration Type:</strong> @Model.RegistrationType</p>
-            <p><strong>Comp/Insurance/Camp:</strong> @Model.CompOrInsOrCamp</p>
+      <div class="row">
+        <div class="col-4"><div class="detail-label">Country</div><div class="detail-value">@Model.Country</div></div>
+        <div class="col-4"><div class="detail-label">Pin Code</div><div class="detail-value">@Model.PinCode</div></div>
+        <div class="col-4"><div class="detail-label">Mobile No</div><div class="detail-value">@Model.MobileNo</div></div>
+      </div>
 
-            <p><strong>Patient Condition:</strong> @Model.PatientCondition</p>
-            <p><strong>Reference / PICME No:</strong> @Model.ReferenceOrPicmeNo</p>
-
-            <p><strong>Status:</strong> @(Model.IsActive ? "Active" : "Inactive")</p>
-
-        </div>
     </div>
 
-    <div class="text-end mt-3">
-        <a asp-action="Edit" asp-route-id="@Model.PatientId" class="btn btn-primary btn-sm">Edit</a>
-        <a asp-action="Index" class="btn btn-secondary btn-sm">Back</a>
+    <div class="col-md-6">
+
+      <div class="row"><div class="col-6"><div class="detail-label">Email</div><div class="detail-value">@Model.Email</div></div><div class="col-6"><div class="detail-label">Occupation</div><div class="detail-value">@Model.Occupation</div></div></div>
+
+      <div class="row"><div class="col-4"><div class="detail-label">Marital Status</div><div class="detail-value">@Model.MaritalStatus</div></div><div class="col-4"><div class="detail-label">Blood Group</div><div class="detail-value">@Model.BloodGroup</div></div><div class="col-4"><div class="detail-label">Allergic To</div><div class="detail-value">@Model.AllergicTo</div></div></div>
+
+      <div class="row"><div class="col-6"><div class="detail-label">Consultant Doctor</div><div class="detail-value">@Model.ConsultantDoctorId</div></div><div class="col-6"><div class="detail-label">Ref Doctor</div><div class="detail-value">@Model.RefDoctorId</div></div></div>
+
+      <div class="row"><div class="col-4"><div class="detail-label">Payment Terms</div><div class="detail-value">@Model.PaymentTerms</div></div><div class="col-4"><div class="detail-label">Reg Type</div><div class="detail-value">@Model.RegistrationType</div></div><div class="col-4"><div class="detail-label">Comp/Ins/Camp</div><div class="detail-value">@Model.CompOrInsOrCamp</div></div></div>
+
+      <div class="row"><div class="col-6"><div class="detail-label">Patient Condition</div><div class="detail-value">@Model.PatientCondition</div></div><div class="col-6"><div class="detail-label">Reference/PICME No</div><div class="detail-value">@Model.ReferenceOrPicmeNo</div></div></div>
+
+      <div class="row mt-2">
+        <div class="col-6">
+          <div class="detail-label">Photo</div>
+          <div class="photo-box" style="background-image: @(Model.PhotoBase64 != null ? $"url('data:image/png;base64,{Model.PhotoBase64}')" : "none")"></div>
+        </div>
+        <div class="col-6 d-flex align-items-center">
+          <div>
+            <div class="detail-label">File Name</div>
+            <div class="detail-value">@Model.PhotoFileName</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-1">
+        <div class="col-12"><div class="detail-label">Active</div><div class="detail-value">@Model.IsActive</div></div>
+      </div>
+
     </div>
+  </div>
+
+  <div class="mt-3 text-end">
+    <a asp-action="Index" class="btn btn-secondary btn-sm">Back</a>
+  </div>
 </div>
