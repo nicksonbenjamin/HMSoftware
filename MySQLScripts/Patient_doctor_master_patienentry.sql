@@ -35,6 +35,15 @@ CREATE TABLE `patients_master` (
   PRIMARY KEY (`PatientId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+ALTER TABLE patients_master
+ADD COLUMN PhotoFileName VARCHAR(255);
+
+ALTER TABLE patients_master
+ADD COLUMN PhotoBase64 LONGTEXT,
+
+
+
 CREATE TABLE `doctor_master` (
   `doctor_id` INT NOT NULL AUTO_INCREMENT,
   `doctor_name` VARCHAR(100) NOT NULL,

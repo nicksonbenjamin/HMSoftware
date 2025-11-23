@@ -98,7 +98,7 @@ namespace ClinicApp.ViewModels
         [EmailAddress]
         public string Email { get; set; }
 
-        public IFormFile Photo { get; set; }
+      //  public IFormFile Photo { get; set; }
 
         [Display(Name = "Occupation")]
         public string Occupation { get; set; }
@@ -152,5 +152,12 @@ namespace ClinicApp.ViewModels
         public DateTime? CreatedDate { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
+
+        [Display(Name = "Photo (Base64)")]
+public string PhotoBase64 { get; set; }
+
+[Display(Name = "Photo File Name")]
+public string PhotoFileName { get; set; }
+
     }
 }
