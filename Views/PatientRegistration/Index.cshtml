@@ -4,6 +4,9 @@
     ViewData["Title"] = "Patient Registration List";
 }
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css" />
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/bundle.js"></script>
+
 <style>
     .table-container {
         background-color: #f8f9fa;
@@ -108,10 +111,7 @@
                 <th></th>
                 <th><input type="text" id="filterUHIDType" class="form-control form-control-sm" placeholder="Search UHID Type" /></th>
                 <th><input type="text" id="filterUHIDNo" class="form-control form-control-sm" placeholder="Search UHID No" /></th>
-                
-                <!-- Date filter inside grid -->
-                <th><input type="date" id="filterRegDate" class="form-control form-control-sm" /></th>
-
+                <th><input type="text" id="filterRegDateRange" class="form-control form-control-sm" placeholder="Select Date Range" readonly /></th>
                 <th><input type="text" id="filterName" class="form-control form-control-sm" placeholder="Search Name" /></th>
                 <th><input type="text" id="filterMobile" class="form-control form-control-sm" placeholder="Search Mobile" /></th>
                 <th><input type="text" id="filterAge" class="form-control form-control-sm" placeholder="Search Age" /></th>
@@ -137,9 +137,7 @@
                     </td>
                     <td>@patient.UHIDType</td>
                     <td>@patient.UHIDNo</td>
-                    <td>@(patient.RegistrationDate.HasValue 
-                        ? patient.RegistrationDate.Value.ToString("dd-MM-yyyy") 
-                        : "")</td>
+                    <td>@(patient.RegistrationDate.HasValue ? patient.RegistrationDate.Value.ToString("dd-MM-yyyy") : "")</td>
                     <td>@patient.PatientName</td>
                     <td>@patient.MobileNo</td>
                     <td>@patient.Age</td>
@@ -153,15 +151,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
-    // Convert dd-MM-yyyy → yyyy-MM-dd for comparison with date input value
+    // Format date from dd-MM-yyyy to yyyy-MM-dd
     function formatToISO(dateStr) {
         const parts = dateStr.split('-');
         if (parts.length === 3) {
-            const day = parts[0].padStart(2, '0');
-            const month = parts[1].padStart(2, '0');
-            const year = parts[2];
-            return `${year}-${month}-${day}`;
+            return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
         }
         return '';
     }
@@ -169,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const filterInputs = {
         uhidType: document.getElementById('filterUHIDType'),
         uhidNo: document.getElementById('filterUHIDNo'),
-        regDate: document.getElementById('filterRegDate'),
+        regDateRange: document.getElementById('filterRegDateRange'),
         name: document.getElementById('filterName'),
         mobile: document.getElementById('filterMobile'),
         age: document.getElementById('filterAge'),
@@ -178,29 +172,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const rows = document.querySelectorAll('tbody tr');
 
+    // Initialize Litepicker
+    const picker = new Litepicker({
+        element: filterInputs.regDateRange,
+        singleMode: false,
+        format: 'DD-MM-YYYY',
+        buttonText: { clear: 'Clear' },
+        setup: (picker) => {
+            picker.on('selected', applyFilters);
+            picker.on('cleared', () => {
+                filterInputs.regDateRange.value = '';
+                applyFilters();
+            });
+        }
+    });
+
     function applyFilters() {
         const uhidTypeVal = filterInputs.uhidType.value.toLowerCase();
         const uhidNoVal = filterInputs.uhidNo.value.toLowerCase();
-        const regDateVal = filterInputs.regDate.value;  // yyyy-MM-dd from date input
+        const regDateRangeVal = filterInputs.regDateRange.value; // "DD-MM-YYYY - DD-MM-YYYY"
         const nameVal = filterInputs.name.value.toLowerCase();
         const mobileVal = filterInputs.mobile.value.toLowerCase();
         const ageVal = filterInputs.age.value.toLowerCase();
         const sexVal = filterInputs.sex.value.toLowerCase();
 
+        let start = null, end = null;
+        if(regDateRangeVal){
+            const dates = regDateRangeVal.split(' - ');
+            if(dates.length === 2){
+                start = formatToISO(dates[0]);
+                end = formatToISO(dates[1]);
+            }
+        }
+
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
             const uhidTypeText = cells[1]?.textContent.toLowerCase() || "";
             const uhidNoText = cells[2]?.textContent.toLowerCase() || "";
-            const regDateText = formatToISO(cells[3]?.textContent.trim());  // convert dd-MM-yyyy → yyyy-MM-dd
+            const regDateText = formatToISO(cells[3]?.textContent.trim());
             const nameText = cells[4]?.textContent.toLowerCase() || "";
             const mobileText = cells[5]?.textContent.toLowerCase() || "";
             const ageText = cells[6]?.textContent.toLowerCase() || "";
             const sexText = cells[7]?.textContent.toLowerCase() || "";
 
+            let dateInRange = true;
+            if(start && end){
+                if(regDateText < start || regDateText > end){
+                    dateInRange = false;
+                }
+            }
+
             const matches =
                 uhidTypeText.includes(uhidTypeVal) &&
                 uhidNoText.includes(uhidNoVal) &&
-                (regDateVal === "" || regDateText === regDateVal) &&
+                dateInRange &&
                 nameText.includes(nameVal) &&
                 mobileText.includes(mobileVal) &&
                 ageText.includes(ageVal) &&
@@ -211,7 +236,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     Object.values(filterInputs).forEach(input => {
-        input.addEventListener('input', applyFilters);
+        if(input.id !== "filterRegDateRange"){
+            input.addEventListener('input', applyFilters);
+        }
     });
 });
 </script>
