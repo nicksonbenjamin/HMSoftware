@@ -108,7 +108,10 @@
                 <th></th>
                 <th><input type="text" id="filterUHIDType" class="form-control form-control-sm" placeholder="Search UHID Type" /></th>
                 <th><input type="text" id="filterUHIDNo" class="form-control form-control-sm" placeholder="Search UHID No" /></th>
-                <th><input type="text" id="filterRegDate" class="form-control form-control-sm" placeholder="Search Reg Date" /></th>
+                
+                <!-- Date filter inside grid -->
+                <th><input type="date" id="filterRegDate" class="form-control form-control-sm" /></th>
+
                 <th><input type="text" id="filterName" class="form-control form-control-sm" placeholder="Search Name" /></th>
                 <th><input type="text" id="filterMobile" class="form-control form-control-sm" placeholder="Search Mobile" /></th>
                 <th><input type="text" id="filterAge" class="form-control form-control-sm" placeholder="Search Age" /></th>
@@ -134,7 +137,9 @@
                     </td>
                     <td>@patient.UHIDType</td>
                     <td>@patient.UHIDNo</td>
-                    <td>@patient.RegistrationDate.ToString("dd/MM/yyyy")</td>
+                    <td>@(patient.RegistrationDate.HasValue 
+                        ? patient.RegistrationDate.Value.ToString("dd-MM-yyyy") 
+                        : "")</td>
                     <td>@patient.PatientName</td>
                     <td>@patient.MobileNo</td>
                     <td>@patient.Age</td>
@@ -146,9 +151,21 @@
     </table>
 </div>
 
-<!-- Search Filter Script -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+
+    // Convert dd-MM-yyyy → yyyy-MM-dd for comparison with date input value
+    function formatToISO(dateStr) {
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            const day = parts[0].padStart(2, '0');
+            const month = parts[1].padStart(2, '0');
+            const year = parts[2];
+            return `${year}-${month}-${day}`;
+        }
+        return '';
+    }
+
     const filterInputs = {
         uhidType: document.getElementById('filterUHIDType'),
         uhidNo: document.getElementById('filterUHIDNo'),
@@ -164,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function applyFilters() {
         const uhidTypeVal = filterInputs.uhidType.value.toLowerCase();
         const uhidNoVal = filterInputs.uhidNo.value.toLowerCase();
-        const regDateVal = filterInputs.regDate.value.toLowerCase();
+        const regDateVal = filterInputs.regDate.value;  // yyyy-MM-dd from date input
         const nameVal = filterInputs.name.value.toLowerCase();
         const mobileVal = filterInputs.mobile.value.toLowerCase();
         const ageVal = filterInputs.age.value.toLowerCase();
@@ -174,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cells = row.querySelectorAll('td');
             const uhidTypeText = cells[1]?.textContent.toLowerCase() || "";
             const uhidNoText = cells[2]?.textContent.toLowerCase() || "";
-            const regDateText = cells[3]?.textContent.toLowerCase() || "";
+            const regDateText = formatToISO(cells[3]?.textContent.trim());  // convert dd-MM-yyyy → yyyy-MM-dd
             const nameText = cells[4]?.textContent.toLowerCase() || "";
             const mobileText = cells[5]?.textContent.toLowerCase() || "";
             const ageText = cells[6]?.textContent.toLowerCase() || "";
@@ -183,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const matches =
                 uhidTypeText.includes(uhidTypeVal) &&
                 uhidNoText.includes(uhidNoVal) &&
-                regDateText.includes(regDateVal) &&
+                (regDateVal === "" || regDateText === regDateVal) &&
                 nameText.includes(nameVal) &&
                 mobileText.includes(mobileVal) &&
                 ageText.includes(ageVal) &&

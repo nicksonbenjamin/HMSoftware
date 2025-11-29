@@ -30,7 +30,6 @@ DROP PROCEDURE IF EXISTS sp_GetPrescriptionList;
 DROP PROCEDURE IF EXISTS sp_SavePrescriptionClinical;
 
 DELIMITER //
-
 /* ------------------------------------------------
    Get All Patients
 ------------------------------------------------ */
@@ -43,8 +42,10 @@ BEGIN
         pm.Sex,
         pm.UHIDNo,
         pm.PhotoBase64,
-        pm.PhotoFileName
+        pm.PhotoFileName,
+        pe.RegistrationDate
     FROM patients_master pm
+    JOIN patient_entry pe on pm.PatientId =pe.PatientId
     ORDER BY pm.PatientName;
 END //
 

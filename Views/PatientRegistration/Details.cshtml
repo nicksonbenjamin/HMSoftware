@@ -39,7 +39,12 @@
       <div class="row">
         <div class="col-4"><div class="detail-label">UHID Type</div><div class="detail-value">@Model.UHIDType</div></div>
         <div class="col-4"><div class="detail-label">UHID No</div><div class="detail-value">@Model.UHIDNo</div></div>
-        <div class="col-4"><div class="detail-label">Reg Date</div><div class="detail-value">@Model.RegistrationDate.ToShortDateString()</div></div>
+        <div class="col-4">
+    <div class="detail-label">Reg Date</div>
+    <div class="detail-value">
+        @Model.RegistrationDate?.ToString("dd/MM/yyyy")
+    </div>
+</div>
       </div>
 
       <div class="row">
