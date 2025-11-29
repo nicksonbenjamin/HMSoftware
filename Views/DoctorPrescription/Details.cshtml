@@ -1,0 +1,109 @@
+@model ClinicApp.ViewModels.DoctorPrescriptionVM
+
+@{
+    ViewData["Title"] = "Prescription Details";
+}
+
+<style>
+    .title-bar {
+        background: #1c4e80;
+        color: white;
+        padding: 8px;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    .section-block {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+    }
+    .grid-table th {
+        background: #1c4e80;
+        color: white;
+        text-align: center;
+    }
+</style>
+
+<div class="title-bar">Prescription Details</div>
+
+<!-- Patient & Vitals Section -->
+<div class="section-block">
+    <h5><b>Patient & Vitals</b></h5>
+    <div class="row">
+        <div class="col-md-3"><strong>Patient Name:</strong> @Model.Prescription.PatientName</div>
+        <div class="col-md-3"><strong>Entry Type:</strong> @Model.Prescription.EntryType</div>
+        <div class="col-md-2"><strong>Entry Number:</strong> @Model.Prescription.EntryNumber</div>
+        <div class="col-md-2"><strong>Entry Period:</strong> @Model.Prescription.EntryPeriod</div>
+        <div class="col-md-2"><strong>Disease:</strong> @Model.Prescription.DeseaseId</div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2"><strong>Height:</strong> @Model.Prescription.Height</div>
+        <div class="col-md-2"><strong>Weight:</strong> @Model.Prescription.Weight</div>
+        <div class="col-md-2"><strong>BMI:</strong> @Model.Prescription.BMI</div>
+        <div class="col-md-2"><strong>Temp (°C):</strong> @Model.Prescription.TempInCelcius</div>
+        <div class="col-md-2"><strong>BP:</strong> @Model.Prescription.BP</div>
+        <div class="col-md-2"><strong>SPO2:</strong> @Model.Prescription.SPO2</div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3"><strong>Pulse Rate:</strong> @Model.Prescription.PulseRate</div>
+        <div class="col-md-3"><strong>Next Visit:</strong> @(Model.Prescription.NextVisitDate.HasValue ? Model.Prescription.NextVisitDate.Value.ToString("dd-MMM-yyyy") : "-")</div>
+    </div>
+</div>
+
+<!-- Medicines Section -->
+<div class="section-block">
+    <h5><b>Medicines</b></h5>
+    <table class="table table-bordered grid-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Dose Pattern</th>
+                <th>Usage</th>
+                <th>Days</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model.Medicines)
+            {
+                <tr>
+                    <td>@m.ProductId</td>
+                    <td>@m.DosePatternId</td>
+                    <td>@m.DoseUsage</td>
+                    <td>@m.DoseDays</td>
+                    <td>@m.Qty</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Clinical Details Section (optional if you have clinical notes) -->
+@if (Model.Clinical != null && Model.Clinical.Any())
+{
+    <div class="section-block">
+        <h5><b>Clinical Details</b></h5>
+        <table class="table table-bordered grid-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model.Clinical)
+                {
+                    <tr>
+                        <td>@c.ClinicalNote</td>
+                        <td>@c.Result</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>

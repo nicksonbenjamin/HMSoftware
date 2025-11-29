@@ -9,7 +9,7 @@ namespace ClinicApp.Models
         public Guid MedicineId { get; set; }
 
         public Guid PrescriptionId { get; set; }
-        public Prescription Prescription { get; set; }
+        public DrPrescription Prescription { get; set; }
 
         public string MedicineName { get; set; }
         public string DosePattern { get; set; }   // e.g. "1-0-1"
