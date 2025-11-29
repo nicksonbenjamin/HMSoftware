@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -21,16 +22,18 @@ namespace ClinicApp.Controllers
             _db = db;
         }
 
-        // ================== LIST PATIENTS ==================
-        public IActionResult Index()
+        // ================== LIST PATIENTS WITH DATE FILTER ==================
+        public IActionResult Index(DateTime? fromDate, DateTime? toDate)
         {
             var list = new List<PatientRegistrationViewModel>();
+
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new MySqlCommand("spGetAllPatients", conn)
             {
                 CommandType = CommandType.StoredProcedure
             };
+
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -40,10 +43,22 @@ namespace ClinicApp.Controllers
                     PatientName = reader.GetString("PatientName"),
                     MobileNo = reader.GetString("MobileNo"),
                     Sex = reader.GetString("Sex"),
+                    RegistrationDate = reader["RegistrationDate"] != DBNull.Value
+                        ? Convert.ToDateTime(reader["RegistrationDate"])
+                        : (DateTime?)null,
                     UHIDNo = reader["UHIDNo"]?.ToString(),
-                    PhotoBase64 = reader["PhotoBase64"]?.ToString() // load Base64 for preview
+                    PhotoBase64 = reader["PhotoBase64"]?.ToString()
                 });
             }
+
+            if (fromDate.HasValue)
+                list = list.FindAll(x => x.RegistrationDate.HasValue && x.RegistrationDate.Value.Date >= fromDate.Value.Date);
+            if (toDate.HasValue)
+                list = list.FindAll(x => x.RegistrationDate.HasValue && x.RegistrationDate.Value.Date <= toDate.Value.Date);
+
+            ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd");
+            ViewBag.ToDate = toDate?.ToString("yyyy-MM-dd");
+
             return View(list);
         }
 
@@ -65,12 +80,6 @@ namespace ClinicApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(PatientRegistrationViewModel model)
         {
-            // if (!ModelState.IsValid)
-            // {
-            //     PopulateDropdowns(model);
-            //     return View(model);
-            // }
-
             int patientId = InsertPatientMaster(model);
             if (patientId <= 0)
             {
@@ -104,12 +113,6 @@ namespace ClinicApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(PatientRegistrationViewModel model)
         {
-            // if (!ModelState.IsValid)
-            // {
-            //     PopulateDropdowns(model);
-            //     return View(model);
-            // }
-
             using var conn = _db.GetConnection();
             conn.Open();
             using var cmd = new MySqlCommand("spUpdatePatient", conn)
@@ -142,7 +145,6 @@ namespace ClinicApp.Controllers
             cmd.Parameters.AddWithValue("@p_AllergicTo", model.AllergicTo ?? "");
             cmd.Parameters.AddWithValue("@p_IsActive", model.IsActive);
 
-            // ================== PHOTO ==================
             if (!string.IsNullOrEmpty(model.PhotoBase64))
             {
                 var rawBase64 = model.PhotoBase64.Split(',').Last();
@@ -232,7 +234,7 @@ namespace ClinicApp.Controllers
             model.AllergicTo = reader["AllergicTo"]?.ToString();
             model.IsActive = reader["IsActive"] != DBNull.Value && Convert.ToBoolean(reader["IsActive"]);
             model.PhotoFileName = reader["PhotoFileName"]?.ToString();
-            model.PhotoBase64 = reader["PhotoBase64"]?.ToString(); // load for Edit display
+            model.PhotoBase64 = reader["PhotoBase64"]?.ToString();
             return model;
         }
 
@@ -245,7 +247,6 @@ namespace ClinicApp.Controllers
                 CommandType = CommandType.StoredProcedure
             };
 
-            // All other parameters preserved
             cmd.Parameters.AddWithValue("@p_UHIDType", model.UHIDType);
             cmd.Parameters.AddWithValue("@p_UHIDNo", model.UHIDNo ?? "");
             cmd.Parameters.AddWithValue("@p_PatientTitle", model.PatientTitle);
@@ -271,7 +272,6 @@ namespace ClinicApp.Controllers
             cmd.Parameters.AddWithValue("@p_IsActive", model.IsActive);
             cmd.Parameters.AddWithValue("@p_CreatedBy", User.Identity?.Name ?? "System");
 
-            // ================== PHOTO ==================
             if (!string.IsNullOrEmpty(model.PhotoBase64))
             {
                 var rawBase64 = model.PhotoBase64.Split(',').Last();
@@ -322,8 +322,6 @@ namespace ClinicApp.Controllers
 
         private void PopulateDropdowns(PatientRegistrationViewModel model)
         {
-            // ================== All dropdown code unchanged ==================
-            // Sex
             model.Sexes = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Male", Value = "Male" },
@@ -331,7 +329,6 @@ namespace ClinicApp.Controllers
                 new SelectListItem { Text = "Other", Value = "Other" }
             };
 
-            // Marital Status
             model.MaritalStatuses = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Single", Value = "Single" },
@@ -339,7 +336,6 @@ namespace ClinicApp.Controllers
                 new SelectListItem { Text = "Other", Value = "Other" }
             };
 
-            // Blood Group
             model.BloodGroups = new List<SelectListItem>
             {
                 new SelectListItem { Text = "A+", Value = "A+" },
@@ -352,14 +348,12 @@ namespace ClinicApp.Controllers
                 new SelectListItem { Text = "AB-", Value = "AB-" }
             };
 
-            // UHID Types
             model.UHIDTypes = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Patient Registration", Value = "Patient Registration" },
                 new SelectListItem { Text = "OPD", Value = "OPD" }
             };
 
-            // Patient Titles
             model.PatientTitles = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Mr", Value = "Mr" },
@@ -368,7 +362,6 @@ namespace ClinicApp.Controllers
                 new SelectListItem { Text = "Master", Value = "Master" }
             };
 
-            // Guardian Titles
             model.GuardianTitles = new List<SelectListItem>
             {
                 new SelectListItem { Text = "S/O", Value = "S/O" },
@@ -377,25 +370,24 @@ namespace ClinicApp.Controllers
                 new SelectListItem { Text = "M/O", Value = "M/O" }
             };
 
-            // GST States
             model.GSTStates = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Tamil Nadu", Value = "33-Tamil Nadu" },
                 new SelectListItem { Text = "Kerala", Value = "32-Kerala" }
-                // Add more as required
             };
 
-            // Countries
             model.Countries = new List<SelectListItem>
             {
                 new SelectListItem { Text = "India", Value = "India" },
                 new SelectListItem { Text = "USA", Value = "USA" }
             };
 
-            // Consultant Doctors
             model.ConsultantDoctors = new List<SelectListItem>();
+            model.RefDoctors = new List<SelectListItem>();
+
             using var conn = _db.GetConnection();
             conn.Open();
+
             using (var cmd = new MySqlCommand("SELECT Doctor_Id, Doctor_Name FROM doctor_master WHERE Active=1 ORDER BY Doctor_Name", conn))
             using (var reader = cmd.ExecuteReader())
             {
@@ -406,16 +398,6 @@ namespace ClinicApp.Controllers
                         Value = reader["Doctor_Id"].ToString(),
                         Text = reader["Doctor_Name"].ToString()
                     });
-                }
-            }
-
-            // Referred Doctors
-            model.RefDoctors = new List<SelectListItem>();
-            using (var cmd = new MySqlCommand("SELECT Doctor_Id, Doctor_Name FROM doctor_master WHERE Active=1 ORDER BY Doctor_Name", conn))
-            using (var reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
                     model.RefDoctors.Add(new SelectListItem
                     {
                         Value = reader["Doctor_Id"].ToString(),
@@ -424,21 +406,18 @@ namespace ClinicApp.Controllers
                 }
             }
 
-            // Payment Terms
             model.PaymentTermsList = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Cash", Value = "Cash" },
                 new SelectListItem { Text = "Credit", Value = "Credit" }
             };
 
-            // Registration Types
             model.RegistrationTypes = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Walk-in", Value = "Walk-in" },
                 new SelectListItem { Text = "Online", Value = "Online" }
             };
 
-            // Comp / Ins / Camp
             model.CompInsCampList = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Company", Value = "Company" },
