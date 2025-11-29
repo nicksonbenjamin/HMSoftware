@@ -14,7 +14,7 @@ namespace ClinicApp.Models
         public int PrescriptionId { get; set; }
 
         [ForeignKey("PrescriptionId")]
-        public Prescription Prescription { get; set; }
+        public DrPrescription Prescription { get; set; }
 
         [Required, StringLength(255)]
         public string Medicine { get; set; }

@@ -1,67 +1,85 @@
+using AutoMapper;
 using ClinicApp.Models;
 using ClinicApp.ViewModels;
-using AutoMapper;
+using System.Collections.Generic;
 
-public class MappingProfile : Profile
+namespace ClinicApp
 {
-    public MappingProfile()
+    public class MappingProfile : Profile
     {
-        // Existing mappings
-        CreateMap<ApplicationUser, ApplicationUserViewModel>();
-        CreateMap<ApplicationUserViewModel, ApplicationUser>();
-        CreateMap<Patient, PatientViewModel>();
-        CreateMap<PatientViewModel, Patient>();
-        CreateMap<ProductMaster, ProductMasterViewModel>();
-        CreateMap<ProductMasterViewModel, ProductMaster>();
-        CreateMap<LedgerMaster, LedgerMasterViewModel>();
-        CreateMap<LedgerMasterViewModel, LedgerMaster>();
-        CreateMap<DescriptionMaster, DescriptionMasterViewModel>();
-        CreateMap<DescriptionMasterViewModel, DescriptionMaster>();
+        public MappingProfile()
+        {
+            // ======================================================
+            // General mappings
+            // ======================================================
+            CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
+            CreateMap<Patient, PatientViewModel>().ReverseMap();
+            CreateMap<ProductMaster, ProductMasterViewModel>().ReverseMap();
+            CreateMap<LedgerMaster, LedgerMasterViewModel>().ReverseMap();
+            CreateMap<DescriptionMaster, DescriptionMasterViewModel>().ReverseMap();
+            CreateMap<DescriptionMasterTestValue, DescriptionMasterTestValueViewModel>().ReverseMap();
+            CreateMap<RoomMaster, RoomMasterViewModel>()
+                .ForMember(dest => dest.RoomTypeList, opt => opt.Ignore())
+                .ReverseMap();
+            CreateMap<RoomTypeMaster, RoomTypeMasterViewModel>().ReverseMap();
+            CreateMap<ICDCodeMaster, Icd10CodeViewModel>().ReverseMap();
+            CreateMap<CommonMaster, CommonMasterViewModel>().ReverseMap();
 
-        // Child mapping
-        CreateMap<DescriptionMasterTestValue, DescriptionMasterTestValueViewModel>();
-        CreateMap<DescriptionMasterTestValueViewModel, DescriptionMasterTestValue>();
+            // ======================================================
+            // Doctor Prescription mappings
+            // ======================================================
+            // DoctorPrescriptionVM -> DrPrescription
+            CreateMap<DoctorPrescriptionVM, DrPrescription>()
+                .ForMember(dest => dest.DrPrescriptionId, opt => opt.MapFrom(src => src.Prescription.DrPrescriptionId))
+                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Prescription.PatientId))
+                .ForMember(dest => dest.DeseaseId, opt => opt.MapFrom(src => src.Prescription.DeseaseId))
+                .ForMember(dest => dest.EntryType, opt => opt.MapFrom(src => src.Prescription.EntryType))
+                .ForMember(dest => dest.EntryNumber, opt => opt.MapFrom(src => src.Prescription.EntryNumber))
+                .ForMember(dest => dest.EntryPeriod, opt => opt.MapFrom(src => src.Prescription.EntryPeriod))
+                .ForMember(dest => dest.Height, opt => opt.MapFrom(src => src.Prescription.Height))
+                .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Prescription.Weight))
+                .ForMember(dest => dest.BMI, opt => opt.MapFrom(src => src.Prescription.BMI))
+                .ForMember(dest => dest.TempInCelcius, opt => opt.MapFrom(src => src.Prescription.TempInCelcius))
+                .ForMember(dest => dest.BP, opt => opt.MapFrom(src => src.Prescription.BP))
+                .ForMember(dest => dest.SPO2, opt => opt.MapFrom(src => src.Prescription.SPO2))
+                .ForMember(dest => dest.PulseRate, opt => opt.MapFrom(src => src.Prescription.PulseRate))
+                .ForMember(dest => dest.NextVisitDate, opt => opt.MapFrom(src => src.Prescription.NextVisitDate))
+                .ForMember(dest => dest.ConsultantDoctorId, opt => opt.MapFrom(src => src.Prescription.ConsultantDoctorId))
+                .ForMember(dest => dest.RefDoctorId, opt => opt.MapFrom(src => src.Prescription.RefDoctorId));
 
-        // Room mappings
-        CreateMap<RoomMaster, RoomMasterViewModel>()
-            .ForMember(dest => dest.RoomTypeList, opt => opt.Ignore())
-            .ReverseMap();
-        CreateMap<RoomTypeMaster, RoomTypeMasterViewModel>().ReverseMap();
+            // DrPrescription -> DoctorPrescriptionVM
+            CreateMap<DrPrescription, DoctorPrescriptionVM>()
+                .ForMember(dest => dest.Prescription, opt => opt.MapFrom(src => src));
 
-        // ICD Code mapping
-        CreateMap<ICDCodeMaster, Icd10CodeViewModel>().ReverseMap();
+            // DrPrescriptionDetails -> DoctorPrescriptionVM.Medicines
+            CreateMap<DrPrescriptionDetails, DoctorPrescriptionVM>()
+                .ForMember(dest => dest.Medicines, opt => opt.MapFrom(src => new List<DrPrescriptionDetails> { src }));
 
-        // CommonMaster mapping
-        CreateMap<CommonMaster, CommonMasterViewModel>().ReverseMap();
+            // DoctorPrescriptionVM.Medicines -> DrPrescriptionDetails
+            CreateMap<DrPrescriptionDetails, DrPrescriptionDetails>().ReverseMap();
 
-        // ======================================================
-        // Prescription mappings (commented for now)
-        // ======================================================
-        //CreateMap<Prescription, PrescriptionEntryViewModel>()
-        //    .ForMember(dest => dest.Medicines, opt => opt.Ignore())
-        //    .ForMember(dest => dest.ClinicalDetails, opt => opt.Ignore())
-        //    .ReverseMap();
-        //CreateMap<PrescriptionMedicine, PrescriptionMedicineVM>().ReverseMap();
-        //CreateMap<PrescriptionClinicalDetail, PrescriptionClinicalDetailVM>().ReverseMap();
+            // DrPrescriptionClinical -> DoctorPrescriptionVM.ClinicalNotes
+            CreateMap<DrPrescriptionClinical, DrPrescriptionClinical>().ReverseMap();
 
-        // ======================================================
-        // NEW: PatientRegistration mapping
-        // ======================================================
-        CreateMap<Patient, PatientRegistrationViewModel>()
-            .ForMember(dest => dest.UHIDTypes, opt => opt.Ignore())
-            .ForMember(dest => dest.Sexes, opt => opt.Ignore())
-            .ForMember(dest => dest.PatientTitles, opt => opt.Ignore())
-            .ForMember(dest => dest.GuardianTitles, opt => opt.Ignore())
-            .ForMember(dest => dest.GSTStates, opt => opt.Ignore())
-            .ForMember(dest => dest.Countries, opt => opt.Ignore())
-            .ForMember(dest => dest.MaritalStatuses, opt => opt.Ignore())
-            .ForMember(dest => dest.BloodGroups, opt => opt.Ignore())
-            .ForMember(dest => dest.ConsultantDoctors, opt => opt.Ignore())
-            .ForMember(dest => dest.RefDoctors, opt => opt.Ignore())
-            .ForMember(dest => dest.PaymentTermsList, opt => opt.Ignore())
-            .ForMember(dest => dest.RegistrationTypes, opt => opt.Ignore())
-            .ForMember(dest => dest.CompInsCampList, opt => opt.Ignore())
-            .ReverseMap()
-            .ForMember(dest => dest.Photo, opt => opt.Ignore()); // Assuming Photo handling is manual
+            // ======================================================
+            // PatientRegistration mappings
+            // ======================================================
+            CreateMap<PatientsMaster, PatientRegistrationViewModel>()
+                .ForMember(dest => dest.UHIDTypes, opt => opt.Ignore())
+                .ForMember(dest => dest.Sexes, opt => opt.Ignore())
+                .ForMember(dest => dest.PatientTitles, opt => opt.Ignore())
+                .ForMember(dest => dest.GuardianTitles, opt => opt.Ignore())
+                .ForMember(dest => dest.GSTStates, opt => opt.Ignore())
+                .ForMember(dest => dest.Countries, opt => opt.Ignore())
+                .ForMember(dest => dest.MaritalStatuses, opt => opt.Ignore())
+                .ForMember(dest => dest.BloodGroups, opt => opt.Ignore())
+                .ForMember(dest => dest.ConsultantDoctors, opt => opt.Ignore())
+                .ForMember(dest => dest.RefDoctors, opt => opt.Ignore())
+                .ForMember(dest => dest.PaymentTermsList, opt => opt.Ignore())
+                .ForMember(dest => dest.RegistrationTypes, opt => opt.Ignore())
+                .ForMember(dest => dest.CompInsCampList, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(dest => dest.Photo, opt => opt.Ignore());
+        }
     }
 }

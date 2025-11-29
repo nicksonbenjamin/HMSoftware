@@ -1,0 +1,45 @@
+@model List<ClinicApp.ViewModels.DoctorPrescriptionListVM>
+
+@{
+    ViewBag.Title = "Prescriptions";
+}
+
+<h2>Prescriptions</h2>
+
+<p>
+    <a class="btn btn-primary" href="@Url.Action("Create")">Add New Prescription</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Prescription No</th>
+            <th>Patient Name</th>
+            <th>Entry Type</th>
+            <th>Entry Number</th>
+            <th>Disease</th>
+            <th>Prescription Date</th>
+            <th>Next Visit</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PrescriptionNo</td>
+                <td>@item.PatientName</td>
+                <td>@item.EntryType</td>
+                <td>@item.EntryNumber</td>
+                <td>@item.DiseaseName</td>
+                <td>@item.PrescriptionDate.ToString("dd-MMM-yyyy")</td>
+                <td>@(item.NextVisitDate.HasValue ? item.NextVisitDate.Value.ToString("dd-MMM-yyyy") : "-")</td>
+                <td>
+                    <a class="btn btn-info btn-sm" href="@Url.Action("Details", new { id = item.DrPrescriptionId })">Details</a>
+                    <a class="btn btn-warning btn-sm" href="@Url.Action("Edit", new { id = item.DrPrescriptionId })">Edit</a>
+                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", new { id = item.DrPrescriptionId })" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

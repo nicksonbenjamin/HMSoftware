@@ -1,0 +1,218 @@
+@model ClinicApp.ViewModels.DoctorPrescriptionVM
+@using ClinicApp.Models
+
+@{
+    ViewData["Title"] = "Edit Prescription";
+
+    // Auto-calculate financial year for EntryPeriod
+    var today = DateTime.Today;
+    int startYear, endYear;
+
+    if (today.Month >= 4) // April to December
+    {
+        startYear = today.Year % 100;
+        endYear = (today.Year + 1) % 100;
+    }
+    else // January to March
+    {
+        startYear = (today.Year - 1) % 100;
+        endYear = today.Year % 100;
+    }
+
+    var entryPeriod = $"{startYear:D2}-{endYear:D2}";
+}
+
+<style>
+    .title-bar {
+        background: #1c4e80;
+        color: white;
+        padding: 6px 10px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .section-block {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        background: #fafafa;
+    }
+
+    .section-block .row > div {
+        margin-bottom: 5px;
+    }
+
+    .grid-table th, .grid-table td {
+        font-size: 12px;
+        padding: 3px 6px;
+        vertical-align: middle;
+    }
+
+    .grid-table th {
+        text-align: center;
+        background: #1c4e80;
+        color: white;
+    }
+
+    label, .form-label {
+        font-weight: 600;
+        font-size: 12px;
+        margin-bottom: 2px;
+    }
+
+    .form-control {
+        padding: 2px 4px;
+        height: 26px;
+        font-size: 12px;
+    }
+
+    .btn-small, .btn-sm {
+        padding: 1px 5px;
+        font-size: 11px;
+    }
+
+    button {
+        margin-top: 2px;
+    }
+</style>
+
+<div class="title-bar">Edit Prescription</div>
+
+<form asp-action="Update" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Prescription.DrPrescriptionId" />
+
+    <!-- Patient & Entry Details -->
+    <div class="section-block">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Patient</label>
+                <select asp-for="Prescription.PatientId"
+                        asp-items="@(new SelectList(Model.PatientList, "PatientId", "PatientName"))"
+                        class="form-control">
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Entry Type</label>
+                <input asp-for="Prescription.EntryType" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Entry No</label>
+                <input asp-for="Prescription.EntryNumber" class="form-control" readonly />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Entry Period</label>
+                <input asp-for="Prescription.EntryPeriod" class="form-control" value="@entryPeriod" readonly />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Disease</label>
+                <input list="diseaseList" name="Prescription.DeseaseId" class="form-control"
+                       value="@Model.Prescription.DeseaseId" />
+                <datalist id="diseaseList">
+                    @foreach (var d in Model.DiseaseList)
+                    {
+                        <option value="@d.DeseaseId">@d.DeseaseDetails</option>
+                    }
+                </datalist>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vitals -->
+    <div class="section-block">
+        <div class="row">
+            <div class="col-md-2"><label class="form-label">Height</label><input asp-for="Prescription.Height" class="form-control" /></div>
+            <div class="col-md-2"><label class="form-label">Weight</label><input asp-for="Prescription.Weight" class="form-control" /></div>
+            <div class="col-md-2"><label class="form-label">BMI</label><input asp-for="Prescription.BMI" class="form-control" /></div>
+            <div class="col-md-2"><label class="form-label">Temp</label><input asp-for="Prescription.TempInCelcius" class="form-control" /></div>
+            <div class="col-md-2"><label class="form-label">BP</label><input asp-for="Prescription.BP" class="form-control" /></div>
+            <div class="col-md-2"><label class="form-label">SPO2</label><input asp-for="Prescription.SPO2" class="form-control" /></div>
+            <div class="col-md-2"><label class="form-label">Pulse</label><input asp-for="Prescription.PulseRate" class="form-control" /></div>
+            <div class="col-md-3"><label class="form-label">Next Visit</label><input asp-for="Prescription.NextVisitDate" type="date" class="form-control" /></div>
+        </div>
+    </div>
+
+    <!-- Medicines -->
+    <div class="section-block">
+        <div class="section-title mb-1"><b>Medicines</b></div>
+        <table class="table table-bordered grid-table">
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Dose</th>
+                    <th>Usage</th>
+                    <th>Days</th>
+                    <th>Qty</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody id="medicineRows">
+                @for (int i = 0; i < Model.Medicines.Count; i++)
+                {
+                    <tr>
+                        <td><input list="medicineList" name="Medicines[@i].ProductId" class="form-control" value="@Model.Medicines[i].ProductId" /></td>
+                        <td><input list="doseList" name="Medicines[@i].DosePatternId" class="form-control" value="@Model.Medicines[i].DosePatternId" /></td>
+                        <td><input name="Medicines[@i].DoseUsage" class="form-control" value="@Model.Medicines[i].DoseUsage" /></td>
+                        <td><input name="Medicines[@i].DoseDays" class="form-control" value="@Model.Medicines[i].DoseDays" /></td>
+                        <td><input name="Medicines[@i].Qty" class="form-control" value="@Model.Medicines[i].Qty" /></td>
+                        <td><button type="button" class="btn btn-danger btn-small" onclick="removeRow(this)">X</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success btn-sm" onclick="addMedicine()">+ Add Medicine</button>
+    </div>
+
+    <!-- Clinical Details -->
+    <div class="section-block">
+        <div class="section-title mb-1"><b>Clinical Details</b></div>
+        <table class="table table-bordered grid-table">
+            <thead>
+                <tr><th>Description</th><th>Result</th><th>#</th></tr>
+            </thead>
+            <tbody id="clinicalRows">
+                @for (int i = 0; i < Model.Clinical.Count; i++)
+                {
+                    <tr>
+                        <td><input name="Clinical[@i].ClinicalNote" class="form-control" value="@Model.Clinical[i].ClinicalNote" /></td>
+                        <td><input name="Clinical[@i].Result" class="form-control" value="@Model.Clinical[i].Result" /></td>
+                        <td><button type="button" class="btn btn-danger btn-small" onclick="removeRow(this)">X</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success btn-sm" onclick="addClinical()">+ Add Clinical Row</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm">Update Prescription</button>
+</form>
+
+<script>
+    function removeRow(btn){ btn.closest("tr").remove(); }
+
+    function addMedicine() {
+        let index = document.querySelectorAll("#medicineRows tr").length;
+        let row = `<tr>
+            <td><input list="medicineList" name="Medicines[${index}].ProductId" class="form-control" /></td>
+            <td><input list="doseList" name="Medicines[${index}].DosePatternId" class="form-control" /></td>
+            <td><input name="Medicines[${index}].DoseUsage" class="form-control" /></td>
+            <td><input name="Medicines[${index}].DoseDays" type="number" class="form-control" /></td>
+            <td><input name="Medicines[${index}].Qty" type="number" class="form-control" /></td>
+            <td><button type="button" class="btn btn-danger btn-small" onclick="removeRow(this)">X</button></td>
+        </tr>`;
+        document.getElementById("medicineRows").insertAdjacentHTML('beforeend', row);
+    }
+
+    function addClinical() {
+        let index = document.querySelectorAll("#clinicalRows tr").length;
+        let row = `<tr>
+            <td><input name="Clinical[${index}].ClinicalNote" class="form-control" /></td>
+            <td><input name="Clinical[${index}].Result" class="form-control" /></td>
+            <td><button type="button" class="btn btn-danger btn-small" onclick="removeRow(this)">X</button></td>
+        </tr>`;
+        document.getElementById("clinicalRows").insertAdjacentHTML('beforeend', row);
+    }
+</script>
