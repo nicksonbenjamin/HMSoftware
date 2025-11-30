@@ -38,6 +38,8 @@ builder.Services.AddScoped<LedgerMasterViewModel>();
 builder.Services.AddScoped<DescriptionMasterViewModel>();
 builder.Services.AddScoped<PatientRegistrationViewModel>(); // << Added PatientRegistration
 // Prescription-related ViewModels
+builder.Services.AddScoped<DoctorPrescriptionVM>();
+builder.Services.AddScoped<DoctorPrescriptionListVM>();
 
 builder.Services.AddControllersWithViews(options =>
 {
