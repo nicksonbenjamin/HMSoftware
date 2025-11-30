@@ -23,7 +23,7 @@ namespace ClinicApp.ViewModels
         [Required]
         [Display(Name = "Registration Date")]
         [DataType(DataType.Date)]
-        public DateTime RegistrationDate { get; set; } = DateTime.Now;
+        public DateTime? RegistrationDate { get; set; } = DateTime.Now;
 
         [Required]
         [Display(Name = "Registration Time")]
