@@ -1,18 +1,70 @@
 @model List<ClinicApp.ViewModels.DoctorPrescriptionListVM>
 
 @{
-    ViewBag.Title = "Prescriptions";
+    ViewData["Title"] = "Prescriptions";
 }
 
-<h2>Prescriptions</h2>
+<style>
+    table.table {
+        width: 100%;
+        font-size: 0.85rem;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+    table.table th, table.table td {
+        padding: 4px 6px;
+        vertical-align: middle;
+        line-height: 1.1;
+        border: 1px solid #dee2e6;
+    }
+
+    thead th {
+        background-color: #007bff;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+
+    .btn-icon {
+        padding: 2px 4px;
+        margin-right: 3px;
+        border: none;
+        background-color: transparent;
+        line-height: 1;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .btn-icon img {
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+    }
+
+    .btn-icon:hover {
+        transform: scale(1.1);
+        transition: 0.15s;
+    }
+
+    td.actions {
+        text-align: center;
+        white-space: nowrap;
+        width: 110px;
+    }
+</style>
+
+<h4 class="mb-2">Prescriptions</h4>
 
 <p>
-    <a class="btn btn-primary" href="@Url.Action("Create")">Add New Prescription</a>
+    <a class="btn btn-success btn-sm" href="@Url.Action("Create")">+ Add New</a>
 </p>
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-hover">
     <thead>
         <tr>
+            <th class="text-center">Actions</th>
             <th>Prescription No</th>
             <th>Patient Name</th>
             <th>Entry Type</th>
@@ -20,13 +72,30 @@
             <th>Disease</th>
             <th>Prescription Date</th>
             <th>Next Visit</th>
-            <th>Actions</th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                <td class="actions">
+                    <a href="@Url.Action("Details", new { id = item.DrPrescriptionId })" class="btn-icon" title="Details">
+                        <img src="~/images/details.jpg" alt="Details" />
+                    </a>
+
+                    <a href="@Url.Action("Edit", new { id = item.DrPrescriptionId })" class="btn-icon" title="Edit">
+                        <img src="~/images/edit.jpg" alt="Edit" />
+                    </a>
+
+                    <a href="@Url.Action("Delete", new { id = item.DrPrescriptionId })"
+                       class="btn-icon"
+                       onclick="return confirm('Are you sure?')"
+                       title="Delete">
+                        <img src="~/images/delete.jpg" alt="Delete" />
+                    </a>
+                </td>
+
                 <td>@item.PrescriptionNo</td>
                 <td>@item.PatientName</td>
                 <td>@item.EntryType</td>
@@ -34,11 +103,6 @@
                 <td>@item.DiseaseName</td>
                 <td>@item.PrescriptionDate.ToString("dd-MMM-yyyy")</td>
                 <td>@(item.NextVisitDate.HasValue ? item.NextVisitDate.Value.ToString("dd-MMM-yyyy") : "-")</td>
-                <td>
-                    <a class="btn btn-info btn-sm" href="@Url.Action("Details", new { id = item.DrPrescriptionId })">Details</a>
-                    <a class="btn btn-warning btn-sm" href="@Url.Action("Edit", new { id = item.DrPrescriptionId })">Edit</a>
-                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", new { id = item.DrPrescriptionId })" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
             </tr>
         }
     </tbody>
