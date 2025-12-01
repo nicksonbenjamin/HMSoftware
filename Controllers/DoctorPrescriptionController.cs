@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; 
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ClinicApp.ViewModels;
 using ClinicApp.Models;
 using Microsoft.Extensions.Configuration;
+using Rotativa.AspNetCore;
 
 namespace ClinicApp.Controllers
 {
@@ -81,7 +83,6 @@ namespace ClinicApp.Controllers
                 model.Prescription.EntryNumber = Convert.ToInt32(cmdEntry.ExecuteScalar());
             }
 
-            // Save prescription
             using (var cmd = new MySqlCommand(
                 "CALL sp_SavePrescription(@PatientId,@EntryType,@EntryNumber,@EntryPeriod,@DiseaseId,@Height,@Weight,@BMI,@Temp,@BP,@SPO2,@Pulse,@NextVisit);", con))
             {
@@ -280,18 +281,63 @@ namespace ClinicApp.Controllers
             var patient = LoadPatients().Find(p => p.PatientId == prescription.PatientId);
             if (patient != null) prescription.PatientName = patient.PatientName;
 
-            var disease = LoadDiseases().Find(d => d.DeseaseId == prescription.DeseaseId);
-            if (disease != null) prescription.DeseaseName = disease.DeseaseDetails;
-
             var vm = new DoctorPrescriptionVM
             {
                 Prescription = prescription,
                 Medicines = medicines,
-                Clinical = clinicalNotes
+                Clinical = clinicalNotes,
+                MedicineList = LoadMedicines(),
+                DosePatternList = LoadDosePatterns(),
+                DiseaseList = LoadDiseases()
             };
 
             return View(vm);
         }
+        #endregion
+
+        #region Print PDF
+        #region Print PDF
+public IActionResult PrintPdf(int id)
+{
+    var prescription = GetPrescription(id);
+    if (prescription == null)
+        return NotFound();
+
+    var medicines = GetPrescriptionDetails(id);
+    var clinicalNotes = GetClinicalDetails(id);
+
+    // Populate Patient Name
+    var patient = LoadPatients().FirstOrDefault(p => p.PatientId == prescription.PatientId);
+    if (patient != null)
+        prescription.PatientName = patient.PatientName;
+
+    var vm = new DoctorPrescriptionVM
+    {
+        Prescription = prescription,
+        Medicines = medicines,
+        Clinical = clinicalNotes,
+        DiseaseList = LoadDiseases(),
+        MedicineList = LoadMedicines(),
+        DosePatternList = LoadDosePatterns()
+    };
+
+    // Sanitize patient name for file name
+    var patientNameSafe = string.Join("_", prescription.PatientName.Split(Path.GetInvalidFileNameChars()));
+
+    // Include patient ID with prefix 'ID' and current datetime
+    var dateTimePart = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+    var fileName = $"Prescription_ID{prescription.PatientId}_{patientNameSafe}_{dateTimePart}.pdf";
+
+    return new ViewAsPdf("PrintPdf", vm)
+    {
+        FileName = fileName,
+        PageSize = Rotativa.AspNetCore.Options.Size.A4,
+        PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+        PageMargins = new Rotativa.AspNetCore.Options.Margins(5, 5, 10, 5)
+    };
+}
+#endregion
+
         #endregion
 
         #region Helper Methods
@@ -301,7 +347,7 @@ namespace ClinicApp.Controllers
             con.Open();
 
             using var cmd = new MySqlCommand(
-                "SELECT dp.*, d.Desease AS DiseaseName FROM DrPrescription dp LEFT JOIN DiseaseMaster d ON dp.DeseaseId = d.DeseaseId WHERE DrPrescriptionId=@Id;", con);
+                "SELECT * FROM DrPrescription WHERE DrPrescriptionId=@Id;", con);
             cmd.Parameters.AddWithValue("@Id", id);
 
             using var dr = cmd.ExecuteReader();
@@ -315,7 +361,6 @@ namespace ClinicApp.Controllers
                     EntryNumber = dr.GetInt32("EntryNumber"),
                     EntryPeriod = dr.GetString("EntryPeriod"),
                     DeseaseId = dr.GetInt32("DeseaseId"),
-                    DeseaseName = dr["DiseaseName"] != DBNull.Value ? dr.GetString("DiseaseName") : null,
                     Height = dr.GetDecimal("Height"),
                     Weight = dr.GetDecimal("Weight"),
                     BMI = dr.GetDecimal("BMI"),

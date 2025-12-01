@@ -9,8 +9,17 @@ using ClinicApp.Data;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Org.BouncyCastle.Asn1.X509.Qualified;
 using ClinicApp.ViewModels;
+using Rotativa.AspNetCore;
+using CApp.Services;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
+var openAiKey = builder.Configuration["OpenAI:ApiKey"];
+
+builder.Services.AddSingleton<OpenAIService>(sp =>
+{
+    return new OpenAIService(openAiKey);
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -47,6 +56,8 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,7 +76,7 @@ app.UseSession();
 
 app.UseAuthorization();
 
-
+app.UseRotativa();   // <-- ADD THIS
 
 app.MapControllerRoute(
 	name: "default",
