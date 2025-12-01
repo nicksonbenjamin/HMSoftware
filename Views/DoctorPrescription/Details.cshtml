@@ -1,109 +1,156 @@
 @model ClinicApp.ViewModels.DoctorPrescriptionVM
+@using ClinicApp.Models
 
 @{
     ViewData["Title"] = "Prescription Details";
+
+    /* Dropdown templates for JavaScript use, if needed */
+    string medicineOptions = "";
+    foreach (var m in Model.MedicineList ?? new List<ProductMaster>())
+    {
+        medicineOptions += $"<option value='{m.ProductCode}'>{m.ProductName}</option>";
+    }
+
+    string dosePatternOptions = "";
+    foreach (var dp in Model.DosePatternList ?? new List<DosePattern>())
+    {
+        dosePatternOptions += $"<option value='{dp.DosePatternId}'>{dp.DoseDescription}</option>";
+    }
 }
 
 <style>
     .title-bar {
         background: #1c4e80;
         color: white;
-        padding: 8px;
-        font-weight: bold;
-        font-size: 18px;
-        margin-bottom: 10px;
+        padding: 6px 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        margin-bottom: 12px;
     }
     .section-block {
         border: 1px solid #ddd;
         padding: 10px;
-        margin-bottom: 10px;
-        background: #f8f9fa;
+        border-radius: 4px;
+        background: #fafafa;
+        margin-bottom: 15px;
     }
-    .grid-table th {
-        background: #1c4e80;
-        color: white;
-        text-align: center;
+    .section-title {
+        font-weight: bold;
+        color: #1c4e80;
+        margin-bottom: 8px;
     }
+    .form-control {
+        height: 26px;
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+    table.table { font-size: 12px; }
+    table td, table th { padding: 4px; }
 </style>
 
 <div class="title-bar">Prescription Details</div>
 
-<!-- Patient & Vitals Section -->
+<!-- Patient Information -->
 <div class="section-block">
-    <h5><b>Patient & Vitals</b></h5>
+    <div class="section-title">Patient Details</div>
+
     <div class="row">
-        <div class="col-md-3"><strong>Patient Name:</strong> @Model.Prescription.PatientName</div>
-        <div class="col-md-3"><strong>Entry Type:</strong> @Model.Prescription.EntryType</div>
-        <div class="col-md-2"><strong>Entry Number:</strong> @Model.Prescription.EntryNumber</div>
-        <div class="col-md-2"><strong>Entry Period:</strong> @Model.Prescription.EntryPeriod</div>
-        <div class="col-md-2"><strong>Disease:</strong> @Model.Prescription.DeseaseId</div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-2"><strong>Height:</strong> @Model.Prescription.Height</div>
-        <div class="col-md-2"><strong>Weight:</strong> @Model.Prescription.Weight</div>
-        <div class="col-md-2"><strong>BMI:</strong> @Model.Prescription.BMI</div>
-        <div class="col-md-2"><strong>Temp (°C):</strong> @Model.Prescription.TempInCelcius</div>
-        <div class="col-md-2"><strong>BP:</strong> @Model.Prescription.BP</div>
-        <div class="col-md-2"><strong>SPO2:</strong> @Model.Prescription.SPO2</div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-md-3"><strong>Pulse Rate:</strong> @Model.Prescription.PulseRate</div>
-        <div class="col-md-3"><strong>Next Visit:</strong> @(Model.Prescription.NextVisitDate.HasValue ? Model.Prescription.NextVisitDate.Value.ToString("dd-MMM-yyyy") : "-")</div>
+        <div class="col-md-3">
+            <label>Patient</label>
+            <input class="form-control" readonly value="@Model.Prescription?.PatientName ?? "N/A"" />
+        </div>
+        <div class="col-md-2">
+            <label>Entry Type</label>
+            <input class="form-control" readonly value="@Model.Prescription?.EntryType ?? "N/A"" />
+        </div>
+        <div class="col-md-2">
+            <label>Entry Number</label>
+            <input class="form-control" readonly value="@Model.Prescription?.EntryNumber.ToString() ?? "N/A"" />
+        </div>
+        <div class="col-md-2">
+            <label>Entry Period</label>
+            <input class="form-control" readonly value="@Model.Prescription?.EntryPeriod ?? "N/A"" />
+        </div>
+        <div class="col-md-3">
+            <label>Disease</label>
+            <input class="form-control" readonly value="@Model.DiseaseList?.FirstOrDefault(d => d.DeseaseId == Model.Prescription?.DeseaseId)?.DeseaseDetails ?? "N/A"" />
+        </div>
     </div>
 </div>
 
-<!-- Medicines Section -->
+<!-- Vitals -->
 <div class="section-block">
-    <h5><b>Medicines</b></h5>
-    <table class="table table-bordered grid-table">
+    <div class="section-title">Vitals</div>
+    <div class="row">
+        <div class="col-md-2"><label>Height</label><input class="form-control" readonly value="@Model.Prescription?.Height.ToString() ?? "N/A"" /></div>
+        <div class="col-md-2"><label>Weight</label><input class="form-control" readonly value="@Model.Prescription?.Weight.ToString() ?? "N/A"" /></div>
+        <div class="col-md-2"><label>BMI</label><input class="form-control" readonly value="@Model.Prescription?.BMI.ToString() ?? "N/A"" /></div>
+        <div class="col-md-2"><label>Temp</label><input class="form-control" readonly value="@Model.Prescription?.TempInCelcius.ToString() ?? "N/A"" /></div>
+        <div class="col-md-2"><label>BP</label><input class="form-control" readonly value="@Model.Prescription?.BP ?? "N/A"" /></div>
+        <div class="col-md-2"><label>SPO2</label><input class="form-control" readonly value="@Model.Prescription?.SPO2 ?? "N/A"" /></div>
+        <div class="col-md-2"><label>Pulse</label><input class="form-control" readonly value="@Model.Prescription?.PulseRate.ToString() ?? "N/A"" /></div>
+        <div class="col-md-3"><label>Next Visit</label><input class="form-control" readonly value="@Model.Prescription?.NextVisitDate?.ToString("yyyy-MM-dd") ?? "N/A"" /></div>
+    </div>
+</div>
+
+<!-- Medicines -->
+<div class="section-block">
+    <div class="section-title">Medicines</div>
+
+    <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Product</th>
+                <th>Medicine</th>
                 <th>Dose Pattern</th>
                 <th>Usage</th>
                 <th>Days</th>
-                <th>Quantity</th>
+                <th>Qty</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var m in Model.Medicines)
+            @foreach (var med in Model.Medicines ?? new List<DrPrescriptionDetails>())
             {
+                var productName = !string.IsNullOrEmpty(med.ProductName)
+                                    ? med.ProductName
+                                    : Model.MedicineList?.FirstOrDefault(m => m.ProductCode == med.ProductId)?.ProductName
+                                      ?? "N/A";
+
+                var dosePatternName = !string.IsNullOrEmpty(med.DosePattern)
+                                    ? med.DosePattern
+                                    : Model.DosePatternList?.FirstOrDefault(dp => dp.DosePatternId == med.DosePatternId)?.DoseDescription
+                                      ?? "N/A";
+
                 <tr>
-                    <td>@m.ProductId</td>
-                    <td>@m.DosePatternId</td>
-                    <td>@m.DoseUsage</td>
-                    <td>@m.DoseDays</td>
-                    <td>@m.Qty</td>
+                    <td>@productName</td>
+                    <td>@dosePatternName</td>
+                    <td>@(string.IsNullOrEmpty(med.DoseUsage) ? "N/A" : med.DoseUsage)</td>
+                    <td>@med.DoseDays</td>
+                    <td>@med.Qty</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<!-- Clinical Details Section (optional if you have clinical notes) -->
-@if (Model.Clinical != null && Model.Clinical.Any())
-{
-    <div class="section-block">
-        <h5><b>Clinical Details</b></h5>
-        <table class="table table-bordered grid-table">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Result</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var c in Model.Clinical)
-                {
-                    <tr>
-                        <td>@c.ClinicalNote</td>
-                        <td>@c.Result</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
+<!-- Clinical Details -->
+<div class="section-block">
+    <div class="section-title">Clinical Details</div>
 
-<a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var clin in Model.Clinical ?? new List<DrPrescriptionClinical>())
+            {
+                <tr>
+                    <td>@(string.IsNullOrEmpty(clin.ClinicalNote) ? "N/A" : clin.ClinicalNote)</td>
+                    <td>@(string.IsNullOrEmpty(clin.Result) ? "N/A" : clin.Result)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
