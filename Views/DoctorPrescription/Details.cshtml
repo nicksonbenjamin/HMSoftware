@@ -4,48 +4,23 @@
 @{
     ViewData["Title"] = "Prescription Details";
 
-    /* Dropdown templates for JavaScript use, if needed */
+    // Dropdown templates for JS, if needed
     string medicineOptions = "";
     foreach (var m in Model.MedicineList ?? new List<ProductMaster>())
-    {
         medicineOptions += $"<option value='{m.ProductCode}'>{m.ProductName}</option>";
-    }
 
     string dosePatternOptions = "";
     foreach (var dp in Model.DosePatternList ?? new List<DosePattern>())
-    {
         dosePatternOptions += $"<option value='{dp.DosePatternId}'>{dp.DoseDescription}</option>";
-    }
 }
 
 <style>
-    .title-bar {
-        background: #1c4e80;
-        color: white;
-        padding: 6px 10px;
-        font-size: 16px;
-        border-radius: 4px;
-        margin-bottom: 12px;
-    }
-    .section-block {
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 4px;
-        background: #fafafa;
-        margin-bottom: 15px;
-    }
-    .section-title {
-        font-weight: bold;
-        color: #1c4e80;
-        margin-bottom: 8px;
-    }
-    .form-control {
-        height: 26px;
-        padding: 2px 5px;
-        font-size: 12px;
-    }
-    table.table { font-size: 12px; }
-    table td, table th { padding: 4px; }
+.title-bar { background:#1c4e80; color:white; padding:6px 10px; font-size:16px; border-radius:4px; margin-bottom:12px; }
+.section-block { border:1px solid #ddd; padding:10px; border-radius:4px; background:#fafafa; margin-bottom:10px; }
+.section-title { font-weight:bold; color:#1c4e80; margin-bottom:6px; }
+.form-control { height:26px; padding:2px 5px; font-size:12px; }
+table.table { font-size:12px; }
+table td, table th { padding:3px; }
 </style>
 
 <div class="title-bar">Prescription Details</div>
@@ -53,27 +28,21 @@
 <!-- Patient Information -->
 <div class="section-block">
     <div class="section-title">Patient Details</div>
-
     <div class="row">
-        <div class="col-md-3">
-            <label>Patient</label>
-            <input class="form-control" readonly value="@Model.Prescription?.PatientName ?? "N/A"" />
+        <div class="col-md-3"><label>Patient</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.PatientName ?? "N/A")' />
         </div>
-        <div class="col-md-2">
-            <label>Entry Type</label>
-            <input class="form-control" readonly value="@Model.Prescription?.EntryType ?? "N/A"" />
+        <div class="col-md-2"><label>Entry Type</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.EntryType ?? "N/A")' />
         </div>
-        <div class="col-md-2">
-            <label>Entry Number</label>
-            <input class="form-control" readonly value="@Model.Prescription?.EntryNumber.ToString() ?? "N/A"" />
+        <div class="col-md-2"><label>Entry Number</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.EntryNumber.ToString() ?? "N/A")' />
         </div>
-        <div class="col-md-2">
-            <label>Entry Period</label>
-            <input class="form-control" readonly value="@Model.Prescription?.EntryPeriod ?? "N/A"" />
+        <div class="col-md-2"><label>Entry Period</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.EntryPeriod ?? "N/A")' />
         </div>
-        <div class="col-md-3">
-            <label>Disease</label>
-            <input class="form-control" readonly value="@Model.DiseaseList?.FirstOrDefault(d => d.DeseaseId == Model.Prescription?.DeseaseId)?.DeseaseDetails ?? "N/A"" />
+        <div class="col-md-3"><label>Disease</label>
+            <input class="form-control" readonly value='@(Model.DiseaseList?.FirstOrDefault(d => d.DeseaseId == Model.Prescription?.DeseaseId)?.DeseaseDetails ?? "N/A")' />
         </div>
     </div>
 </div>
@@ -82,43 +51,42 @@
 <div class="section-block">
     <div class="section-title">Vitals</div>
     <div class="row">
-        <div class="col-md-2"><label>Height</label><input class="form-control" readonly value="@Model.Prescription?.Height.ToString() ?? "N/A"" /></div>
-        <div class="col-md-2"><label>Weight</label><input class="form-control" readonly value="@Model.Prescription?.Weight.ToString() ?? "N/A"" /></div>
-        <div class="col-md-2"><label>BMI</label><input class="form-control" readonly value="@Model.Prescription?.BMI.ToString() ?? "N/A"" /></div>
-        <div class="col-md-2"><label>Temp</label><input class="form-control" readonly value="@Model.Prescription?.TempInCelcius.ToString() ?? "N/A"" /></div>
-        <div class="col-md-2"><label>BP</label><input class="form-control" readonly value="@Model.Prescription?.BP ?? "N/A"" /></div>
-        <div class="col-md-2"><label>SPO2</label><input class="form-control" readonly value="@Model.Prescription?.SPO2 ?? "N/A"" /></div>
-        <div class="col-md-2"><label>Pulse</label><input class="form-control" readonly value="@Model.Prescription?.PulseRate.ToString() ?? "N/A"" /></div>
-        <div class="col-md-3"><label>Next Visit</label><input class="form-control" readonly value="@Model.Prescription?.NextVisitDate?.ToString("yyyy-MM-dd") ?? "N/A"" /></div>
+        <div class="col-md-2"><label>Height</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.Height.ToString() ?? "N/A")' /></div>
+        <div class="col-md-2"><label>Weight</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.Weight.ToString() ?? "N/A")' /></div>
+        <div class="col-md-2"><label>BMI</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.BMI.ToString() ?? "N/A")' /></div>
+        <div class="col-md-2"><label>Temp</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.TempInCelcius.ToString() ?? "N/A")' /></div>
+        <div class="col-md-2"><label>BP</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.BP ?? "N/A")' /></div>
+        <div class="col-md-2"><label>SPO2</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.SPO2 ?? "N/A")' /></div>
+        <div class="col-md-2"><label>Pulse</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.PulseRate.ToString() ?? "N/A")' /></div>
+        <div class="col-md-3"><label>Next Visit</label>
+            <input class="form-control" readonly value='@(Model.Prescription?.NextVisitDate?.ToString("yyyy-MM-dd") ?? "N/A")' /></div>
     </div>
 </div>
 
 <!-- Medicines -->
 <div class="section-block">
     <div class="section-title">Medicines</div>
-
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <th>Medicine</th>
-                <th>Dose Pattern</th>
-                <th>Usage</th>
-                <th>Days</th>
-                <th>Qty</th>
-            </tr>
+            <tr><th>Medicine</th><th>Dose Pattern</th><th>Usage</th><th>Days</th><th>Qty</th></tr>
         </thead>
         <tbody>
             @foreach (var med in Model.Medicines ?? new List<DrPrescriptionDetails>())
             {
                 var productName = !string.IsNullOrEmpty(med.ProductName)
                                     ? med.ProductName
-                                    : Model.MedicineList?.FirstOrDefault(m => m.ProductCode == med.ProductId)?.ProductName
-                                      ?? "N/A";
+                                    : Model.MedicineList?.FirstOrDefault(m => m.ProductCode == med.ProductId)?.ProductName ?? "N/A";
 
                 var dosePatternName = !string.IsNullOrEmpty(med.DosePattern)
                                     ? med.DosePattern
-                                    : Model.DosePatternList?.FirstOrDefault(dp => dp.DosePatternId == med.DosePatternId)?.DoseDescription
-                                      ?? "N/A";
+                                    : Model.DosePatternList?.FirstOrDefault(dp => dp.DosePatternId == med.DosePatternId)?.DoseDescription ?? "N/A";
 
                 <tr>
                     <td>@productName</td>
@@ -135,14 +103,8 @@
 <!-- Clinical Details -->
 <div class="section-block">
     <div class="section-title">Clinical Details</div>
-
     <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Result</th>
-            </tr>
-        </thead>
+        <thead><tr><th>Description</th><th>Result</th></tr></thead>
         <tbody>
             @foreach (var clin in Model.Clinical ?? new List<DrPrescriptionClinical>())
             {
