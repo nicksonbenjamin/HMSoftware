@@ -1,0 +1,126 @@
+@model ClinicApp.ViewModels.DoctorPrescriptionVM
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Prescription</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        .header { text-align:center; border-bottom:2px solid #000; padding-bottom:6px; margin-bottom:10px; }
+        .clinic-name { font-size:20px; font-weight:bold; color:#1c4e80; }
+        .doctor-info { font-size:12px; margin-top:3px; }
+        table { width:100%; border-collapse:collapse; margin-top:6px; }
+        table th, table td { border:1px solid #777; padding:4px; font-size:12px; }
+        .section-title { font-weight:bold; font-size:14px; margin-top:10px; margin-bottom:3px; color:#1c4e80; }
+        .signature-block { margin-top:35px; width:100%; text-align:right; font-weight:bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="clinic-name">★ Your Clinic Name ★</div>
+    <div class="doctor-info">
+        Dr. Your Name | MBBS, MD<br />
+        Contact: +91-XXXXXXXXXX | Address Line
+    </div>
+</div>
+
+<div class="section-title">Patient Details</div>
+<table>
+    <tr>
+        <th>Patient</th><td>@Model.Prescription.PatientName</td>
+        <th>Entry Type</th><td>@Model.Prescription.EntryType</td>
+    </tr>
+    <tr>
+        <th>Entry No</th><td>@Model.Prescription.EntryNumber</td>
+        <th>Period</th><td>@Model.Prescription.EntryPeriod</td>
+    </tr>
+    <tr>
+        <th>Disease</th>
+        <td colspan="3">
+            @(Model.DiseaseList?.FirstOrDefault(d => d.DeseaseId == Model.Prescription.DeseaseId)?.DeseaseDetails ?? "N/A")
+        </td>
+    </tr>
+</table>
+
+<div class="section-title">Vitals</div>
+<table>
+    <tr>
+        <th>Height</th><td>@Model.Prescription.Height</td>
+        <th>Weight</th><td>@Model.Prescription.Weight</td>
+        <th>BMI</th><td>@Model.Prescription.BMI</td>
+    </tr>
+    <tr>
+        <th>Temp</th><td>@Model.Prescription.TempInCelcius</td>
+        <th>BP</th><td>@Model.Prescription.BP</td>
+        <th>SPO2</th><td>@Model.Prescription.SPO2</td>
+    </tr>
+    <tr>
+        <th>Pulse</th><td>@Model.Prescription.PulseRate</td>
+        <th>Next Visit</th><td colspan="3">@Model.Prescription.NextVisitDate?.ToString("dd-MMM-yyyy") ?? "N/A"</td>
+    </tr>
+</table>
+
+<div class="section-title">Medicines</div>
+<table>
+    <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Dose Pattern</th>
+            <th>Usage</th>
+            <th>Days</th>
+            <th>Qty</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Medicines != null && Model.Medicines.Any())
+        {
+            foreach(var med in Model.Medicines)
+            {
+                var product = Model.MedicineList?.FirstOrDefault(p => p.ProductCode == med.ProductId);
+                var dose = Model.DosePatternList?.FirstOrDefault(dp => dp.DosePatternId == med.DosePatternId);
+                <tr>
+                    <td>@(med.ProductName ?? product?.ProductName ?? "N/A")</td>
+                    <td>@(med.DosePattern ?? dose?.DoseDescription ?? "N/A")</td>
+                    <td>@med.DoseUsage</td>
+                    <td>@med.DoseDays</td>
+                    <td>@med.Qty</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="5" style="text-align:center;">No medicines prescribed</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="section-title">Clinical Notes</div>
+<table>
+    <thead><tr><th>Description</th><th>Result</th></tr></thead>
+    <tbody>
+        @if(Model.Clinical != null && Model.Clinical.Any())
+        {
+            foreach(var c in Model.Clinical)
+            {
+                <tr>
+                    <td>@c.ClinicalNote</td>
+                    <td>@c.Result</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="2" style="text-align:center;">No clinical notes</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="signature-block">
+    Doctor Signature<br />___________________________
+</div>
+
+</body>
+</html>

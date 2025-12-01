@@ -1,0 +1,169 @@
+@model ClinicApp.ViewModels.DoctorPrescriptionVM
+@using ClinicApp.Models
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Print Prescription</title>
+
+    <style>
+        body { font-family: Arial; margin: 20px; font-size: 13px; }
+
+        h2 { margin-bottom: 5px; }
+
+        .section-title {
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+
+        table th, table td {
+            border: 1px solid #777;
+            padding: 4px;
+            font-size: 12px;
+        }
+
+        .no-print {
+            margin-bottom: 10px;
+        }
+
+        /** Razor-safe @@media rule **/
+        @@media print {
+            .no-print { display: none; }
+            body { margin: 10px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="no-print">
+    <button onclick="window.print()" style="padding:5px 10px; font-size:12px;">Print</button>
+    <a href="@Url.Action("Index")" style="padding:5px 10px; font-size:12px;">Back</a>
+</div>
+
+<h2>Prescription</h2>
+
+<!-- ================= PATIENT DETAILS ================= -->
+<div class="section-title">Patient Details</div>
+<table>
+    <tr>
+        <th>Patient</th>
+        <td>@(Model.Prescription?.PatientName ?? "N/A")</td>
+
+        <th>Entry Type</th>
+        <td>@(Model.Prescription?.EntryType ?? "N/A")</td>
+    </tr>
+
+    <tr>
+        <th>Entry No</th>
+        <td>@Model.Prescription?.EntryNumber</td>
+
+        <th>Period</th>
+        <td>@(Model.Prescription?.EntryPeriod ?? "N/A")</td>
+    </tr>
+
+    <tr>
+        <th>Disease</th>
+        <td colspan="3">
+            @(
+                Model.DiseaseList?
+                .FirstOrDefault(d => d.DeseaseId == Model.Prescription?.DeseaseId)
+                ?.DeseaseDetails ?? "N/A"
+            )
+        </td>
+    </tr>
+</table>
+
+<!-- ================= VITALS ================= -->
+<div class="section-title">Vitals</div>
+<table>
+    <tr>
+        <th>Height</th><td>@Model.Prescription?.Height</td>
+        <th>Weight</th><td>@Model.Prescription?.Weight</td>
+        <th>BMI</th><td>@Model.Prescription?.BMI</td>
+    </tr>
+    <tr>
+        <th>Temp</th><td>@Model.Prescription?.TempInCelcius</td>
+        <th>BP</th><td>@(Model.Prescription?.BP ?? "N/A")</td>
+        <th>SPO2</th><td>@(Model.Prescription?.SPO2 ?? "N/A")</td>
+    </tr>
+    <tr>
+        <th>Pulse</th><td>@Model.Prescription?.PulseRate</td>
+        <th>Next Visit</th>
+        <td colspan="4">
+            @(Model.Prescription?.NextVisitDate?.ToString("dd-MMM-yyyy") ?? "N/A")
+        </td>
+    </tr>
+</table>
+
+<!-- ================= MEDICINES ================= -->
+<div class="section-title">Medicines</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Dose Pattern</th>
+            <th>Usage</th>
+            <th>Days</th>
+            <th>Qty</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var med in Model.Medicines ?? new List<DrPrescriptionDetails>())
+    {
+        var productName = !string.IsNullOrEmpty(med.ProductName)
+            ? med.ProductName
+            : Model.MedicineList?.FirstOrDefault(p => p.ProductCode == med.ProductId)?.ProductName ?? "N/A";
+
+        var dosePattern = !string.IsNullOrEmpty(med.DosePattern)
+            ? med.DosePattern
+            : Model.DosePatternList?.FirstOrDefault(dp => dp.DosePatternId == med.DosePatternId)?.DoseDescription ?? "N/A";
+
+        <tr>
+            <td>@productName</td>
+            <td>@dosePattern</td>
+            <td>@(string.IsNullOrEmpty(med.DoseUsage) ? "N/A" : med.DoseUsage)</td>
+            <td>@med.DoseDays</td>
+            <td>@med.Qty</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<!-- ================= CLINICAL DETAILS ================= -->
+<div class="section-title">Clinical Details</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var clin in Model.Clinical ?? new List<DrPrescriptionClinical>())
+    {
+        <tr>
+            <td>@(string.IsNullOrEmpty(clin.ClinicalNote) ? "N/A" : clin.ClinicalNote)</td>
+            <td>@(string.IsNullOrEmpty(clin.Result) ? "N/A" : clin.Result)</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+</body>
+</html>

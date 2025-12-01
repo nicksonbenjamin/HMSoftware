@@ -80,6 +80,10 @@
         {
             <tr>
                 <td class="actions">
+                <a class="btn-icon" title="PDF"
+                 href="@Url.Action("PrintPdf", "DoctorPrescription", new { id = item.DrPrescriptionId })">
+                    <img src="~/images/printpdf.png" style="width:18px;" />
+                    </a>
                     <a href="@Url.Action("Details", new { id = item.DrPrescriptionId })" class="btn-icon" title="Details">
                         <img src="~/images/details.jpg" alt="Details" />
                     </a>
