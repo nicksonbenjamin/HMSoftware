@@ -1,0 +1,57 @@
+@model List<ClinicApp.ViewModels.SupplierMasterViewModel>
+
+@{
+    ViewData["Title"] = "Supplier List";
+}
+
+<h2>Supplier List</h2>
+<a asp-action="Create" class="btn btn-primary">Add New Supplier</a>
+<br />
+<br />
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Supplier Name</th>
+            <th>Contact Person</th>
+            <th>Mobile No</th>
+            <th>Email</th>
+            <th>GST No</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.SupplierName</td>
+            <td>@item.ContactPerson</td>
+            <td>@item.MobileNo</td>
+            <td>@item.Email</td>
+            <td>@item.GSTNo</td>
+            <td>@(item.IsActive ? "Active" : "Inactive")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SupplierId">
+                    <img src="~/images/edit.jpg" alt="Edit" style="width:20px; height:20px;" />
+                </a> |
+                <a asp-action="Details" asp-route-id="@item.SupplierId">
+                    <img src="~/images/details.jpg" alt="Details" style="width:20px; height:20px;" />
+                </a> |
+                <a asp-action="Delete" asp-route-id="@item.SupplierId">
+                    <img src="~/images/delete.jpg" alt="Delete" style="width:20px; height:20px;" />
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Remove 'active' class from all menu items
+        $(".menu li a").removeClass("active");
+
+        // Add 'active' class to the supplier menu
+        $(".suppliermaster").addClass("active");
+    });
+</script>

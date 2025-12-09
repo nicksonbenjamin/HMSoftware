@@ -12,7 +12,8 @@
         "RoomMaster",
         "RoomTypeMaster",
         "ICDCodeMaster",
-        "CommonMaster"
+        "CommonMaster",
+        "SupplierMaster" 
     };
 
     // Highlight active menu
@@ -193,6 +194,12 @@
                                     <i class="fa-solid fa-box"></i> Product Master
                                 </a>
                             </li>
+                            <li class="nav-item">
+    <a class="nav-link @isActive("SupplierMaster","Index")" asp-controller="SupplierMaster" asp-action="Index">
+        <i class="fa-solid fa-truck"></i> Supplier Master
+    </a>
+</li>
+
                             <li class="nav-item">
                                 <a class="nav-link @isActive("RoomMaster","Index")" asp-controller="RoomMaster" asp-action="Index">
                                     <i class="fa-solid fa-bed"></i> Room Master

@@ -80,6 +80,18 @@ namespace ClinicApp
                 .ForMember(dest => dest.CompInsCampList, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore());
+
+                   // ======================================================
+            // SupplierMaster mapping
+            // ======================================================
+            CreateMap<SupplierMaster, SupplierMasterViewModel>()
+                .ForMember(dest => dest.ActiveStatusList, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductList, opt => opt.Ignore())
+                .ForMember(dest => dest.SelectedProducts, opt => opt.Ignore())
+                .ForMember(dest => dest.GSTTypeList, opt => opt.Ignore())
+                .ForMember(dest => dest.CountryList, opt => opt.Ignore())
+                .ForMember(dest => dest.StateList, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }

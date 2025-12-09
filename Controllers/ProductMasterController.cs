@@ -29,58 +29,64 @@ namespace ClinicApp.Controllers
 
         // GET: ProductMasters
         public IActionResult Index()
+{
+    List<ProductMaster> products = new List<ProductMaster>();
+    using var conn = _db.GetConnection();
+    conn.Open();
+    var cmd = new MySqlCommand(@"SELECT * FROM ProductMaster", conn);
+    using var reader = cmd.ExecuteReader();
+    while (reader.Read())
+    {
+        products.Add(new ProductMaster
         {
-            List<ProductMaster> products = new List<ProductMaster>();
-            using var conn = _db.GetConnection();
-            conn.Open();
-            var cmd = new MySqlCommand(@"SELECT * FROM ProductMaster", conn);
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                products.Add(new ProductMaster
-                {
-                    ProductCode = reader.GetInt32("ProductCode"),
-                    ProductName = reader.GetString("ProductName"),
-                    GenericName = reader.GetString("GenericName"),
-                    ProductGroup_List = reader.GetString("ProductGroup_List"),
-                    ProductGroup_Txt = reader.GetString("ProductGroup_Txt"),
-                    PurchaseUnit_List = reader.GetString("PurchaseUnit_List"),
-                    PurchaseUnit_Txt = reader.GetString("PurchaseUnit_Txt"),
-                    Packing = reader.GetInt32("Packing"),
-                    StockUnit_List = reader.GetString("StockUnit_List"),
-                    StockUnit_Txt = reader.GetString("StockUnit_Txt"),
-                    Rack_List = reader.GetString("Rack_List"),
-                    Rack_Txt = reader.GetString("Rack_Txt"),
-                    Bin_List = reader.GetString("Bin_List"),
-                    Bin_Txt = reader.GetString("Bin_Txt"),
-                    ProductType_List = reader.GetString("ProductType_List"),
-                    ProductType_Txt = reader.GetString("ProductType_Txt"),
-                    Manufacturer_List = reader.GetString("Manufacturer_List"),
-                    Manufacturer_Txt = reader.GetString("Manufacturer_Txt"),
-                    Remarks = reader.GetString("Remarks"),
-                    PurchaseRate = reader.GetDecimal("PurchaseRate"),
-                    PurchaseDiscount = reader.GetDecimal("PurchaseDiscount"),
-                    MRP = reader.GetDecimal("MRP"),
-                    SaleRate = reader.GetDecimal("SaleRate"),
-                    SaleDiscount = reader.GetDecimal("SaleDiscount"),
-                    TaxPercent = reader.GetDecimal("TaxPercent"),
-                    HSN = reader.GetString("HSN"),
-                    MinStock = reader.GetDecimal("MinStock"),
-                    MaxStock = reader.GetDecimal("MaxStock"),
-                    MinOrder = reader.GetDecimal("MinOrder"),
-                    CreatedAt = reader.GetDateTime("CreatedAt"),
-                    UpdatedAt = reader.GetDateTime("UpdatedAt"),
-                });
-            }
-            List<ProductMasterViewModel> productMasterVMList = new List<ProductMasterViewModel>();
-            foreach (var product in products)
-            {
-                ProductMasterViewModel productMasterViewModel = _mapper.Map<ProductMasterViewModel>(product);
-                productMasterVMList.Add(productMasterViewModel);
-            }
+            ProductCode = reader.GetInt32("ProductCode"),
+            ProductName = reader.GetString("ProductName"),
 
-            return View(productMasterVMList);
-        }
+            // Nullable string fields
+            GenericName = reader.IsDBNull(reader.GetOrdinal("GenericName")) ? null : reader.GetString("GenericName"),
+            ProductGroup_List = reader.IsDBNull(reader.GetOrdinal("ProductGroup_List")) ? null : reader.GetString("ProductGroup_List"),
+            ProductGroup_Txt = reader.IsDBNull(reader.GetOrdinal("ProductGroup_Txt")) ? null : reader.GetString("ProductGroup_Txt"),
+            PurchaseUnit_List = reader.IsDBNull(reader.GetOrdinal("PurchaseUnit_List")) ? null : reader.GetString("PurchaseUnit_List"),
+            PurchaseUnit_Txt = reader.IsDBNull(reader.GetOrdinal("PurchaseUnit_Txt")) ? null : reader.GetString("PurchaseUnit_Txt"),
+            StockUnit_List = reader.IsDBNull(reader.GetOrdinal("StockUnit_List")) ? null : reader.GetString("StockUnit_List"),
+            StockUnit_Txt = reader.IsDBNull(reader.GetOrdinal("StockUnit_Txt")) ? null : reader.GetString("StockUnit_Txt"),
+            Rack_List = reader.IsDBNull(reader.GetOrdinal("Rack_List")) ? null : reader.GetString("Rack_List"),
+            Rack_Txt = reader.IsDBNull(reader.GetOrdinal("Rack_Txt")) ? null : reader.GetString("Rack_Txt"),
+            Bin_List = reader.IsDBNull(reader.GetOrdinal("Bin_List")) ? null : reader.GetString("Bin_List"),
+            Bin_Txt = reader.IsDBNull(reader.GetOrdinal("Bin_Txt")) ? null : reader.GetString("Bin_Txt"),
+            ProductType_List = reader.IsDBNull(reader.GetOrdinal("ProductType_List")) ? null : reader.GetString("ProductType_List"),
+            ProductType_Txt = reader.IsDBNull(reader.GetOrdinal("ProductType_Txt")) ? null : reader.GetString("ProductType_Txt"),
+            Manufacturer_List = reader.IsDBNull(reader.GetOrdinal("Manufacturer_List")) ? null : reader.GetString("Manufacturer_List"),
+            Manufacturer_Txt = reader.IsDBNull(reader.GetOrdinal("Manufacturer_Txt")) ? null : reader.GetString("Manufacturer_Txt"),
+            Remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? null : reader.GetString("Remarks"),
+            HSN = reader.IsDBNull(reader.GetOrdinal("HSN")) ? null : reader.GetString("HSN"),
+
+            // Nullable decimal fields
+            PurchaseRate = reader.IsDBNull(reader.GetOrdinal("PurchaseRate")) ? 0 : reader.GetDecimal("PurchaseRate"),
+            PurchaseDiscount = reader.IsDBNull(reader.GetOrdinal("PurchaseDiscount")) ? 0 : reader.GetDecimal("PurchaseDiscount"),
+            MRP = reader.IsDBNull(reader.GetOrdinal("MRP")) ? 0 : reader.GetDecimal("MRP"),
+            SaleRate = reader.IsDBNull(reader.GetOrdinal("SaleRate")) ? 0 : reader.GetDecimal("SaleRate"),
+            SaleDiscount = reader.IsDBNull(reader.GetOrdinal("SaleDiscount")) ? 0 : reader.GetDecimal("SaleDiscount"),
+            TaxPercent = reader.IsDBNull(reader.GetOrdinal("TaxPercent")) ? 0 : reader.GetDecimal("TaxPercent"),
+            MinStock = reader.IsDBNull(reader.GetOrdinal("MinStock")) ? 0 : reader.GetDecimal("MinStock"),
+            MaxStock = reader.IsDBNull(reader.GetOrdinal("MaxStock")) ? 0 : reader.GetDecimal("MaxStock"),
+            MinOrder = reader.IsDBNull(reader.GetOrdinal("MinOrder")) ? 0 : reader.GetDecimal("MinOrder"),
+
+            CreatedAt = reader.GetDateTime("CreatedAt"),
+            UpdatedAt = reader.GetDateTime("UpdatedAt"),
+        });
+    }
+
+    var productMasterVMList = new List<ProductMasterViewModel>();
+    foreach (var product in products)
+    {
+        var productMasterViewModel = _mapper.Map<ProductMasterViewModel>(product);
+        productMasterVMList.Add(productMasterViewModel);
+    }
+
+    return View(productMasterVMList);
+}
+
 
         // GET: ProductMaster/Details/5
         public IActionResult Details(int id)
@@ -240,79 +246,154 @@ namespace ClinicApp.Controllers
         }
 
         // GET: ProductMaster/Edit/5
-        public IActionResult Edit(int id)
+      public IActionResult Edit(int id)
+{
+    if (id <= 0)
+        return NotFound();
+
+    using var conn = _db.GetConnection();
+    conn.Open();
+
+    ProductMaster product = null;
+    var cmd = new MySqlCommand("SELECT * FROM ProductMaster WHERE ProductCode=@Id", conn);
+    cmd.Parameters.AddWithValue("@Id", id);
+
+    using var reader = cmd.ExecuteReader();
+    if (reader.Read())
+    {
+        product = new ProductMaster
         {
-            if (id <= 0)
-            {
-                return NotFound();
-            }
+            ProductCode = reader.GetInt32("ProductCode"),
+            ProductName = reader.GetString("ProductName"),
 
-            /*
-            List<SelectListItem> Roles = new List<SelectListItem>();
-            using var conn = _db.GetConnection();
-            conn.Open();
+            GenericName = reader.IsDBNull(reader.GetOrdinal("GenericName")) 
+                            ? null 
+                            : reader.GetString("GenericName"),
 
-            var roleCmd = new MySqlCommand("SELECT RoleId, RoleName FROM Roles", conn);
-            using var roleReader = roleCmd.ExecuteReader();
-            while (roleReader.Read())
-            {
-                Roles.Add(new SelectListItem
-                {
-                    Value = Convert.ToString(roleReader.GetGuid("RoleId")),
-                    Text = roleReader.GetString("RoleName")
-                });
-            }
-            roleReader.Close();
-            */
-            using var conn = _db.GetConnection();
-            conn.Open();
-            ProductMaster product = null;
-            var cmd = new MySqlCommand("SELECT * FROM ProductMaster WHERE ProductCode=@Id", conn);
-            cmd.Parameters.AddWithValue("@Id", id);
-            using var reader = cmd.ExecuteReader();
-            if (reader.Read())
-            {
-                product = new ProductMaster
-                {
-                    ProductCode = reader.GetInt32("ProductCode"),
-                    ProductName = reader.GetString("ProductName"),
-                    GenericName = reader.GetString("GenericName"),
-                    ProductGroup_List = reader.GetString("ProductGroup_List"),
-                    ProductGroup_Txt = reader.GetString("ProductGroup_Txt"),
-                    PurchaseUnit_List = reader.GetString("PurchaseUnit_List"),
-                    PurchaseUnit_Txt = reader.GetString("PurchaseUnit_Txt"),
-                    Packing = reader.GetInt32("Packing"),
-                    StockUnit_List = reader.GetString("StockUnit_List"),
-                    StockUnit_Txt = reader.GetString("StockUnit_Txt"),
-                    Rack_List = reader.GetString("Rack_List"),
-                    Rack_Txt = reader.GetString("Rack_Txt"),
-                    Bin_List = reader.GetString("Bin_List"),
-                    Bin_Txt = reader.GetString("Bin_Txt"),
-                    ProductType_List = reader.GetString("ProductType_List"),
-                    ProductType_Txt = reader.GetString("ProductType_Txt"),
-                    Manufacturer_List = reader.GetString("Manufacturer_List"),
-                    Manufacturer_Txt = reader.GetString("Manufacturer_Txt"),
-                    Remarks = reader.GetString("Remarks"),
-                    PurchaseRate = reader.GetDecimal("PurchaseRate"),
-                    PurchaseDiscount = reader.GetDecimal("PurchaseDiscount"),
-                    MRP = reader.GetDecimal("MRP"),
-                    SaleRate = reader.GetDecimal("SaleRate"),
-                    SaleDiscount = reader.GetDecimal("SaleDiscount"),
-                    TaxPercent = reader.GetDecimal("TaxPercent"),
-                    HSN = reader.GetString("HSN"),
-                    MinStock = reader.GetDecimal("MinStock"),
-                    MaxStock = reader.GetDecimal("MaxStock"),
-                    MinOrder = reader.GetDecimal("MinOrder"),
-                    IsActive = reader.GetBoolean("IsActive"),
-                    CreatedAt = reader.GetDateTime("CreatedAt"),
-                    UpdatedAt = reader.GetDateTime("UpdatedAt")
-                };
-            }
+            ProductGroup_List = reader.IsDBNull(reader.GetOrdinal("ProductGroup_List")) 
+                                ? null 
+                                : reader.GetString("ProductGroup_List"),
 
-            ProductMasterViewModel productMasterVM = _mapper.Map<ProductMasterViewModel>(product);
-            return View(productMasterVM);
-            //ViewData["RoleID"] = new SelectList(_context.Roles, "RoleId", "RoleId", applicationUser.RoleID);
-        }
+            ProductGroup_Txt = reader.IsDBNull(reader.GetOrdinal("ProductGroup_Txt")) 
+                               ? null 
+                               : reader.GetString("ProductGroup_Txt"),
+
+            PurchaseUnit_List = reader.IsDBNull(reader.GetOrdinal("PurchaseUnit_List")) 
+                                ? null 
+                                : reader.GetString("PurchaseUnit_List"),
+
+            PurchaseUnit_Txt = reader.IsDBNull(reader.GetOrdinal("PurchaseUnit_Txt")) 
+                               ? null 
+                               : reader.GetString("PurchaseUnit_Txt"),
+
+            Packing = reader.IsDBNull(reader.GetOrdinal("Packing")) 
+                      ? 0 
+                      : reader.GetInt32("Packing"),
+
+            StockUnit_List = reader.IsDBNull(reader.GetOrdinal("StockUnit_List")) 
+                             ? null 
+                             : reader.GetString("StockUnit_List"),
+
+            StockUnit_Txt = reader.IsDBNull(reader.GetOrdinal("StockUnit_Txt")) 
+                            ? null 
+                            : reader.GetString("StockUnit_Txt"),
+
+            Rack_List = reader.IsDBNull(reader.GetOrdinal("Rack_List")) 
+                        ? null 
+                        : reader.GetString("Rack_List"),
+
+            Rack_Txt = reader.IsDBNull(reader.GetOrdinal("Rack_Txt")) 
+                       ? null 
+                       : reader.GetString("Rack_Txt"),
+
+            Bin_List = reader.IsDBNull(reader.GetOrdinal("Bin_List")) 
+                       ? null 
+                       : reader.GetString("Bin_List"),
+
+            Bin_Txt = reader.IsDBNull(reader.GetOrdinal("Bin_Txt")) 
+                      ? null 
+                      : reader.GetString("Bin_Txt"),
+
+            ProductType_List = reader.IsDBNull(reader.GetOrdinal("ProductType_List")) 
+                               ? null 
+                               : reader.GetString("ProductType_List"),
+
+            ProductType_Txt = reader.IsDBNull(reader.GetOrdinal("ProductType_Txt")) 
+                              ? null 
+                              : reader.GetString("ProductType_Txt"),
+
+            Manufacturer_List = reader.IsDBNull(reader.GetOrdinal("Manufacturer_List")) 
+                                ? null 
+                                : reader.GetString("Manufacturer_List"),
+
+            Manufacturer_Txt = reader.IsDBNull(reader.GetOrdinal("Manufacturer_Txt")) 
+                               ? null 
+                               : reader.GetString("Manufacturer_Txt"),
+
+            Remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) 
+                      ? null 
+                      : reader.GetString("Remarks"),
+
+            PurchaseRate = reader.IsDBNull(reader.GetOrdinal("PurchaseRate")) 
+                           ? 0 
+                           : reader.GetDecimal("PurchaseRate"),
+
+            PurchaseDiscount = reader.IsDBNull(reader.GetOrdinal("PurchaseDiscount")) 
+                               ? 0 
+                               : reader.GetDecimal("PurchaseDiscount"),
+
+            MRP = reader.IsDBNull(reader.GetOrdinal("MRP")) 
+                  ? 0 
+                  : reader.GetDecimal("MRP"),
+
+            SaleRate = reader.IsDBNull(reader.GetOrdinal("SaleRate")) 
+                       ? 0 
+                       : reader.GetDecimal("SaleRate"),
+
+            SaleDiscount = reader.IsDBNull(reader.GetOrdinal("SaleDiscount")) 
+                           ? 0 
+                           : reader.GetDecimal("SaleDiscount"),
+
+            TaxPercent = reader.IsDBNull(reader.GetOrdinal("TaxPercent")) 
+                         ? 0 
+                         : reader.GetDecimal("TaxPercent"),
+
+            HSN = reader.IsDBNull(reader.GetOrdinal("HSN")) 
+                  ? null 
+                  : reader.GetString("HSN"),
+
+            MinStock = reader.IsDBNull(reader.GetOrdinal("MinStock")) 
+                       ? 0 
+                       : reader.GetDecimal("MinStock"),
+
+            MaxStock = reader.IsDBNull(reader.GetOrdinal("MaxStock")) 
+                       ? 0 
+                       : reader.GetDecimal("MaxStock"),
+
+            MinOrder = reader.IsDBNull(reader.GetOrdinal("MinOrder")) 
+                       ? 0 
+                       : reader.GetDecimal("MinOrder"),
+
+            IsActive = reader.IsDBNull(reader.GetOrdinal("IsActive")) 
+                       ? true 
+                       : reader.GetBoolean("IsActive"),
+
+        CreatedAt = reader.IsDBNull(reader.GetOrdinal("CreatedAt")) 
+            ? DateTime.MinValue 
+            : reader.GetDateTime("CreatedAt"),
+
+UpdatedAt = reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) 
+            ? DateTime.MinValue 
+            : reader.GetDateTime("UpdatedAt")
+
+
+        };
+    }
+
+    ProductMasterViewModel productMasterVM = _mapper.Map<ProductMasterViewModel>(product);
+    return View(productMasterVM);
+}
+
 
         // POST: ProductMaster/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
