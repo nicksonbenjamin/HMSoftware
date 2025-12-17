@@ -33,19 +33,51 @@ namespace ClinicApp.Controllers
             using var cmd = new MySqlCommand("CALL sp_GetPrescriptionList();", con);
             using var dr = cmd.ExecuteReader();
 
-            while (dr.Read())
-            {
-                list.Add(new DoctorPrescriptionListVM
-                {
-                    DrPrescriptionId = dr.GetInt32("DrPrescriptionId"),
-                    PatientName = dr.GetString("PatientName"),
-                    EntryType = dr.GetString("EntryType"),
-                    EntryNumber = dr.GetInt32("EntryNumber"),
-                    PrescriptionDate = dr.GetDateTime("PrescriptionDate"),
-                    NextVisitDate = dr["NextVisitDate"] != DBNull.Value ? dr.GetDateTime("NextVisitDate") : null,
-                    DiseaseName = dr["Desease"] != DBNull.Value ? dr.GetString("Desease") : null
-                });
-            }
+            // while (dr.Read())
+            // {
+                
+
+            //     list.Add(new DoctorPrescriptionListVM
+            //     {
+            //         DrPrescriptionId = dr.GetInt32("DrPrescriptionId"),
+            //         PatientName = dr.GetString("PatientName"),
+            //         EntryType = dr.GetString("EntryType"),
+            //         EntryNumber = dr.GetInt32("EntryNumber"),
+            //         PrescriptionDate = dr.GetDateTime("PrescriptionDate"),
+            //         NextVisitDate = dr["NextVisitDate"] != DBNull.Value ? dr.GetDateTime("NextVisitDate") : null,
+            //         DiseaseName = dr["Desease"] != DBNull.Value ? dr.GetString("Desease") : null
+            //     });
+            // }
+
+while (dr.Read())
+{
+    list.Add(new DoctorPrescriptionListVM
+    {
+        DrPrescriptionId = dr.GetInt32("DrPrescriptionId"),
+
+        PatientName = dr["PatientName"] != DBNull.Value 
+                        ? dr.GetString("PatientName") 
+                        : string.Empty,
+
+        EntryType = dr["EntryType"] != DBNull.Value 
+                        ? dr.GetString("EntryType") 
+                        : string.Empty,
+
+        EntryNumber = dr["EntryNumber"] != DBNull.Value 
+                        ? dr.GetInt32("EntryNumber") 
+                        : 0,
+
+        PrescriptionDate = dr.GetDateTime("PrescriptionDate"),
+
+        NextVisitDate = dr["NextVisitDate"] != DBNull.Value 
+                        ? dr.GetDateTime("NextVisitDate") 
+                        : (DateTime?)null,
+
+        DiseaseName = dr["Desease"] != DBNull.Value 
+                        ? dr.GetString("Desease") 
+                        : null
+    });
+}
 
             return View(list);
         }
@@ -341,71 +373,135 @@ public IActionResult PrintPdf(int id)
         #endregion
 
         #region Helper Methods
-        private DrPrescription GetPrescription(int id)
+     private DrPrescription GetPrescription(int id)
+{
+    using var con = GetConn();
+    con.Open();
+
+    using var cmd = new MySqlCommand(
+        "SELECT * FROM DrPrescription WHERE DrPrescriptionId=@Id;", con);
+    cmd.Parameters.AddWithValue("@Id", id);
+
+    using var dr = cmd.ExecuteReader();
+    if (dr.Read())
+    {
+        return new DrPrescription
         {
-            using var con = GetConn();
-            con.Open();
+            DrPrescriptionId = dr.GetInt32("DrPrescriptionId"),
 
-            using var cmd = new MySqlCommand(
-                "SELECT * FROM DrPrescription WHERE DrPrescriptionId=@Id;", con);
-            cmd.Parameters.AddWithValue("@Id", id);
+            PatientId = dr["PatientId"] != DBNull.Value
+                            ? dr.GetInt32("PatientId")
+                            : 0,
 
-            using var dr = cmd.ExecuteReader();
-            if (dr.Read())
-            {
-                return new DrPrescription
-                {
-                    DrPrescriptionId = dr.GetInt32("DrPrescriptionId"),
-                    PatientId = dr.GetInt32("PatientId"),
-                    EntryType = dr.GetString("EntryType"),
-                    EntryNumber = dr.GetInt32("EntryNumber"),
-                    EntryPeriod = dr.GetString("EntryPeriod"),
-                    DeseaseId = dr.GetInt32("DeseaseId"),
-                    Height = dr.GetDecimal("Height"),
-                    Weight = dr.GetDecimal("Weight"),
-                    BMI = dr.GetDecimal("BMI"),
-                    TempInCelcius = dr.GetDecimal("TempInCelcius"),
-                    BP = dr.GetString("BP"),
-                    SPO2 = dr.GetString("SPO2"),
-                    PulseRate = dr.GetDecimal("PulseRate"),
-                    NextVisitDate = dr["NextVisitDate"] != DBNull.Value ? dr.GetDateTime("NextVisitDate") : null,
-                    PrescriptionDate = dr.GetDateTime("PrescriptionDate")
-                };
-            }
-            return null;
-        }
+            EntryType = dr["EntryType"] != DBNull.Value
+                            ? dr.GetString("EntryType")
+                            : string.Empty,
 
-        private List<DrPrescriptionDetails> GetPrescriptionDetails(int id)
+            EntryNumber = dr["EntryNumber"] != DBNull.Value
+                            ? dr.GetInt32("EntryNumber")
+                            : 0,
+
+            EntryPeriod = dr["EntryPeriod"] != DBNull.Value
+                            ? dr.GetString("EntryPeriod")
+                            : string.Empty,
+
+            DeseaseId = dr["DeseaseId"] != DBNull.Value
+                            ? dr.GetInt32("DeseaseId")
+                            : 0,
+
+            Height = dr["Height"] != DBNull.Value
+                            ? dr.GetDecimal("Height")
+                            : 0,
+
+            Weight = dr["Weight"] != DBNull.Value
+                            ? dr.GetDecimal("Weight")
+                            : 0,
+
+            BMI = dr["BMI"] != DBNull.Value
+                            ? dr.GetDecimal("BMI")
+                            : 0,
+
+            TempInCelcius = dr["TempInCelcius"] != DBNull.Value
+                            ? dr.GetDecimal("TempInCelcius")
+                            : 0,
+
+            BP = dr["BP"] != DBNull.Value
+                            ? dr.GetString("BP")
+                            : string.Empty,
+
+            SPO2 = dr["SPO2"] != DBNull.Value
+                            ? dr.GetString("SPO2")
+                            : string.Empty,
+
+            PulseRate = dr["PulseRate"] != DBNull.Value
+                            ? dr.GetDecimal("PulseRate")
+                            : 0,
+
+            NextVisitDate = dr["NextVisitDate"] != DBNull.Value
+                            ? dr.GetDateTime("NextVisitDate")
+                            : (DateTime?)null,
+
+            PrescriptionDate = dr.GetDateTime("PrescriptionDate")
+        };
+    }
+    return null;
+}
+
+
+
+       private List<DrPrescriptionDetails> GetPrescriptionDetails(int id)
+{
+    var list = new List<DrPrescriptionDetails>();
+    using var con = GetConn();
+    con.Open();
+
+    using var cmd = new MySqlCommand(
+        @"SELECT d.*, p.ProductName, dp.DoseDescription 
+          FROM DrPrescriptionDetails d
+          LEFT JOIN ProductMaster p ON d.ProductId = p.ProductCode
+          LEFT JOIN DosePattern dp ON d.DosePatternId = dp.DosePatternId
+          WHERE DrPrescriptionId=@Id;", con);
+
+    cmd.Parameters.AddWithValue("@Id", id);
+
+    using var dr = cmd.ExecuteReader();
+    while (dr.Read())
+    {
+        list.Add(new DrPrescriptionDetails
         {
-            var list = new List<DrPrescriptionDetails>();
-            using var con = GetConn();
-            con.Open();
+            DrPrescriptionDetailsId = dr.GetInt32("DrPrescriptionDetailsId"),
 
-            using var cmd = new MySqlCommand(
-                @"SELECT d.*, p.ProductName, dp.DoseDescription 
-                  FROM DrPrescriptionDetails d
-                  LEFT JOIN ProductMaster p ON d.ProductId = p.ProductCode
-                  LEFT JOIN DosePattern dp ON d.DosePatternId = dp.DosePatternId
-                  WHERE DrPrescriptionId=@Id;", con);
-            cmd.Parameters.AddWithValue("@Id", id);
+            ProductId = dr["ProductId"] != DBNull.Value
+                            ? dr.GetInt32("ProductId")
+                            : 0,
 
-            using var dr = cmd.ExecuteReader();
-            while (dr.Read())
-            {
-                list.Add(new DrPrescriptionDetails
-                {
-                    DrPrescriptionDetailsId = dr.GetInt32("DrPrescriptionDetailsId"),
-                    ProductId = dr.GetInt32("ProductId"),
-                    ProductName = dr["ProductName"] != DBNull.Value ? dr.GetString("ProductName") : null,
-                    DosePatternId = dr.GetInt32("DosePatternId"),
-                    DosePattern = dr["DoseDescription"] != DBNull.Value ? dr.GetString("DoseDescription") : null,
-                    DoseUsage = dr["DoseUsage"] != DBNull.Value ? dr.GetString("DoseUsage") : null,
-                    DoseDays = dr.GetInt32("DoseDays"),
-                    Qty = dr.GetInt32("Qty")
-                });
-            }
-            return list;
-        }
+            ProductName = dr["ProductName"] != DBNull.Value
+                            ? dr.GetString("ProductName")
+                            : string.Empty,
+
+            DosePatternId = dr["DosePatternId"] != DBNull.Value
+                            ? dr.GetInt32("DosePatternId")
+                            : 0,
+
+            DosePattern = dr["DoseDescription"] != DBNull.Value
+                            ? dr.GetString("DoseDescription")
+                            : string.Empty,
+
+            DoseUsage = dr["DoseUsage"] != DBNull.Value
+                            ? dr.GetString("DoseUsage")
+                            : string.Empty,
+
+            DoseDays = dr["DoseDays"] != DBNull.Value
+                            ? dr.GetInt32("DoseDays")
+                            : 0,
+
+            Qty = dr["Qty"] != DBNull.Value
+                            ? dr.GetInt32("Qty")
+                            : 0
+        });
+    }
+    return list;
+}
 
         private List<DrPrescriptionClinical> GetClinicalDetails(int id)
         {
