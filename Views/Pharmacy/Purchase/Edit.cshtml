@@ -1,25 +1,10 @@
 @model ClinicApp.ViewModels.PurchaseViewModel
-
 @{
     ViewData["Title"] = "Edit Purchase";
 
-    var productOptions = new System.Text.StringBuilder();
-    foreach (var prod in Model.ProductList)
-    {
-        var selectedProd = "";
-        if (Model.Items != null && Model.Items.Any())
-        {
-            selectedProd = Model.Items.Any(i => i.ProductId.ToString() == prod.Value) ? "selected" : "";
-        }
-        productOptions.AppendLine($"<option value='{prod.Value}' {selectedProd}>{prod.Text}</option>");
-    }
-
-    var supplierOptions = new System.Text.StringBuilder();
-    foreach (var sup in Model.SupplierList)
-    {
-        var selected = (sup.Value == Model.SupplierId.ToString()) ? "selected" : "";
-        supplierOptions.AppendLine($"<option value='{sup.Value}' {selected}>{sup.Text}</option>");
-    }
+    var productOptionsHtml = string.Join("",
+        Model.ProductList.Select(p =>
+            $"<option value='{p.Value}'>{p.Text}</option>"));
 }
 
 <h2>Edit Purchase</h2>
@@ -28,155 +13,107 @@
     @Html.AntiForgeryToken()
     <input type="hidden" asp-for="PurchaseId" />
 
-    <!-- Top form fields -->
-    <div class="row g-3 mb-3">
-        <div class="col-md-2">
-            <label asp-for="PurchaseNo" class="form-label"></label>
+    <!-- HEADER -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label>Purchase No</label>
             <input asp-for="PurchaseNo" class="form-control" readonly />
         </div>
-        <div class="col-md-2">
-            <label asp-for="PurchaseDate" class="form-label"></label>
-            <input asp-for="PurchaseDate" class="form-control" type="date" />
-        </div>
         <div class="col-md-3">
-            <label class="form-label">Supplier</label>
-            <select name="SupplierId" class="form-select">
-                <option value="">-- Select Supplier --</option>
-                @Html.Raw(supplierOptions)
+            <label>Date</label>
+            <input asp-for="PurchaseDate" type="date" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label>Supplier</label>
+            <select asp-for="SupplierId" class="form-select" asp-items="Model.SupplierList">
+                <option value="">-- Select --</option>
             </select>
-        </div>
-        <div class="col-md-2">
-            <label asp-for="SupplierInvoiceNo" class="form-label"></label>
-            <input asp-for="SupplierInvoiceNo" class="form-control" />
-        </div>
-        <div class="col-md-3">
-            <label>Supplier Invoice Date</label>
-            <input type="date" name="SupplierInvoiceDate" class="form-control"
-                   value="@(Model.SupplierInvoiceDate?.ToString("yyyy-MM-dd") ?? "")" />
         </div>
     </div>
 
-    <!-- Purchase Items Table -->
-    <table class="table table-bordered table-sm align-middle" id="purchaseItemsTable" style="font-size: 0.9rem;">
-        <thead class="table-primary text-center">
+    <!-- ITEMS TABLE -->
+    <table class="table table-bordered" id="itemsTable">
+        <thead class="table-primary">
             <tr>
-                <th style="min-width: 120px;">Product</th>
-                <th style="width: 80px;">Batch No</th>
-                <th style="width: 100px;">Expiry Date</th>
-                <th style="width: 60px;">UOM</th>
-                <th style="width: 80px;">Qty</th>
-                <th style="width: 80px;">Free</th>
-                <th style="width: 80px;">Rate</th>
-                <th style="width: 80px;">MRP</th>
-                <th style="width: 80px;">Disc %</th>
-                <th style="width: 80px;">Tax %</th>
-                <th style="width: 100px;">Net Amount</th>
-                <th style="width: 50px;">Action</th>
+                <th>Product</th>
+                <th>Batch</th>
+                <th>Exp</th>
+                <th>UOM</th>
+                <th>Qty</th>
+                <th>Free</th>
+                <th>Rate</th>
+                <th>MRP</th>
+                <th>Disc%</th>
+                <th>Tax%</th>
+                <th>Net</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            @if (Model.Items != null && Model.Items.Any())
-            {
-                for (int i = 0; i < Model.Items.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            <select name="Items[@i].ProductId" class="form-select form-select-sm product-select">
-                                <option value="">-- Select --</option>
-                                @Html.Raw(productOptions)
-                            </select>
-                        </td>
-                        <td><input type="text" name="Items[@i].BatchNo" class="form-control form-control-sm" value="@Model.Items[i].BatchNo" /></td>
-                        <td><input type="date" name="Items[@i].ExpiryDate" class="form-control form-control-sm"
-                                   value="@(Model.Items[i].ExpiryDate?.ToString("yyyy-MM-dd") ?? "")" /></td>
-                        <td><input type="text" name="Items[@i].UOM" class="form-control form-control-sm" readonly value="@Model.Items[i].UOM" /></td>
-                        <td><input type="number" name="Items[@i].Qty" class="form-control form-control-sm qty-input" step="0.01" min="0" value="@Model.Items[i].Qty" /></td>
-                        <td><input type="number" name="Items[@i].FreeQty" class="form-control form-control-sm free-input" step="0.01" min="0" value="@Model.Items[i].FreeQty" /></td>
-                        <td><input type="number" name="Items[@i].Rate" class="form-control form-control-sm rate-input" step="0.01" min="0" value="@Model.Items[i].Rate" /></td>
-                        <td><input type="number" name="Items[@i].MRP" class="form-control form-control-sm mrp-input" step="0.01" min="0" value="@Model.Items[i].MRP" /></td>
-                        <td><input type="number" name="Items[@i].DiscountPercent" class="form-control form-control-sm disc-input" step="0.01" min="0" value="@Model.Items[i].DiscountPercent" /></td>
-                        <td><input type="number" name="Items[@i].TaxPercent" class="form-control form-control-sm tax-input" step="0.01" min="0" value="@Model.Items[i].TaxPercent" /></td>
-                        <td><input type="number" name="Items[@i].NetAmount" class="form-control form-control-sm net-input" step="0.01" readonly value="@Model.Items[i].NetAmount" /></td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
-                    </tr>
-                }
-            }
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <tr>
+                <td>
+                    <select name="Items[@i].ProductId" class="form-select">
+                        <option value="">--Select--</option>
+                        @foreach (var p in Model.ProductList)
+                        {
+                            <option value="@p.Value"
+                                    selected="@(p.Value == Model.Items[i].ProductId.ToString())">
+                                @p.Text
+                            </option>
+                        }
+                    </select>
+                </td>
+                <td><input name="Items[@i].BatchNo" value="@Model.Items[i].BatchNo" class="form-control" /></td>
+                <td><input type="date" name="Items[@i].ExpiryDate" value="@(Model.Items[i].ExpiryDate?.ToString("yyyy-MM-dd"))" class="form-control" /></td>
+                <td><input name="Items[@i].UOM" value="@Model.Items[i].UOM" class="form-control" readonly /></td>
+                <td><input name="Items[@i].Qty" value="@Model.Items[i].Qty" class="form-control" /></td>
+                <td><input name="Items[@i].FreeQty" value="@Model.Items[i].FreeQty" class="form-control" /></td>
+                <td><input name="Items[@i].Rate" value="@Model.Items[i].Rate" class="form-control" /></td>
+                <td><input name="Items[@i].MRP" value="@Model.Items[i].MRP" class="form-control" /></td>
+                <td><input name="Items[@i].DiscountPercent" value="@Model.Items[i].DiscountPercent" class="form-control" /></td>
+                <td><input name="Items[@i].TaxPercent" value="@Model.Items[i].TaxPercent" class="form-control" /></td>
+                <td><input name="Items[@i].NetAmount" value="@Model.Items[i].NetAmount" class="form-control" readonly /></td>
+                <td><button type="button" class="btn btn-danger remove">×</button></td>
+            </tr>
+        }
         </tbody>
     </table>
 
-    <button type="button" class="btn btn-sm btn-primary mb-3" id="addRowBtn">+ Add Item</button>
+    <button type="button" id="addRow" class="btn btn-primary">+ Add</button>
+    <br /><br />
 
-    <!-- Totals Row -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-2">
-            <label>Total Qty</label>
-            <input asp-for="TotalQty" class="form-control form-control-sm" readonly />
-        </div>
-        <div class="col-md-2">
-            <label>Total Amount</label>
-            <input asp-for="TotalAmount" class="form-control form-control-sm" readonly />
-        </div>
-        <div class="col-md-2">
-            <label>Total Discount</label>
-            <input asp-for="TotalDiscount" class="form-control form-control-sm" readonly />
-        </div>
-        <div class="col-md-2">
-            <label>Total Tax</label>
-            <input asp-for="TotalTax" class="form-control form-control-sm" readonly />
-        </div>
-        <div class="col-md-2">
-            <label>Round Off</label>
-            <input asp-for="RoundOff" class="form-control form-control-sm" />
-        </div>
-        <div class="col-md-2">
-            <label>Net Amount</label>
-            <input asp-for="NetAmount" class="form-control form-control-sm" readonly />
-        </div>
-    </div>
-
-    <!-- Remarks -->
-    <div class="mb-3">
-        <label asp-for="Remarks" class="form-label"></label>
-        <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-success btn-lg">Save Changes</button>
-    <a asp-action="Index" class="btn btn-secondary btn-lg ms-2">Cancel</a>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(function () {
-            var productOptionsHtml = `@Html.Raw(productOptions.ToString())`;
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var productOptions = `@Html.Raw(productOptionsHtml)`;
 
-            // Add new purchase item row
-            $('#addRowBtn').click(function () {
-                var rowCount = $('#purchaseItemsTable tbody tr').length;
-                var newRow = `<tr>
-                    <td><select name="Items[${rowCount}].ProductId" class="form-select form-select-sm product-select">
-                        <option value="">-- Select --</option>
-                        ${productOptionsHtml}
-                    </select></td>
-                    <td><input type="text" name="Items[${rowCount}].BatchNo" class="form-control form-control-sm" /></td>
-                    <td><input type="date" name="Items[${rowCount}].ExpiryDate" class="form-control form-control-sm" /></td>
-                    <td><input type="text" name="Items[${rowCount}].UOM" class="form-control form-control-sm" readonly /></td>
-                    <td><input type="number" name="Items[${rowCount}].Qty" class="form-control form-control-sm qty-input" step="0.01" min="0" value="0" /></td>
-                    <td><input type="number" name="Items[${rowCount}].FreeQty" class="form-control form-control-sm free-input" step="0.01" min="0" value="0" /></td>
-                    <td><input type="number" name="Items[${rowCount}].Rate" class="form-control form-control-sm rate-input" step="0.01" min="0" value="0" /></td>
-                    <td><input type="number" name="Items[${rowCount}].MRP" class="form-control form-control-sm mrp-input" step="0.01" min="0" value="0" /></td>
-                    <td><input type="number" name="Items[${rowCount}].DiscountPercent" class="form-control form-control-sm disc-input" step="0.01" min="0" value="0" /></td>
-                    <td><input type="number" name="Items[${rowCount}].TaxPercent" class="form-control form-control-sm tax-input" step="0.01" min="0" value="0" /></td>
-                    <td><input type="number" name="Items[${rowCount}].NetAmount" class="form-control form-control-sm net-input" step="0.01" readonly value="0" /></td>
-                    <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
-                </tr>`;
-                $('#purchaseItemsTable tbody').append(newRow);
-            });
+    $('#addRow').click(function () {
+        var i = $('#itemsTable tbody tr').length;
+        $('#itemsTable tbody').append(`
+        <tr>
+            <td><select name="Items[${i}].ProductId" class="form-select"><option value="">--Select--</option>${productOptions}</select></td>
+            <td><input name="Items[${i}].BatchNo" class="form-control" /></td>
+            <td><input type="date" name="Items[${i}].ExpiryDate" class="form-control" /></td>
+            <td><input name="Items[${i}].UOM" class="form-control" readonly /></td>
+            <td><input name="Items[${i}].Qty" class="form-control" /></td>
+            <td><input name="Items[${i}].FreeQty" class="form-control" /></td>
+            <td><input name="Items[${i}].Rate" class="form-control" /></td>
+            <td><input name="Items[${i}].MRP" class="form-control" /></td>
+            <td><input name="Items[${i}].DiscountPercent" class="form-control" /></td>
+            <td><input name="Items[${i}].TaxPercent" class="form-control" /></td>
+            <td><input name="Items[${i}].NetAmount" class="form-control" readonly /></td>
+            <td><button type="button" class="btn btn-danger remove">×</button></td>
+        </tr>`);
+    });
 
-            // Remove purchase item row
-            $(document).on('click', '.remove-row', function () {
-                $(this).closest('tr').remove();
-            });
-        });
-    </script>
+    $(document).on('click', '.remove', function () {
+        $(this).closest('tr').remove();
+    });
+</script>
 }

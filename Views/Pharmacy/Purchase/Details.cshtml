@@ -1,111 +1,73 @@
 @model ClinicApp.ViewModels.PurchaseViewModel
-
 @{
     ViewData["Title"] = "Purchase Details";
 }
 
-<h2>Purchase Details - @Model.PurchaseNo</h2>
+<h2>Purchase Details</h2>
 
-<!-- Top Info -->
-<div class="row g-3 mb-3">
-    <div class="col-md-2">
-        <label>Purchase No</label>
-        <input class="form-control" value="@Model.PurchaseNo" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Purchase Date</label>
-        <input class="form-control" value="@Model.PurchaseDate.ToString("yyyy-MM-dd")" readonly />
-    </div>
-    <div class="col-md-3">
-        <label>Supplier</label>
-        <input class="form-control" value="@Model.SupplierName" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Supplier Invoice No</label>
-        <input class="form-control" value="@Model.SupplierInvoiceNo" readonly />
-    </div>
-    <div class="col-md-3">
-        <label>Supplier Invoice Date</label>
-        <input class="form-control" value="@(Model.SupplierInvoiceDate?.ToString("yyyy-MM-dd") ?? "")" readonly />
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-md-3"><strong>Purchase No:</strong> @Model.PurchaseNo</div>
+            <div class="col-md-3"><strong>Date:</strong> @Model.PurchaseDate.ToString("dd-MM-yyyy")</div>
+            <div class="col-md-6"><strong>Supplier:</strong> @Model.SupplierName</div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-3"><strong>Invoice No:</strong> @Model.SupplierInvoiceNo</div>
+            <div class="col-md-3"><strong>Invoice Date:</strong> @(Model.SupplierInvoiceDate?.ToString("dd-MM-yyyy"))</div>
+        </div>
     </div>
 </div>
 
-<!-- Purchase Items Table -->
-<table class="table table-bordered table-sm align-middle" style="font-size: 0.9rem;">
-    <thead class="table-primary text-center">
+<table class="table table-bordered table-sm">
+    <thead class="table-secondary text-center">
         <tr>
             <th>Product</th>
-            <th>Batch No</th>
-            <th>Expiry Date</th>
+            <th>Batch</th>
+            <th>Exp</th>
             <th>UOM</th>
             <th>Qty</th>
             <th>Free</th>
             <th>Rate</th>
             <th>MRP</th>
-            <th>Disc %</th>
-            <th>Tax %</th>
-            <th>Net Amount</th>
+            <th>Disc%</th>
+            <th>Tax%</th>
+            <th>Net</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.Items != null && Model.Items.Any())
+        @foreach (var item in Model.Items)
         {
-            foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.BatchNo</td>
-                    <td>@(item.ExpiryDate?.ToString("yyyy-MM-dd") ?? "")</td>
-                    <td>@item.UOM</td>
-                    <td class="text-end">@item.Qty</td>
-                    <td class="text-end">@item.FreeQty</td>
-                    <td class="text-end">@item.Rate.ToString("0.##")</td>
-                    <td class="text-end">@item.MRP.ToString("0.##")</td>
-                    <td class="text-end">@item.DiscountPercent.ToString("0.##")</td>
-                    <td class="text-end">@item.TaxPercent.ToString("0.##")</td>
-                    <td class="text-end">@item.NetAmount.ToString("0.##")</td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr><td colspan="11" class="text-center">No items found</td></tr>
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.BatchNo</td>
+                <td>@item.ExpiryDate?.ToString("MM/yyyy")</td>
+                <td>@item.UOM</td>
+                <td class="text-end">@item.Qty</td>
+                <td class="text-end">@item.FreeQty</td>
+                <td class="text-end">@item.Rate</td>
+                <td class="text-end">@item.MRP</td>
+                <td class="text-end">@item.DiscountPercent</td>
+                <td class="text-end">@item.TaxPercent</td>
+                <td class="text-end">@item.NetAmount</td>
+            </tr>
         }
     </tbody>
 </table>
 
-<!-- Totals -->
-<div class="row g-3 mb-3">
-    <div class="col-md-2">
-        <label>Total Qty</label>
-        <input class="form-control" value="@Model.TotalQty" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Total Amount</label>
-        <input class="form-control" value="@Model.TotalAmount" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Total Discount</label>
-        <input class="form-control" value="@Model.TotalDiscount" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Total Tax</label>
-        <input class="form-control" value="@Model.TotalTax" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Round Off</label>
-        <input class="form-control" value="@Model.RoundOff" readonly />
-    </div>
-    <div class="col-md-2">
-        <label>Net Amount</label>
-        <input class="form-control" value="@Model.NetAmount" readonly />
-    </div>
+<div class="row mt-3">
+    <div class="col-md-2"><strong>Total Qty:</strong> @Model.TotalQty</div>
+    <div class="col-md-2"><strong>Total Amount:</strong> @Model.TotalAmount</div>
+    <div class="col-md-2"><strong>Discount:</strong> @Model.TotalDiscount</div>
+    <div class="col-md-2"><strong>Tax:</strong> @Model.TotalTax</div>
+    <div class="col-md-2"><strong>Round Off:</strong> @Model.RoundOff</div>
+    <div class="col-md-2"><strong>Net:</strong> @Model.NetAmount</div>
 </div>
 
-<!-- Remarks -->
-<div class="mb-3">
-    <label>Remarks</label>
-    <textarea class="form-control" rows="3" readonly>@Model.Remarks</textarea>
+<div class="mt-3">
+    <strong>Remarks:</strong>
+    <p>@Model.Remarks</p>
 </div>
 
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<a asp-action="Index" class="btn btn-secondary mt-3">Back</a>
