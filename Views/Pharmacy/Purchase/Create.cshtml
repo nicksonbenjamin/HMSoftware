@@ -1,0 +1,243 @@
+@model ClinicApp.ViewModels.PurchaseViewModel
+
+@{
+    ViewData["Title"] = "Create Purchase";
+
+    var productOptions = new System.Text.StringBuilder();
+    foreach (var prod in Model.ProductList)
+    {
+        productOptions.AppendLine($"<option value='{prod.Value}'>{prod.Text}</option>");
+    }
+
+    var supplierOptions = new System.Text.StringBuilder();
+    foreach (var sup in Model.SupplierList)
+    {
+        var selected = (sup.Value == Model.SupplierId.ToString()) ? "selected" : "";
+        supplierOptions.AppendLine($"<option value='{sup.Value}' {selected}>{sup.Text}</option>");
+    }
+}
+
+<h2>Create Purchase</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- Top form fields in grid -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-2">
+            <label asp-for="PurchaseNo" class="form-label"></label>
+            <input asp-for="PurchaseNo" class="form-control" readonly />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="PurchaseDate" class="form-label"></label>
+            <input asp-for="PurchaseDate" class="form-control" type="date" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Supplier</label>
+            <select name="SupplierId" class="form-select">
+                <option value="">-- Select Supplier --</option>
+                @Html.Raw(supplierOptions)
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label asp-for="SupplierInvoiceNo" class="form-label"></label>
+            <input asp-for="SupplierInvoiceNo" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label>Supplier Invoice Date</label>
+            <input type="date" name="SupplierInvoiceDate" class="form-control"
+                   value="@(Model.SupplierInvoiceDate?.ToString("yyyy-MM-dd") ?? "")" />
+        </div>
+    </div>
+
+    <!-- Purchase Items Table -->
+    <table class="table table-bordered table-sm align-middle" id="purchaseItemsTable" style="font-size: 0.9rem;">
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="min-width: 120px;">Product</th>
+                <th style="width: 80px;">Batch No</th>
+                <th style="width: 100px;">Expiry Date</th>
+                <th style="width: 60px;">UOM</th>
+                <th style="width: 80px;">Qty</th>
+                <th style="width: 80px;">Free</th>
+                <th style="width: 80px;">Rate</th>
+                <th style="width: 80px;">MRP</th>
+                <th style="width: 80px;">Disc %</th>
+                <th style="width: 80px;">Tax %</th>
+                <th style="width: 100px;">Net Amount</th>
+                <th style="width: 50px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items != null && Model.Items.Any())
+            {
+                for (int i = 0; i < Model.Items.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <select name="Items[@i].ProductId" class="form-select form-select-sm product-select">
+                                <option value="">-- Select --</option>
+                                @Html.Raw(productOptions)
+                            </select>
+                        </td>
+                        <td><input type="text" name="Items[@i].BatchNo" class="form-control form-control-sm" value="@Model.Items[i].BatchNo" /></td>
+                        <td><input type="date" name="Items[@i].ExpiryDate" class="form-control form-control-sm"
+                                   value="@(Model.Items[i].ExpiryDate?.ToString("yyyy-MM-dd") ?? "")" /></td>
+                        <td><input type="text" name="Items[@i].UOM" class="form-control form-control-sm" readonly value="@Model.Items[i].UOM" /></td>
+                        <td><input type="number" name="Items[@i].Qty" class="form-control form-control-sm qty-input" step="0.01" min="0" value="@Model.Items[i].Qty" /></td>
+                        <td><input type="number" name="Items[@i].FreeQty" class="form-control form-control-sm free-input" step="0.01" min="0" value="@Model.Items[i].FreeQty" /></td>
+                        <td><input type="number" name="Items[@i].Rate" class="form-control form-control-sm rate-input" step="0.01" min="0" value="@Model.Items[i].Rate" /></td>
+                        <td><input type="number" name="Items[@i].MRP" class="form-control form-control-sm mrp-input" step="0.01" min="0" value="@Model.Items[i].MRP" /></td>
+                        <td><input type="number" name="Items[@i].DiscountPercent" class="form-control form-control-sm disc-input" step="0.01" min="0" value="@Model.Items[i].DiscountPercent" /></td>
+                        <td><input type="number" name="Items[@i].TaxPercent" class="form-control form-control-sm tax-input" step="0.01" min="0" value="@Model.Items[i].TaxPercent" /></td>
+                        <td><input type="number" name="Items[@i].NetAmount" class="form-control form-control-sm net-input" step="0.01" readonly value="@Model.Items[i].NetAmount" /></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-sm btn-primary mb-3" id="addRowBtn">+ Add Item</button>
+
+    <!-- Totals Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-2">
+            <label>Total Qty</label>
+            <input asp-for="TotalQty" class="form-control form-control-sm" readonly />
+        </div>
+        <div class="col-md-2">
+            <label>Total Amount</label>
+            <input asp-for="TotalAmount" class="form-control form-control-sm" readonly />
+        </div>
+        <div class="col-md-2">
+            <label>Total Discount</label>
+            <input asp-for="TotalDiscount" class="form-control form-control-sm" readonly />
+        </div>
+        <div class="col-md-2">
+            <label>Total Tax</label>
+            <input asp-for="TotalTax" class="form-control form-control-sm" readonly />
+        </div>
+        <div class="col-md-2">
+            <label>Round Off</label>
+            <input asp-for="RoundOff" class="form-control form-control-sm" />
+        </div>
+        <div class="col-md-2">
+            <label>Net Amount</label>
+            <input asp-for="NetAmount" class="form-control form-control-sm" readonly />
+        </div>
+    </div>
+
+    <!-- Remarks -->
+    <div class="mb-3">
+        <label asp-for="Remarks" class="form-label"></label>
+        <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
+    </div>
+
+    <!-- Payment Breakup Section -->
+    <h4>Payment Breakup (Optional)</h4>
+    <table class="table table-bordered table-sm" id="paymentTable" style="font-size: 0.9rem;">
+        <thead class="table-secondary text-center">
+            <tr>
+                <th style="width: 40px;">#</th>
+                <th style="width: 120px;">Type</th>
+                <th style="width: 150px;">Ref. No</th>
+                <th style="width: 250px;">Payment Detail</th>
+                <th style="width: 120px;">Amount</th>
+                <th style="width: 50px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Initially empty or bind from model if exists -->
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-sm btn-primary mb-4" id="addPaymentBtn">+ Add Payment</button>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <label>Cash Received</label>
+            <input type="number" step="0.01" min="0" class="form-control form-control-sm" name="CashReceived" />
+        </div>
+        <div class="col-md-4">
+            <label>Return Cash</label>
+            <input type="number" step="0.01" min="0" class="form-control form-control-sm" name="ReturnCash" />
+        </div>
+        <div class="col-md-4">
+            <label>Total</label>
+            <input type="number" step="0.01" min="0" class="form-control form-control-sm" name="PaymentTotal" readonly />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-lg">Save Purchase</button>
+    <a asp-action="Index" class="btn btn-secondary btn-lg ms-2">Cancel</a>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            var productOptionsHtml = `@Html.Raw(productOptions.ToString())`;
+
+            // Add new purchase item row
+            $('#addRowBtn').click(function () {
+                var rowCount = $('#purchaseItemsTable tbody tr').length;
+                var newRow = `<tr>
+                    <td><select name="Items[${rowCount}].ProductId" class="form-select form-select-sm product-select">
+                        <option value="">-- Select --</option>
+                        ${productOptionsHtml}
+                    </select></td>
+                    <td><input type="text" name="Items[${rowCount}].BatchNo" class="form-control form-control-sm" /></td>
+                    <td><input type="date" name="Items[${rowCount}].ExpiryDate" class="form-control form-control-sm" /></td>
+                    <td><input type="text" name="Items[${rowCount}].UOM" class="form-control form-control-sm" readonly /></td>
+                    <td><input type="number" name="Items[${rowCount}].Qty" class="form-control form-control-sm qty-input" step="0.01" min="0" value="0" /></td>
+                    <td><input type="number" name="Items[${rowCount}].FreeQty" class="form-control form-control-sm free-input" step="0.01" min="0" value="0" /></td>
+                    <td><input type="number" name="Items[${rowCount}].Rate" class="form-control form-control-sm rate-input" step="0.01" min="0" value="0" /></td>
+                    <td><input type="number" name="Items[${rowCount}].MRP" class="form-control form-control-sm mrp-input" step="0.01" min="0" value="0" /></td>
+                    <td><input type="number" name="Items[${rowCount}].DiscountPercent" class="form-control form-control-sm disc-input" step="0.01" min="0" value="0" /></td>
+                    <td><input type="number" name="Items[${rowCount}].TaxPercent" class="form-control form-control-sm tax-input" step="0.01" min="0" value="0" /></td>
+                    <td><input type="number" name="Items[${rowCount}].NetAmount" class="form-control form-control-sm net-input" step="0.01" readonly value="0" /></td>
+                    <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
+                </tr>`;
+                $('#purchaseItemsTable tbody').append(newRow);
+            });
+
+            // Remove purchase item row
+            $(document).on('click', '.remove-row', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // Payment breakup add/remove rows
+            $('#addPaymentBtn').click(function () {
+                var rowCount = $('#paymentTable tbody tr').length;
+                var newRow = `<tr>
+                    <td class="text-center">${rowCount + 1}</td>
+                    <td>
+                        <select name="Payments[${rowCount}].Type" class="form-select form-select-sm">
+                            <option value="Cash">Cash</option>
+                            <option value="Credit">Credit</option>
+                            <option value="Card">Card</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="Payments[${rowCount}].RefNo" class="form-control form-control-sm" /></td>
+                    <td><input type="text" name="Payments[${rowCount}].PaymentDetail" class="form-control form-control-sm" /></td>
+                    <td><input type="number" step="0.01" min="0" name="Payments[${rowCount}].Amount" class="form-control form-control-sm payment-amount" /></td>
+                    <td><button type="button" class="btn btn-danger btn-sm remove-payment">×</button></td>
+                </tr>`;
+                $('#paymentTable tbody').append(newRow);
+            });
+
+            $(document).on('click', '.remove-payment', function () {
+                $(this).closest('tr').remove();
+                updatePaymentRowNumbers();
+            });
+
+            function updatePaymentRowNumbers() {
+                $('#paymentTable tbody tr').each(function (index) {
+                    $(this).find('td:first').text(index + 1);
+                });
+            }
+        });
+    </script>
+}

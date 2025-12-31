@@ -1,9 +1,11 @@
 ﻿@using System.Linq
+@using Microsoft.AspNetCore.Http
+
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 
-    // List of all master controllers
+    // Master controllers
     string[] masterControllers = new string[]
     {
         "DescriptionMaster",
@@ -13,21 +15,33 @@
         "RoomTypeMaster",
         "ICDCodeMaster",
         "CommonMaster",
-        "SupplierMaster" 
+        "SupplierMaster"
     };
 
-    // Highlight active menu
+    // Pharmacy controllers
+    string[] pharmacyControllers = new string[]
+    {
+        "Purchase"
+    };
+
     Func<string, string, string> isActive = (string controller, string action) =>
     {
-        return (controller == currentController && (string.IsNullOrEmpty(action) || action == currentAction)) ? "active" : "";
+        return (controller == currentController &&
+               (string.IsNullOrEmpty(action) || action == currentAction))
+               ? "active" : "";
     };
 
-    // Show collapse menu if any master controller matches
     Func<string[], string> isMasterOpen = (string[] controllers) =>
     {
         return controllers.Contains(currentController) ? "show" : "";
     };
+
+    Func<string[], string> isPharmacyOpen = (string[] controllers) =>
+    {
+        return controllers.Contains(currentController) ? "show" : "";
+    };
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +51,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
     <style>
         body {
@@ -115,132 +129,162 @@
         .caret {
             transition: transform 0.3s;
         }
-
-        .collapse.show + a .caret {
-            transform: rotate(90deg);
-        }
     </style>
 </head>
+
 <body>
-    <!-- Navbar -->
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light border-bottom">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold text-success" asp-area="" asp-controller="Home" asp-action="Index">
-                    ClinicApp
-                </a>
-                <div class="d-flex ms-auto">
-                    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
-                    {
-                        <span class="me-2">Hello, @Context.Session.GetString("UserName")</span>
-                        <a class="btn btn-outline-success btn-sm" href="/Auth/Logout">Logout</a>
-                    }
-                </div>
+
+<!-- ================= NAVBAR ================= -->
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-success"
+               asp-controller="Home" asp-action="Index">
+                ClinicApp
+            </a>
+
+            <div class="d-flex ms-auto">
+                @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
+                {
+                    <span class="me-2">
+                        Hello, @Context.Session.GetString("UserName")
+                    </span>
+                    <a class="btn btn-outline-success btn-sm"
+                       href="/Auth/Logout">Logout</a>
+                }
             </div>
-        </nav>
-    </header>
-
-    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
-    {
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link @isActive("ApplicationUsers","Index")" asp-controller="ApplicationUsers" asp-action="Index">
-                        <i class="fa-solid fa-user-plus"></i> Add User
-                    </a>
-                </li>
-
-                <!-- Patient Registration -->
-                <li class="nav-item">
-                    <a class="nav-link @isActive("PatientRegistration","Index")" asp-controller="PatientRegistration" asp-action="Index">
-                        <i class="fa-solid fa-hospital-user"></i> Patient Registration
-                    </a>
-                </li>
-
-          <li class="nav-item">
-    <a class="nav-link @isActive("DoctorPrescription","Index")" 
-       asp-controller="DoctorPrescription" asp-action="Index">
-        <i class="fa-solid fa-prescription"></i> Prescription
-    </a>
-    <!-- Doctor AI Helper -->
-<li class="nav-item">
-    <a class="nav-link @isActive("DoctorAI","Index")"
-       asp-controller="DoctorAI" asp-action="Index">
-        <i class="fa-solid fa-robot"></i> Doctor AI Helper
-    </a>
-</li>
-
-</li>
-
-                <!-- Master Dropdown -->
-                <li class="nav-item">
-                    <a class="nav-link d-flex justify-content-between align-items-center @(masterControllers.Contains(currentController) ? "active" : "")"
-                       data-bs-toggle="collapse" href="#masterSubmenu" role="button"
-                       aria-expanded="@(masterControllers.Contains(currentController) ? "true" : "false")"
-                       aria-controls="masterSubmenu">
-                        <span><i class="fa-solid fa-gear"></i> Master</span>
-                        <i class="fa-solid fa-caret-right caret"></i>
-                    </a>
-                    <div class="collapse @isMasterOpen(masterControllers)" id="masterSubmenu">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link @isActive("DescriptionMaster","Index")" asp-controller="DescriptionMaster" asp-action="Index">
-                                    <i class="fa-solid fa-file-lines"></i> Descriptions Master
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @isActive("ProductMaster","Index")" asp-controller="ProductMaster" asp-action="Index">
-                                    <i class="fa-solid fa-box"></i> Product Master
-                                </a>
-                            </li>
-                            <li class="nav-item">
-    <a class="nav-link @isActive("SupplierMaster","Index")" asp-controller="SupplierMaster" asp-action="Index">
-        <i class="fa-solid fa-truck"></i> Supplier Master
-    </a>
-</li>
-
-                            <li class="nav-item">
-                                <a class="nav-link @isActive("RoomMaster","Index")" asp-controller="RoomMaster" asp-action="Index">
-                                    <i class="fa-solid fa-bed"></i> Room Master
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @isActive("LedgerMaster","Index")" asp-controller="LedgerMaster" asp-action="Index">
-                                    <i class="fa-solid fa-book"></i> Ledger Master
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @isActive("ICDCodeMaster","Index")" asp-controller="ICDCodeMaster" asp-action="Index">
-                                    <i class="fa-solid fa-notes-medical"></i> ICD Code Master
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @isActive("CommonMaster","Index")" asp-controller="CommonMaster" asp-action="Index">
-                                    <i class="fa-solid fa-database"></i> Common Master
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
         </div>
-    }
+    </nav>
+</header>
 
-    <!-- Main Content -->
-    <div class="content">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+@if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
+{
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
+        <ul class="nav flex-column">
+
+            <li class="nav-item">
+                <a class="nav-link @isActive("ApplicationUsers","Index")"
+                   asp-controller="ApplicationUsers" asp-action="Index">
+                    <i class="fa-solid fa-user-plus"></i> Add User
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @isActive("PatientRegistration","Index")"
+                   asp-controller="PatientRegistration" asp-action="Index">
+                    <i class="fa-solid fa-hospital-user"></i> Patient Registration
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @isActive("DoctorPrescription","Index")"
+                   asp-controller="DoctorPrescription" asp-action="Index">
+                    <i class="fa-solid fa-prescription"></i> Prescription
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @isActive("DoctorAI","Index")"
+                   asp-controller="DoctorAI" asp-action="Index">
+                    <i class="fa-solid fa-robot"></i> Doctor AI Helper
+                </a>
+            </li>
+
+            <!-- ================= MASTER ================= -->
+            <li class="nav-item">
+                <a class="nav-link d-flex justify-content-between align-items-center @(masterControllers.Contains(currentController) ? "active" : "")"
+                   data-bs-toggle="collapse"
+                   href="#masterSubmenu">
+                    <span><i class="fa-solid fa-gear"></i> Master</span>
+                    <i class="fa-solid fa-caret-right caret"></i>
+                </a>
+
+                <div class="collapse @isMasterOpen(masterControllers)" id="masterSubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("DescriptionMaster","Index")"
+                               asp-controller="DescriptionMaster" asp-action="Index">
+                                <i class="fa-solid fa-file-lines"></i> Descriptions Master
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("ProductMaster","Index")"
+                               asp-controller="ProductMaster" asp-action="Index">
+                                <i class="fa-solid fa-box"></i> Product Master
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("SupplierMaster","Index")"
+                               asp-controller="SupplierMaster" asp-action="Index">
+                                <i class="fa-solid fa-truck"></i> Supplier Master
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("LedgerMaster","Index")"
+                               asp-controller="LedgerMaster" asp-action="Index">
+                                <i class="fa-solid fa-book"></i> Ledger Master
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("ICDCodeMaster","Index")"
+                               asp-controller="ICDCodeMaster" asp-action="Index">
+                                <i class="fa-solid fa-notes-medical"></i> ICD Code Master
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("CommonMaster","Index")"
+                               asp-controller="CommonMaster" asp-action="Index">
+                                <i class="fa-solid fa-database"></i> Common Master
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- ================= PHARMACY (ROOT) ================= -->
+            <li class="nav-item">
+                <a class="nav-link d-flex justify-content-between align-items-center @(pharmacyControllers.Contains(currentController) ? "active" : "")"
+                   data-bs-toggle="collapse"
+                   href="#pharmacySubmenu">
+                    <span><i class="fa-solid fa-pills"></i> Pharmacy</span>
+                    <i class="fa-solid fa-caret-right caret"></i>
+                </a>
+
+                <div class="collapse @isPharmacyOpen(pharmacyControllers)" id="pharmacySubmenu">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link @isActive("Purchase","Index")"
+                               asp-controller="Purchase" asp-action="Index">
+                                <i class="fa-solid fa-cart-shopping"></i> Purchase
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
     </div>
+}
 
-    <!-- Footer -->
-    <footer>
-        &copy; 2025 - ClinicApp | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </footer>
+<!-- ================= MAIN CONTENT ================= -->
+<div class="content">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+<footer>
+    &copy; 2025 - ClinicApp
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

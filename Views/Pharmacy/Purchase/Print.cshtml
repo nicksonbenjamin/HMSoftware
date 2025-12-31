@@ -1,0 +1,74 @@
+@model ClinicApp.ViewModels.PurchaseViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase Invoice</title>
+    <style>
+        body { font-family: Arial; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #000; padding: 5px; }
+        th { background: #f0f0f0; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body onload="window.print()">
+
+<h2 class="text-center">PURCHASE INVOICE</h2>
+
+<p>
+    <strong>Purchase No:</strong> @Model.PurchaseNo <br />
+    <strong>Date:</strong> @Model.PurchaseDate.ToString("dd-MMM-yyyy") <br />
+    <strong>Supplier:</strong> @Model.SupplierName
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Batch</th>
+            <th>Exp</th>
+            <th>UOM</th>
+            <th class="text-right">Qty</th>
+            <th class="text-right">Rate</th>
+            <th class="text-right">Net</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.BatchNo</td>
+                    <td>@item.ExpiryDate?.ToString("MM/yyyy")</td>
+                    <td>@item.UOM</td>
+                    <td class="text-right">@item.Qty</td>
+                    <td class="text-right">@item.Rate</td>
+                    <td class="text-right">@item.NetAmount</td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>
+
+<br />
+
+<table>
+    <tr><td>Total Amount</td><td class="text-right">@Model.TotalAmount</td></tr>
+    <tr><td>Total Discount</td><td class="text-right">@Model.TotalDiscount</td></tr>
+    <tr><td>Total Tax</td><td class="text-right">@Model.TotalTax</td></tr>
+    <tr><td>Round Off</td><td class="text-right">@Model.RoundOff</td></tr>
+    <tr><th>Net Amount</th><th class="text-right">@Model.NetAmount</th></tr>
+</table>
+
+</body>
+</html>

@@ -92,6 +92,45 @@ namespace ClinicApp
                 .ForMember(dest => dest.CountryList, opt => opt.Ignore())
                 .ForMember(dest => dest.StateList, opt => opt.Ignore())
                 .ReverseMap();
+
+                // ======================================================
+            // ✅ Purchase mappings (NEW)
+            // ======================================================
+           // ======================================================
+// // Purchase mappings
+// // ======================================================
+// CreateMap<PurchaseMaster, PurchaseViewModel>()
+//     .ForMember(dest => dest.PurchaseId, opt => opt.MapFrom(src => src.Id))
+//     .ForMember(dest => dest.SupplierList, opt => opt.Ignore())
+//     .ForMember(dest => dest.Items, opt => opt.Ignore()) // handled manually
+//     .ReverseMap()
+//     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PurchaseId));
+//             CreateMap<PurchaseItem, PurchaseItemViewModel>()
+//                 .ForMember(dest => dest.PurchaseItemId, opt => opt.MapFrom(src => src.Id))
+//                 .ReverseMap()
+//                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PurchaseItemId)); 
+
+
+// PurchaseMaster -> PurchaseViewModel
+CreateMap<PurchaseMaster, PurchaseViewModel>()
+    .ForMember(dest => dest.PurchaseId, opt => opt.MapFrom(src => src.Id))
+    .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier.LedgerName))
+    .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.PurchaseItems))
+    .ReverseMap()
+    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PurchaseId));
+
+// PurchaseItem -> PurchaseItemViewModel
+CreateMap<PurchaseItem, PurchaseItemViewModel>()
+    .ForMember(dest => dest.PurchaseItemId, opt => opt.MapFrom(src => src.Id))
+    .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
+    .ReverseMap()
+    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PurchaseItemId));
+
+
+
         }
+
+
+        
     }
 }

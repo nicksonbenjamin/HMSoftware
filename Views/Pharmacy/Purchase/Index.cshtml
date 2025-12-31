@@ -1,0 +1,109 @@
+@model IEnumerable<ClinicApp.ViewModels.PurchaseViewModel>
+
+@{
+    ViewData["Title"] = "Purchase List";
+}
+
+<div class="container-fluid mt-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Purchase List</h3>
+        <a class="btn btn-primary"
+           asp-controller="Purchase"
+           asp-action="Create">
+            <i class="bi bi-plus-circle"></i> Add New Purchase
+        </a>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th style="width:140px;">Actions</th>
+                    <th>#</th>
+                    <th>Purchase No</th>
+                    <th>Date</th>
+                    <th>Supplier</th>
+                    <th class="text-end">Qty</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">Discount</th>
+                    <th class="text-end">Tax</th>
+                    <th class="text-end">Round Off</th>
+                    <th class="text-end">Net Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <!-- Actions -->
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a class="btn btn-info"
+                                       asp-action="Details"
+                                       asp-route-id="@item.PurchaseId"
+                                       title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <a class="btn btn-warning"
+                                       asp-action="Edit"
+                                       asp-route-id="@item.PurchaseId"
+                                       title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <a class="btn btn-secondary"
+                                       asp-action="Print"
+                                       asp-route-id="@item.PurchaseId"
+                                       target="_blank"
+                                       title="Print">
+                                        <i class="bi bi-printer"></i>
+                                    </a>
+
+                                    <form asp-action="DeleteConfirmed"
+                                          asp-controller="Purchase"
+                                          method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this purchase?');">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.PurchaseId" />
+                                        <button type="submit"
+                                                class="btn btn-danger"
+                                                title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+
+                            <td class="text-center">@index</td>
+                            <td>@item.PurchaseNo</td>
+                            <td>@item.PurchaseDate.ToString("dd-MMM-yyyy")</td>
+                            <td>@item.SupplierName</td>
+                            <td class="text-end">@item.TotalQty</td>
+                            <td class="text-end">@item.TotalAmount.ToString("C")</td>
+                            <td class="text-end">@item.TotalDiscount.ToString("C")</td>
+                            <td class="text-end">@item.TotalTax.ToString("C")</td>
+                            <td class="text-end">@item.RoundOff.ToString("C")</td>
+                            <td class="text-end fw-bold">@item.NetAmount.ToString("C")</td>
+                        </tr>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11" class="text-center text-muted py-4">
+                            No purchases found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
